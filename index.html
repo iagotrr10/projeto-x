@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wish a Drink — A bebida que você quer está aqui</title>
+  <meta name="description" content="Depósito virtual de bebidas: cervejas, refrigerantes, sucos, energéticos, destilados e vinhos.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navegação principal">
+
+      <a href="index.html" class="logo" aria-label="Wish a Drink, página inicial">
+        <span class="logo-icon" aria-hidden="true"><i class="bi bi-cup-straw"></i></span>
+        <span class="logo-text">wish<span class="logo-accent">a drink</span></span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link is-active" aria-current="page">Início</a></li>
+        <li><a href="bebidas.html" class="nav-link">Bebidas</a></li>
+        <li><a href="ofertas.html" class="nav-link">Ofertas</a></li>
+        <li><a href="sobre.html" class="nav-link">Sobre nós</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="search-form" role="search" action="busca.html" method="get">
+          <label for="busca" class="sr-only">Buscar bebida</label>
+          <input type="search" id="busca" name="q" placeholder="O que você tá procurando?">
+          <button type="submit" aria-label="Buscar">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </button>
+        </form>
+
+        <a href="login.html" class="icon-link">
+          <i class="bi bi-person" aria-hidden="true"></i>
+          <span>Perfil</span>
+        </a>
+
+        <a href="carrinho.html" class="icon-link icon-link--badge">
+          <i class="bi bi-bag" aria-hidden="true"></i>
+          <span>Carrinho</span>
+          <span class="badge" aria-label="3 itens no carrinho">3</span>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <h1 id="hero-title">Bateu aquela <span class="hero-highlight">vontade?</span></h1>
+        <p class="hero-subtitle">A bebida que você quer está aqui.</p>
+        <a href="bebidas.html" class="btn btn--accent">
+          Ver bebidas
+          <i class="bi bi-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <div class="hero-illustration" aria-hidden="true">
+        <span class="bottle bottle--1"></span>
+        <span class="bottle bottle--2"></span>
+        <span class="bottle bottle--3"></span>
+        <span class="bottle bottle--4"></span>
+        <span class="bottle bottle--5"></span>
+      </div>
+    </section>
+
+    <section class="categorias" aria-labelledby="categorias-title">
+      <h2 id="categorias-title">Categorias</h2>
+
+      <ul class="categorias-lista">
+        <li>
+          <a href="bebidas.html?categoria=cervejas" class="categoria-card">
+            <img src="https://placehold.co/96x96/FDE9C8/B8860B?text=%F0%9F%8D%BA" alt="Cervejas" width="56" height="56">
+            <span>Cervejas</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=refrigerantes" class="categoria-card">
+            <img src="https://placehold.co/96x96/FFD9EC/FF2E88?text=%F0%9F%A5%A4" alt="Refrigerantes" width="56" height="56">
+            <span>Refrigerantes</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=sucos" class="categoria-card">
+            <img src="https://placehold.co/96x96/E4D6FA/7B2FF7?text=%F0%9F%A7%83" alt="Sucos" width="56" height="56">
+            <span>Sucos</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=energeticos" class="categoria-card">
+            <img src="https://placehold.co/96x96/FFF1B8/C99A00?text=%E2%9A%A1" alt="Energéticos" width="56" height="56">
+            <span>Energéticos</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=destilados" class="categoria-card">
+            <img src="https://placehold.co/96x96/F5D6D6/B8443F?text=%F0%9F%A5%83" alt="Destilados" width="56" height="56">
+            <span>Destilados</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=vinhos" class="categoria-card">
+            <img src="https://placehold.co/96x96/E8D2D8/8B3A55?text=%F0%9F%8D%B7" alt="Vinhos" width="56" height="56">
+            <span>Vinhos</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="ofertas" aria-labelledby="ofertas-title">
+      <header class="secao-header">
+        <h2 id="ofertas-title">Ofertas</h2>
+        <p>Tá em promoção? Melhor ainda.</p>
+      </header>
+
+      <ul class="produtos-grid">
+
+        <li>
+          <article class="produto-card">
+            <button type="button" class="favorito" aria-label="Adicionar Cerveja Lager 355ml aos favoritos">
+              <i class="bi bi-heart" aria-hidden="true"></i>
+            </button>
+            <img src="https://placehold.co/240x240/FFF3F8/2A0944?text=Cerveja+Lager" alt="Cerveja Lager 355ml" width="240" height="240">
+            <h3>Cerveja Lager 355ml</h3>
+            <p class="preco">
+              <span class="preco-antigo">R$ 8,90</span>
+              <span class="preco-atual">R$ 6,50</span>
+            </p>
+            <button type="button" class="btn btn--primary btn--full">Adicionar</button>
+          </article>
+        </li>
+
+        <li>
+          <article class="produto-card">
+            <button type="button" class="favorito" aria-label="Adicionar Gin Tropical 700ml aos favoritos">
+              <i class="bi bi-heart" aria-hidden="true"></i>
+            </button>
+            <img src="https://placehold.co/240x240/FFF3F8/2A0944?text=Gin+Tropical" alt="Gin Tropical 700ml" width="240" height="240">
+            <h3>Gin Tropical 700ml</h3>
+            <p class="preco">
+              <span class="preco-antigo">R$ 79,90</span>
+              <span class="preco-atual">R$ 64,90</span>
+            </p>
+            <button type="button" class="btn btn--primary btn--full">Adicionar</button>
+          </article>
+        </li>
+
+        <li>
+          <article class="produto-card">
+            <button type="button" class="favorito" aria-label="Adicionar Energy Drink 269ml aos favoritos">
+              <i class="bi bi-heart" aria-hidden="true"></i>
+            </button>
+            <img src="https://placehold.co/240x240/FFF3F8/2A0944?text=Energy+Drink" alt="Energy Drink 269ml" width="240" height="240">
+            <h3>Energy Drink 269ml</h3>
+            <p class="preco">
+              <span class="preco-antigo">R$ 11,50</span>
+              <span class="preco-atual">R$ 8,90</span>
+            </p>
+            <button type="button" class="btn btn--primary btn--full">Adicionar</button>
+          </article>
+        </li>
+
+        <li>
+          <article class="produto-card">
+            <button type="button" class="favorito" aria-label="Adicionar Suco Natural 1L aos favoritos">
+              <i class="bi bi-heart" aria-hidden="true"></i>
+            </button>
+            <img src="https://placehold.co/240x240/FFF3F8/2A0944?text=Suco+Natural" alt="Suco Natural 1L" width="240" height="240">
+            <h3>Suco Natural 1L</h3>
+            <p class="preco">
+              <span class="preco-antigo">R$ 14,90</span>
+              <span class="preco-atual">R$ 11,20</span>
+            </p>
+            <button type="button" class="btn btn--primary btn--full">Adicionar</button>
+          </article>
+        </li>
+
+      </ul>
+    </section>
+
+    <section class="queridinhos" aria-labelledby="queridinhos-title">
+      <header class="secao-header">
+        <h2 id="queridinhos-title">Os queridinhos da galera</h2>
+        <p>Produtos em destaque</p>
+      </header>
+
+      <ul class="produtos-grid">
+
+        <li>
+          <article class="produto-card">
+            <button type="button" class="favorito" aria-label="Adicionar Cerveja Artesanal aos favoritos">
+              <i class="bi bi-heart" aria-hidden="true"></i>
+            </button>
+            <img src="https://placehold.co/240x240/FFF3F8/2A0944?text=Cerveja+Artesanal" alt="Cerveja Artesanal 500ml" width="240" height="240">
+            <h3>Cerveja Artesanal 500ml</h3>
+            <p class="preco">
+              <span class="preco-atual">R$ 16,90</span>
+            </p>
+            <button type="button" class="btn btn--primary btn--full">Adicionar</button>
+          </article>
+        </li>
+
+        <li>
+          <article class="produto-card">
+            <button type="button" class="favorito" aria-label="Adicionar Whisky 12 Anos aos favoritos">
+              <i class="bi bi-heart" aria-hidden="true"></i>
+            </button>
+            <img src="https://placehold.co/240x240/FFF3F8/2A0944?text=Whisky+12+Anos" alt="Whisky 12 Anos 1L" width="240" height="240">
+            <h3>Whisky 12 Anos 1L</h3>
+            <p class="preco">
+              <span class="preco-atual">R$ 135,00</span>
+            </p>
+            <button type="button" class="btn btn--primary btn--full">Adicionar</button>
+          </article>
+        </li>
+
+        <li>
+          <article class="produto-card">
+            <button type="button" class="favorito" aria-label="Adicionar Refrigerante Cola 2L aos favoritos">
+              <i class="bi bi-heart" aria-hidden="true"></i>
+            </button>
+            <img src="https://placehold.co/240x240/FFF3F8/2A0944?text=Refrigerante+Cola" alt="Refrigerante Cola 2L" width="240" height="240">
+            <h3>Refrigerante Cola 2L</h3>
+            <p class="preco">
+              <span class="preco-atual">R$ 9,90</span>
+            </p>
+            <button type="button" class="btn btn--primary btn--full">Adicionar</button>
+          </article>
+        </li>
+
+        <li>
+          <article class="produto-card">
+            <button type="button" class="favorito" aria-label="Adicionar Vinho Tinto Seco aos favoritos">
+              <i class="bi bi-heart" aria-hidden="true"></i>
+            </button>
+            <img src="https://placehold.co/240x240/FFF3F8/2A0944?text=Vinho+Tinto" alt="Vinho Tinto Seco 750ml" width="240" height="240">
+            <h3>Vinho Tinto Seco 750ml</h3>
+            <p class="preco">
+              <span class="preco-atual">R$ 49,90</span>
+            </p>
+            <button type="button" class="btn btn--primary btn--full">Adicionar</button>
+          </article>
+        </li>
+
+      </ul>
+    </section>
+
+    <section class="banner-promo" aria-label="Promoção em destaque">
+      <p>Seu estoque merece um upgrade. <strong>Confira as ofertas</strong></p>
+      <a href="ofertas.html" class="btn btn--accent">Ver bebidas</a>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <span class="logo-text">wish<span class="logo-accent">a drink</span></span>
+        <p>O seu depósito de bebidas online.</p>
+      </div>
+
+      <nav class="footer-nav" aria-label="Links rápidos">
+        <h3>Links rápidos</h3>
+        <ul>
+          <li><a href="minha-conta.html">Minha conta</a></li>
+          <li><a href="faq.html">FAQ</a></li>
+          <li><a href="rastreio.html">Rastreio</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer-contato">
+        <h3>Atendimento</h3>
+        <ul>
+          <li><a href="contato.html">Contato</a></li>
+          <li><a href="https://wa.me/5511912345678">WhatsApp (11) 91234-5678</a></li>
+          <li><a href="mailto:contato@wishadrink.com">E-mail</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-social">
+        <h3>Siga-nos</h3>
+        <ul class="social-list">
+          <li><a href="#" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a></li>
+          <li><a href="#" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a></li>
+          <li><a href="#" aria-label="TikTok"><i class="bi bi-tiktok" aria-hidden="true"></i></a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Wish a Drink. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
