@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish a Drink | Recuperar Senha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="Assets/Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- BARRA DE ACESSIBILIDADE -->
+  <div class="wad-a11y-bar d-flex justify-content-end align-items-center" role="region" aria-label="Barra de acessibilidade">
+    <div class="container d-flex justify-content-end align-items-center flex-wrap gap-1">
+      <span class="me-2 d-none d-sm-inline"><i class="bi bi-universal-access-circle"></i> Acessibilidade:</span>
+      <button id="wad-btn-fonte-menos" type="button" aria-label="Diminuir tamanho da fonte">A-</button>
+      <button id="wad-btn-fonte-mais" type="button" aria-label="Aumentar tamanho da fonte">A+</button>
+      <button id="wad-btn-contraste" type="button" aria-pressed="false" aria-label="Alternar alto contraste">
+        <i class="bi bi-circle-half"></i> Contraste
+      </button>
+      <button id="wad-btn-modo-escuro" type="button" aria-pressed="false" aria-label="Alternar modo escuro">
+        <i class="bi bi-moon-stars-fill"></i> Modo escuro
+      </button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="wad-header">
+    <nav class="navbar  container py-2" aria-label="Menu principal">
+      <a class="navbar-brand wad-brand wad-logo" href="index.html" aria-label="Wish a Drink">
+        <span class="wad-logo__wish">wish</span>
+        <span class="wad-logo__a">a</span>
+        <span class="wad-logo__drink">drink</span>
+      </a>
+      
+      
+    </nav>
+  </header>
+
+  <!-- CONTEÚDO -->
+  
+  <main class="wad-auth-wrapper">
+    <div class="wad-auth-card">
+      <div class="wad-icon-topo"><i class="bi bi-shield-lock-fill"></i></div>
+      <h1 class="h4 text-center fw-bold mb-1" style="color:var(--wad-roxo)">Recuperar senha</h1>
+      <p class="text-center text-muted small mb-4">Informe seu e-mail para receber instruções.</p>
+
+      <form id="wad-form-recuperar" novalidate>
+        <div class="mb-3">
+          <label for="wad-rec-email" class="form-label">E-mail cadastrado</label>
+          <input type="email" class="form-control" id="wad-rec-email" placeholder="seu@email.com" required>
+          <div class="invalid-feedback">Informe um e-mail válido.</div>
+        </div>
+
+        <button type="submit" class="btn btn-wad-primario w-100 py-2 fw-bold">
+          Enviar instruções <i class="bi bi-send-fill"></i>
+        </button>
+      </form>
+
+      <hr class="my-4">
+      <p class="text-center small mb-0">
+        Lembrou a senha? <a href="login.html">Faça login</a>
+      </p>
+    </div>
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="wad-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a href="index.html" class="wad-logo" aria-label="Wish a Drink">
+            <span class="wad-logo__wish">wish</span>
+            <span class="wad-logo__a">a</span>
+            <span class="wad-logo__drink">drink</span>
+          </a>
+          <p class="small mb-0">Sua loja completa de bebidas, do simples suco ao rótulo premium, com entrega rápida e segura.</p>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Institucional</h6>
+          <ul class="list-unstyled">
+            <li><a href="sobre.html">Sobre nós</a></li>
+            <li><a href="sobre.html#privacidade">Política de privacidade</a></li>
+            <li><a href="sobre.html#termos">Termos de uso</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Minha conta</h6>
+          <ul class="list-unstyled">
+            <li><a href="login.html">Entrar</a></li>
+            <li><a href="cadastro.html">Criar conta</a></li>
+            <li><a href="alterar_senha.html">Alterar senha</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2026 Wish a Drink. Venda proibida para menores de 18 anos. Beba com moderação.</div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="wad-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const form = document.getElementById("wad-form-recuperar");
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = document.getElementById("wad-rec-email").value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          document.getElementById("wad-rec-email").classList.add("is-invalid");
+          window.WAD.mostrarToast("Informe um e-mail válido.", "erro");
+          return;
+        }
+        document.getElementById("wad-rec-email").classList.remove("is-invalid");
+        window.WAD.mostrarToast("Instruções enviadas para seu e-mail! (Simulação)", "sucesso");
+        setTimeout(() => { window.location.href = "login.html"; }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>

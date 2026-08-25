@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish a Drink | Minha Conta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="Assets/Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- BARRA DE ACESSIBILIDADE -->
+  <div class="wad-a11y-bar d-flex justify-content-end align-items-center" role="region" aria-label="Barra de acessibilidade">
+    <div class="container d-flex justify-content-end align-items-center flex-wrap gap-1">
+      <span class="me-2 d-none d-sm-inline"><i class="bi bi-universal-access-circle"></i> Acessibilidade:</span>
+      <button id="wad-btn-fonte-menos" type="button" aria-label="Diminuir tamanho da fonte">A-</button>
+      <button id="wad-btn-fonte-mais" type="button" aria-label="Aumentar tamanho da fonte">A+</button>
+      <button id="wad-btn-contraste" type="button" aria-pressed="false" aria-label="Alternar alto contraste">
+        <i class="bi bi-circle-half"></i> Contraste
+      </button>
+      <button id="wad-btn-modo-escuro" type="button" aria-pressed="false" aria-label="Alternar modo escuro">
+        <i class="bi bi-moon-stars-fill"></i> Modo escuro
+      </button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="wad-header">
+    <nav class="navbar navbar-expand-lg navbar-dark container py-2" aria-label="Menu principal">
+      <a class="navbar-brand wad-brand wad-logo" href="index.html" aria-label="Wish a Drink">
+        <span class="wad-logo__wish">wish</span>
+        <span class="wad-logo__a">a</span>
+        <span class="wad-logo__drink">drink</span>
+      </a>
+      
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#wadMenu" aria-controls="wadMenu" aria-expanded="false" aria-label="Abrir menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="collapse navbar-collapse" id="wadMenu">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link" href="index.html">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="bebidas.html">Bebidas</a></li>
+          <li class="nav-item"><a class="nav-link" href="ofertas.html">Ofertas</a></li>
+          <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-3 mt-3 mt-lg-0">
+          <a href="carrinho.html" class="wad-carrinho-icone" aria-label="Carrinho de compras">
+            <i class="bi bi-cart3"></i>
+            <span id="wad-badge-carrinho" class="wad-badge-carrinho" style="display:none">0</span>
+          </a>
+          <div data-wad-area-usuario></div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- CONTEÚDO -->
+  
+  <main class="container my-5">
+    <div class="row g-4">
+      <!-- Sidebar -->
+      <div class="col-md-3">
+        <div class="wad-conta-sidebar">
+          <div class="text-center mb-3">
+            <div class="wad-avatar mx-auto mb-2" id="wad-conta-avatar" style="width:60px; height:60px; font-size:1.4rem; background:var(--wad-roxo); color:var(--wad-amarelo);">--</div>
+            <h5 class="fw-bold mb-0" id="wad-conta-nome">Visitante</h5>
+            <small class="text-muted" id="wad-conta-email"></small>
+          </div>
+          <nav class="nav flex-column">
+            <a class="nav-link active" href="minha_conta.html"><i class="bi bi-person"></i> Meus dados</a>
+            <a class="nav-link" href="pedidos.html"><i class="bi bi-box-seam"></i> Meus pedidos</a>
+            <a class="nav-link" href="alterar_senha.html"><i class="bi bi-shield-lock"></i> Alterar senha</a>
+             <a class="nav-link d-none" id="wad-conta-admin" href="admin.html"><i class="bi bi-shield-check"></i> Admin beta</a>
+            <a class="nav-link text-danger" href="#" onclick="window.WAD.logout(); return false;"><i class="bi bi-box-arrow-right"></i> Sair</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Conteúdo -->
+      <div class="col-md-9">
+        <div class="card border-0 shadow-sm p-4">
+          <h4 class="fw-bold mb-4" style="color:var(--wad-roxo)">Meus dados</h4>
+          <form id="wad-form-dados" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="wad-dados-nome" class="form-label">Nome completo</label>
+                <input type="text" class="form-control" id="wad-dados-nome" required>
+              </div>
+              <div class="col-md-6">
+                <label for="wad-dados-email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="wad-dados-email" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">CPF</label>
+                <input type="text" class="form-control" value="123.456.789-00" readonly>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Telefone</label>
+                <input type="tel" class="form-control" value="(11) 98765-4321">
+              </div>
+              <div class="col-md-8">
+                <label class="form-label">Endereço</label>
+                <input type="text" class="form-control" value="Rua das Flores, 123">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">CEP</label>
+                <input type="text" class="form-control" value="01000-000">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Cidade</label>
+                <input type="text" class="form-control" value="São Paulo">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Estado</label>
+                <select class="form-select">
+                  <option selected>SP</option><option>RJ</option><option>MG</option>
+                </select>
+              </div>
+            </div>
+            <div class="mt-4">
+              <button type="submit" class="btn btn-wad-primario px-4">Salvar alterações</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="wad-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a href="index.html" class="wad-logo" aria-label="Wish a Drink">
+            <span class="wad-logo__wish">wish</span>
+            <span class="wad-logo__a">a</span>
+            <span class="wad-logo__drink">drink</span>
+          </a>
+          <p class="small mb-0">Sua loja completa de bebidas, do simples suco ao rótulo premium, com entrega rápida e segura.</p>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Institucional</h6>
+          <ul class="list-unstyled">
+            <li><a href="sobre.html">Sobre nós</a></li>
+            <li><a href="sobre.html#privacidade">Política de privacidade</a></li>
+            <li><a href="sobre.html#termos">Termos de uso</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Minha conta</h6>
+          <ul class="list-unstyled">
+            <li><a href="login.html">Entrar</a></li>
+            <li><a href="cadastro.html">Criar conta</a></li>
+            <li><a href="alterar_senha.html">Alterar senha</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2026 Wish a Drink. Venda proibida para menores de 18 anos. Beba com moderação.</div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="wad-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const usuario = window.WAD.obterUsuario();
+      if (!usuario) {
+        window.WAD.mostrarToast("Faça login para acessar sua conta.", "erro");
+        setTimeout(() => { window.location.href = "login.html"; }, 1200);
+        return;
+      }
+
+      document.getElementById("wad-conta-nome").textContent = usuario.nome;
+      document.getElementById("wad-conta-email").textContent = usuario.email;
+       if (sessionStorage.getItem("wad_admin_autenticado") === "true" || usuario.email.toLowerCase() === "wishadmin@gmail.com") {
+         document.getElementById("wad-conta-admin").classList.remove("d-none");
+       }
+      document.getElementById("wad-conta-avatar").textContent = usuario.nome
+        .trim().split(/\s+/).map((parte) => parte[0]).join("").slice(0, 2).toUpperCase();
+      document.getElementById("wad-dados-nome").value = usuario.nome;
+      document.getElementById("wad-dados-email").value = usuario.email;
+
+      document.getElementById("wad-form-dados").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const novoNome = document.getElementById("wad-dados-nome").value.trim();
+        const novoEmail = document.getElementById("wad-dados-email").value.trim();
+        window.WAD.entrar({ nome: novoNome, email: novoEmail });
+        window.WAD.mostrarToast("Dados atualizados com sucesso!", "sucesso");
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish a Drink — A bebida que você quer está aqui</title>
+  <meta name="description" content="Depósito virtual de bebidas: cervejas, refrigerantes, sucos, energéticos, destilados e vinhos.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="Assets/Logo.png">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- BARRA DE ACESSIBILIDADE -->
+  <div class="wad-a11y-bar d-flex justify-content-end align-items-center" role="region" aria-label="Barra de acessibilidade">
+    <div class="container d-flex justify-content-end align-items-center flex-wrap gap-1">
+      <span class="me-2 d-none d-sm-inline"><i class="bi bi-universal-access-circle"></i> Acessibilidade:</span>
+      <button id="wad-btn-fonte-menos" type="button" aria-label="Diminuir tamanho da fonte">A-</button>
+      <button id="wad-btn-fonte-mais" type="button" aria-label="Aumentar tamanho da fonte">A+</button>
+      <button id="wad-btn-contraste" type="button" aria-pressed="false" aria-label="Alternar alto contraste">
+        <i class="bi bi-circle-half"></i> Contraste
+      </button>
+      <button id="wad-btn-modo-escuro" type="button" aria-pressed="false" aria-label="Alternar modo escuro">
+        <i class="bi bi-moon-stars-fill"></i> Modo escuro
+      </button>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navegação principal">
+
+      <a href="index.html" class="wad-logo" aria-label="Wish a Drink, página inicial">
+        <span class="wad-logo__wish">wish</span>
+        <span class="wad-logo__a">a</span>
+        <span class="wad-logo__drink">drink</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link is-active" aria-current="page">Início</a></li>
+        <li><a href="bebidas.html" class="nav-link">Bebidas</a></li>
+        <li><a href="ofertas.html" class="nav-link">Ofertas</a></li>
+        <li><a href="sobre.html" class="nav-link">Sobre nós</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="search-form" role="search" action="bebidas.html" method="get">
+          <label for="busca" class="sr-only">Buscar bebida</label>
+          <input type="search" id="busca" name="q" placeholder="O que você tá procurando?">
+          <button type="submit" aria-label="Buscar">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </button>
+        </form>
+
+        <div data-wad-area-usuario></div>
+
+        <a href="carrinho.html" class="icon-link icon-link--badge">
+          <i class="bi bi-bag" aria-hidden="true"></i>
+          <span>Carrinho</span>
+          <span id="wad-badge-carrinho" class="badge wad-badge-carrinho" style="display:none">0</span>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <h1 id="hero-title">Bateu aquela <span class="hero-highlight">vontade?</span></h1>
+        <p class="hero-subtitle">A bebida que você quer está aqui.</p>
+        <a href="bebidas.html" class="btn btn--accent">
+          Ver bebidas
+          <i class="bi bi-arrow-right" aria-hidden="true"></i>
+        </a>
+      </div>
+
+      <div class="hero-illustration" aria-hidden="true">
+        <span class="bottle bottle--1"></span>
+        <span class="bottle bottle--2"></span>
+        <span class="bottle bottle--3"></span>
+        <span class="bottle bottle--4"></span>
+        <span class="bottle bottle--5"></span>
+      </div>
+    </section>
+
+    <section class="categorias" aria-labelledby="categorias-title">
+      <h2 id="categorias-title">Categorias</h2>
+
+      <ul class="categorias-lista">
+        <li>
+          <a href="bebidas.html?categoria=cervejas" class="categoria-card">
+            <span class="categoria-icone categoria-icone--cervejas" aria-hidden="true"><i class="bi bi-cup-straw"></i></span>
+            <span class="categoria-nome">Cervejas</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=refrigerantes" class="categoria-card">
+            <span class="categoria-icone categoria-icone--refrigerantes" aria-hidden="true"><i class="bi bi-droplet-fill"></i></span>
+            <span class="categoria-nome">Refrigerantes</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=sucos" class="categoria-card">
+            <span class="categoria-icone categoria-icone--sucos" aria-hidden="true"><i class="bi bi-cup-hot"></i></span>
+            <span class="categoria-nome">Sucos</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=energeticos" class="categoria-card">
+            <span class="categoria-icone categoria-icone--energeticos" aria-hidden="true"><i class="bi bi-lightning-charge-fill"></i></span>
+            <span class="categoria-nome">Energéticos</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=destilados" class="categoria-card">
+            <span class="categoria-icone categoria-icone--destilados" aria-hidden="true"><i class="bi bi-cup"></i></span>
+            <span class="categoria-nome">Destilados</span>
+          </a>
+        </li>
+        <li>
+          <a href="bebidas.html?categoria=vinhos" class="categoria-card">
+            <span class="categoria-icone categoria-icone--vinhos" aria-hidden="true"><i class="bi bi-droplet-half"></i></span>
+            <span class="categoria-nome">Vinhos</span>
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="ofertas" aria-labelledby="ofertas-title">
+      <header class="secao-header">
+        <h2 id="ofertas-title">Ofertas</h2>
+        <p>Tá em promoção? Melhor ainda.</p>
+      </header>
+
+      <ul class="produtos-grid" data-wad-produtos="ofertas" aria-live="polite"></ul>
+    </section>
+
+    <section class="queridinhos" aria-labelledby="queridinhos-title">
+      <header class="secao-header">
+        <h2 id="queridinhos-title">Os queridinhos da galera</h2>
+        <p>Produtos em destaque</p>
+      </header>
+
+      <ul class="produtos-grid" data-wad-produtos="destaque" aria-live="polite"></ul>
+    </section>
+
+    <section class="banner-promo" aria-label="Promoção em destaque">
+      <p>Seu estoque merece um upgrade. <strong>Confira as ofertas</strong></p>
+      <a href="ofertas.html" class="btn btn--accent">Ver ofertas</a>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" id="sobre">
+    <div class="footer-grid">
+
+      <div class="footer-brand">
+        <a href="index.html" class="wad-logo" aria-label="Wish a Drink">
+          <span class="wad-logo__wish">wish</span>
+          <span class="wad-logo__a">a</span>
+          <span class="wad-logo__drink">drink</span>
+        </a>
+        <p>O seu depósito de bebidas online.</p>
+      </div>
+
+      <nav class="footer-nav" aria-label="Links rápidos">
+        <h3>Links rápidos</h3>
+        <ul>
+          <li><a href="minha_conta.html">Minha conta</a></li>
+          <li><a href="pedidos.html">Meus pedidos</a></li>
+          <li><a href="ofertas.html">Ofertas</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer-contato">
+        <h3>Atendimento</h3>
+        <ul>
+          <li><a href="sobre.html">Contato</a></li>
+          <li><a href="https://wa.me/5511912345678">WhatsApp (11) 91234-5678</a></li>
+          <li><a href="mailto:contato@wishadrink.com">E-mail</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-social">
+        <h3>Siga-nos</h3>
+        <ul class="social-list">
+          <li><a href="#" aria-label="Instagram"><i class="bi bi-instagram" aria-hidden="true"></i></a></li>
+          <li><a href="#" aria-label="Facebook"><i class="bi bi-facebook" aria-hidden="true"></i></a></li>
+          <li><a href="#" aria-label="TikTok"><i class="bi bi-tiktok" aria-hidden="true"></i></a></li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 Wish a Drink. Todos os direitos reservados. Venda proibida para menores de 18 anos.</p>
+    </div>
+  </footer>
+
+  <div id="wad-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

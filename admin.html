@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wish a Drink | Admin beta</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="Assets/Logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="wad-admin-body">
+  <section id="admin-login" class="wad-admin-login" aria-labelledby="admin-login-title">
+    <div class="wad-auth-card">
+      <a href="index.html" class="wad-logo" aria-label="Voltar para Wish a Drink">
+        <span class="wad-logo__wish">wish</span><span class="wad-logo__a">a</span><span class="wad-logo__drink">drink</span>
+      </a>
+      <h1 id="admin-login-title" class="h4 text-center mb-1">Painel administrativo</h1>
+      <p class="text-center text-muted small mb-4">Ambiente beta para testes internos</p>
+      <form id="admin-login-form" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="admin-email">E-mail</label>
+          <input class="form-control" id="admin-email" type="email" autocomplete="username" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="admin-password">Senha</label>
+          <input class="form-control" id="admin-password" type="password" autocomplete="current-password" required>
+        </div>
+        <p id="admin-login-error" class="text-danger small d-none" role="alert">E-mail ou senha incorretos. Tente novamente.</p>
+        <button class="btn btn-wad-primario w-100 py-2 fw-bold" type="submit">Entrar no painel <i class="bi bi-arrow-right"></i></button>
+      </form>
+    </div>
+  </section>
+
+  <div id="admin-app" class="wad-admin-shell d-none">
+    <aside class="wad-admin-sidebar">
+      <a href="index.html" class="wad-logo" aria-label="Voltar para Wish a Drink">
+        <span class="wad-logo__wish">wish</span><span class="wad-logo__a">a</span><span class="wad-logo__drink">drink</span>
+      </a>
+      <nav class="wad-admin-nav" aria-label="Seções administrativas">
+        <button type="button" class="is-active" data-admin-section="dashboard"><i class="bi bi-grid-1x2 me-2"></i>Visão geral</button>
+        <button type="button" data-admin-section="produtos"><i class="bi bi-box-seam me-2"></i>Produtos</button>
+        <button type="button" data-admin-section="pedidos"><i class="bi bi-receipt me-2"></i>Pedidos</button>
+        <button type="button" data-admin-section="usuarios"><i class="bi bi-people me-2"></i>Usuários</button>
+        <button type="button" data-admin-section="configuracoes"><i class="bi bi-sliders me-2"></i>Configurações</button>
+      </nav>
+      <div class="wad-admin-sidebar-footer small">
+        <span class="d-block mb-2">Sessão: WishAdmin</span>
+        <button id="admin-logout" type="button" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-left me-1"></i>Sair</button>
+      </div>
+    </aside>
+
+    <main class="wad-admin-main">
+      <header class="wad-admin-topbar">
+        <div>
+          <span class="wad-admin-badge">BETA PRIVADO</span>
+          <h1 id="admin-section-title">Visão geral</h1>
+        </div>
+        <a href="index.html" class="btn btn-outline-secondary btn-sm"><i class="bi bi-shop me-1"></i>Ver loja</a>
+      </header>
+
+      <section class="wad-admin-section is-active" data-admin-panel="dashboard">
+        <div class="wad-admin-stats">
+          <div class="wad-admin-stat"><small>Produtos ativos</small><strong id="admin-stat-products">0</strong></div>
+          <div class="wad-admin-stat"><small>Pedidos em aberto</small><strong>2</strong></div>
+          <div class="wad-admin-stat"><small>Usuários cadastrados</small><strong id="admin-stat-users">1</strong></div>
+          <div class="wad-admin-stat"><small>Vendas simuladas</small><strong>R$ 155,10</strong></div>
+        </div>
+        <div class="wad-admin-panel">
+          <h2>Atividade recente</h2>
+          <table class="wad-admin-table">
+            <thead><tr><th>Evento</th><th>Detalhe</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Novo pedido</td><td>#WAD-1063</td><td><span class="badge text-bg-warning">Em preparo</span></td></tr>
+              <tr><td>Produto em destaque</td><td>Vinho Tinto Seco 750ml</td><td><span class="badge text-bg-success">Ativo</span></td></tr>
+              <tr><td>Conta atualizada</td><td>Cliente de teste</td><td><span class="badge text-bg-info">Registrado</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="wad-admin-section" data-admin-panel="produtos">
+        <div class="wad-admin-panel">
+          <h2>Catálogo de produtos</h2>
+          <div id="admin-product-list"></div>
+        </div>
+        <div class="wad-admin-panel">
+          <h2>Adicionar produto de teste</h2>
+          <form id="admin-product-form" class="wad-admin-form-grid">
+            <div><label class="form-label" for="product-name">Nome</label><input class="form-control" id="product-name" required></div>
+            <div><label class="form-label" for="product-category">Categoria</label><select class="form-select" id="product-category"><option value="cervejas">Cervejas</option><option value="refrigerantes">Refrigerantes</option><option value="sucos">Sucos</option><option value="energeticos">Energéticos</option><option value="destilados">Destilados</option><option value="vinhos">Vinhos</option></select></div>
+            <div><label class="form-label" for="product-price">Preço</label><input class="form-control" id="product-price" type="number" min="0" step="0.01" required></div>
+            <div><label class="form-label" for="product-image">Imagem</label><input class="form-control" id="product-image" value="Assets/Logo.png" required></div>
+            <div class="full"><button class="btn btn-wad-primario" type="submit"><i class="bi bi-plus-circle me-1"></i>Adicionar ao catálogo beta</button></div>
+          </form>
+        </div>
+      </section>
+
+      <section class="wad-admin-section" data-admin-panel="pedidos">
+        <div class="wad-admin-panel">
+          <h2>Pedidos para teste</h2>
+          <table class="wad-admin-table"><thead><tr><th>Pedido</th><th>Data</th><th>Total</th><th>Status</th></tr></thead><tbody>
+            <tr><td>#WAD-1042</td><td>18/08/2026</td><td>R$ 87,30</td><td><select class="form-select form-select-sm admin-order-status"><option selected>Entregue</option><option>Em transporte</option><option>Em preparo</option></select></td></tr>
+            <tr><td>#WAD-1058</td><td>20/08/2026</td><td>R$ 42,80</td><td><select class="form-select form-select-sm admin-order-status"><option>Entregue</option><option selected>Em transporte</option><option>Em preparo</option></select></td></tr>
+            <tr><td>#WAD-1063</td><td>22/08/2026</td><td>R$ 24,90</td><td><select class="form-select form-select-sm admin-order-status"><option>Entregue</option><option>Em transporte</option><option selected>Em preparo</option></select></td></tr>
+          </tbody></table>
+        </div>
+      </section>
+
+      <section class="wad-admin-section" data-admin-panel="usuarios">
+        <div class="wad-admin-panel"><h2>Usuários da demonstração</h2><div id="admin-user-list"></div></div>
+      </section>
+
+      <section class="wad-admin-section" data-admin-panel="configuracoes">
+        <div class="wad-admin-panel">
+          <h2>Preferências de visualização</h2>
+          <p class="text-muted">Use estes controles para testar os estados de acessibilidade da loja.</p>
+          <div class="d-flex flex-wrap gap-2"><button type="button" class="btn btn-outline-secondary" id="admin-dark-mode"><i class="bi bi-moon-stars me-1"></i>Alternar modo escuro</button><button type="button" class="btn btn-outline-secondary" id="admin-contrast"><i class="bi bi-circle-half me-1"></i>Alternar contraste</button></div>
+        </div>
+        <div class="wad-admin-panel"><h2>Dados locais</h2><p class="text-muted small">Os dados deste painel são apenas de demonstração e ficam salvos neste navegador.</p><button type="button" class="btn btn-outline-danger btn-sm" id="admin-clear-data">Limpar produtos beta</button></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    (() => {
+      const EMAIL = "WishAdmin@gmail.com";
+      const SENHA = "drunk123";
+      const SESSION_KEY = "wad_admin_autenticado";
+      const produtosBetaKey = "wad_admin_produtos_beta";
+      const login = document.getElementById("admin-login");
+      const app = document.getElementById("admin-app");
+      const formLogin = document.getElementById("admin-login-form");
+      const errorLogin = document.getElementById("admin-login-error");
+      const titulo = document.getElementById("admin-section-title");
+      const titulos = { dashboard: "Visão geral", produtos: "Produtos", pedidos: "Pedidos", usuarios: "Usuários", configuracoes: "Configurações" };
+
+      function produtosAdmin() {
+        try { return JSON.parse(localStorage.getItem(produtosBetaKey)) || []; } catch (erro) { return []; }
+      }
+      function formatar(valor) { return Number(valor).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); }
+      function mostrarPainel() { login.classList.add("d-none"); app.classList.remove("d-none"); renderizarProdutos(); renderizarUsuario(); document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length + produtosAdmin().length; }
+      function renderizarProdutos() {
+        const produtos = [...window.WAD.produtos, ...produtosAdmin()];
+        document.getElementById("admin-product-list").innerHTML = `<table class="wad-admin-table"><thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th></tr></thead><tbody>${produtos.map((produto) => `<tr><td><div class="wad-admin-product"><img src="${produto.imagem}" alt=""><span>${produto.nome}</span></div></td><td>${produto.categoria}</td><td>${formatar(produto.preco)}</td></tr>`).join("")}</tbody></table>`;
+      }
+      function renderizarUsuario() {
+        const usuario = window.WAD.obterUsuario();
+        document.getElementById("admin-user-list").innerHTML = usuario ? `<div class="wad-admin-product"><div class="wad-avatar">${usuario.nome.slice(0, 2).toUpperCase()}</div><div><strong>${usuario.nome}</strong><div class="text-muted small">${usuario.email}</div></div></div>` : `<p class="wad-admin-empty">Nenhum usuário de demonstração cadastrado.</p>`;
+        document.getElementById("admin-stat-users").textContent = usuario ? "1" : "0";
+      }
+      formLogin.addEventListener("submit", (evento) => { evento.preventDefault(); const email = document.getElementById("admin-email").value.trim(); const senha = document.getElementById("admin-password").value; if (email.toLowerCase() === EMAIL.toLowerCase() && senha === SENHA) { sessionStorage.setItem(SESSION_KEY, "true"); window.WAD.entrar({ nome: "WishAdmin", email: EMAIL }); mostrarPainel(); } else { errorLogin.textContent = "E-mail ou senha incorretos. Tente novamente."; errorLogin.classList.remove("d-none"); } });
+      formLogin.querySelectorAll("input").forEach((campo) => campo.addEventListener("input", () => errorLogin.classList.add("d-none")));
+      document.querySelectorAll("[data-admin-section]").forEach((botao) => botao.addEventListener("click", () => { document.querySelectorAll("[data-admin-section]").forEach((item) => item.classList.remove("is-active")); document.querySelectorAll("[data-admin-panel]").forEach((item) => item.classList.remove("is-active")); botao.classList.add("is-active"); document.querySelector(`[data-admin-panel="${botao.dataset.adminSection}"]`).classList.add("is-active"); titulo.textContent = titulos[botao.dataset.adminSection]; }));
+      document.getElementById("admin-product-form").addEventListener("submit", (evento) => { evento.preventDefault(); const novos = produtosAdmin(); novos.push({ nome: document.getElementById("product-name").value.trim(), categoria: document.getElementById("product-category").value, preco: Number(document.getElementById("product-price").value), imagem: document.getElementById("product-image").value.trim() }); localStorage.setItem(produtosBetaKey, JSON.stringify(novos)); evento.target.reset(); renderizarProdutos(); document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length + novos.length; });
+      document.getElementById("admin-logout").addEventListener("click", () => { sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem("wad_usuario"); app.classList.add("d-none"); login.classList.remove("d-none"); formLogin.reset(); });
+      document.getElementById("admin-dark-mode").addEventListener("click", () => { const ativo = document.documentElement.classList.toggle("wad-modo-escuro"); localStorage.setItem("wad_modo_escuro", JSON.stringify(ativo)); });
+      document.getElementById("admin-contrast").addEventListener("click", () => { const ativo = document.documentElement.classList.toggle("wad-alto-contraste"); localStorage.setItem("wad_alto_contraste", JSON.stringify(ativo)); });
+      document.getElementById("admin-clear-data").addEventListener("click", () => { localStorage.removeItem(produtosBetaKey); renderizarProdutos(); document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length; });
+      if (sessionStorage.getItem(SESSION_KEY) === "true") mostrarPainel();
+    })();
+  </script>
+</body>
+</html>
