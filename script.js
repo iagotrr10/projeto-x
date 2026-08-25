@@ -16,15 +16,15 @@
   /* Catálogo de produtos (usado em index.html e bebidas.html)          */
   /* ------------------------------------------------------------------ */
   const produtos = [
-    { id: "cerveja-heineken", nome: "Cerveja Heineken Long Neck 330ml", categoria: "cervejas", preco: 7.99, precoAntigo: 9.49, imagem: "Assets/Heineken.png" },
-    { id: "refri-cola-2l", nome: "Coca-Cola Sabor Original 2L", categoria: "refrigerantes", preco: 11.99, imagem: "Assets/coca_cola2l.png" },
-    { id: "refri-cola-lata", nome: "Coca-Cola Sabor Original Lata 350ml", categoria: "refrigerantes", preco: 4.99, imagem: "Assets/coca-cola-lata.webp" },
-    { id: "guarana-2l", nome: "Guaraná Antarctica 2L", categoria: "refrigerantes", preco: 9.99, imagem: "Assets/Guarana2l.png" },
-    { id: "suco-natural", nome: "Suco de Frutas Natural 1L", categoria: "sucos", preco: 13.90, precoAntigo: 16.90, imagem: "Assets/sucos.png" },
-    { id: "energy-drink", nome: "Red Bull Energy Drink 250ml", categoria: "energeticos", preco: 9.99, precoAntigo: 12.49, imagem: "Assets/RedBull.png" },
-    { id: "jack-daniels", nome: "Jack Daniel's Old No. 7 1L", categoria: "destilados", preco: 149.90, precoAntigo: 179.90, imagem: "Assets/Jack_Daniels.png" },
-    { id: "vodka-absolute", nome: "Vodka Absolut 1L", categoria: "destilados", preco: 99.90, imagem: "Assets/vodka_absolute.png" },
-    { id: "vinho-tinto", nome: "Vinho Tinto Seco 750ml", categoria: "vinhos", preco: 42.90, imagem: "Assets/vinho.png" }
+    { id: "cerveja-heineken", nome: "Cerveja Heineken Long Neck 330ml", categoria: "cervejas", preco: 7.99, precoAntigo: 9.49, imagem: "Bebidas/Heineken.png" },
+    { id: "refri-cola-2l", nome: "Coca-Cola Sabor Original 2L", categoria: "refrigerantes", preco: 11.99, imagem: "Bebidas/coca_cola2l.png" },
+    { id: "refri-cola-lata", nome: "Coca-Cola Sabor Original Lata 350ml", categoria: "refrigerantes", preco: 4.99, imagem: "Bebidas/coca-cola-lata.webp" },
+    { id: "guarana-2l", nome: "Guaraná Antarctica 2L", categoria: "refrigerantes", preco: 9.99, imagem: "Bebidas/Guarana2l.png" },
+    { id: "suco-natural", nome: "Suco de Frutas Natural 1L", categoria: "sucos", preco: 13.90, precoAntigo: 16.90, imagem: "Bebidas/sucos.png" },
+    { id: "energy-drink", nome: "Red Bull Energy Drink 250ml", categoria: "energeticos", preco: 9.99, precoAntigo: 12.49, imagem: "Bebidas/RedBull.png" },
+    { id: "jack-daniels", nome: "Jack Daniel's Old No. 7 1L", categoria: "destilados", preco: 149.90, precoAntigo: 179.90, imagem: "Bebidas/Jack_Daniels.png" },
+    { id: "vodka-absolute", nome: "Vodka Absolut 1L", categoria: "destilados", preco: 99.90, imagem: "Bebidas/vodka_absolute.png" },
+    { id: "vinho-tinto", nome: "Vinho Tinto Seco 750ml", categoria: "vinhos", preco: 42.90, imagem: "Bebidas/vinho.png" }
   ];
 
   const idsDestaque = ["refri-cola-2l", "vodka-absolute", "refri-cola-lata", "vinho-tinto"];
