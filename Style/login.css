@@ -69,7 +69,7 @@ input {
     background-color: var(--roxo-principal); /* cor de fallback enquanto a imagem carrega ou caso ela falhe */
     background-image:
         linear-gradient(180deg, rgba(59, 20, 160, 0.35) 0%, rgba(59, 20, 160, 0.75) 100%),
-        url("../img/background.png");
+        url("../imagens/img_login/background.png");
     background-size: cover, 130%; /* uma medida por camada: gradiente cobre o painel normalmente, imagem entra em "zoom in" */
     background-position: center, center bottom; /* idem: uma posição por camada */
     background-repeat: no-repeat;
