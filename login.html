@@ -1,11 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/login.css">
+    <title>Login</title>
 </head>
 <body>
-    
+    <main class="login-page">
+
+        <section class="lado-esquerdo">
+            <h1>Wish<span class="destaque">A</span>Drink!</h1>
+            <div class="texto-apresentacao">
+                <h2>Bateu aquela vontade?</h2>
+                <p>
+                Entre na sua conta e encontre sua
+                próxima bebida favorita.
+                <p>
+            </div>
+        </section>
+
+        <section class="lado-direito">
+            <div class="acessibilidade">
+                <!-- IDs adicionados para o JavaScript conseguir identificar cada botão -->
+                <button type="button" id="btn-aumentar-fonte">A+</button>
+                <button type="button" id="btn-diminuir-fonte">A-</button>
+                <button type="button" id="btn-modo-noturno">◐ Modo Noturno</button>
+            </div>
+            <div class="formulario-login">
+                <h2>Bem-Vindo de volta!</h2>
+                <p>
+                    Entre na sua conta para continuar.
+                </p>
+                <!-- id adicionado para o JavaScript conseguir "ouvir" o envio do formulário.
+                     action ainda fica vazio: quando o PHP existir, troque para action="login.php" -->
+                <form action="" method="POST" id="form-login">
+                    <div class="campo">
+                        <label for="login">Login:</label>
+                        <input
+                            type="text"
+                            id="login"
+                            name="login"
+                            placeholder="Digite seu login"
+                            required>
+                        <!-- Mensagem de erro do campo Login. Começa escondida (classe "escondido")
+                             e o JavaScript mostra ela só se o campo estiver vazio no envio. -->
+                        <p class="mensagem-erro escondido" id="erro-login">
+                            ⚠ Preencha o campo de login.
+                        </p>
+                    </div>
+
+                    <div class="campo">
+                        <label for="senha">Senha:</label>
+                        <!-- Div "invólucro" nova, só para posicionar o botão-olho por cima do input via CSS -->
+                        <div class="input-com-icone">
+                            <input
+                                type="password"
+                                id="senha"
+                                name="senha"
+                                placeholder="Digite sua senha"
+                                required>
+                            <!-- Antes o ícone de olho era só decoração (background-image do input).
+                                 Agora é um <button> de verdade, para o JavaScript conseguir clicar nele. -->
+                            <button type="button" id="btn-mostrar-senha" class="icone-olho" aria-label="Mostrar senha"></button>
+                        </div>
+                        <p class="mensagem-erro escondido" id="erro-senha">
+                            ⚠ Preencha o campo de senha.
+                        </p>
+                    </div>
+                    <div class="botoes">
+                        <button type="submit">
+                            Entrar
+                        </button>
+
+                        <button type="reset">
+                            Limpar
+                        </button>
+                    </div>
+                </form>
+                <p class="cadastro">
+                    Ainda não tem uma conta?
+                    <a href="cadastro.html">Cadastre-se</a>
+                </p>
+                <!-- id adicionado para o JavaScript interceptar o clique e abrir o modal em vez de navegar -->
+                <p class="esqueci-senha">
+                    <a href="esqueci-senha.html" id="link-esqueci-senha">Esqueci minha senha</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- MODAL DE RECUPERAÇÃO DE SENHA
+             Fica fora das duas seções (esquerda/direita) porque precisa cobrir a tela inteira.
+             Por padrão fica invisível (ver CSS); o JavaScript adiciona a classe "ativo" para revelar. -->
+        <div class="overlay" id="overlay-recuperar-senha">
+            <div class="modal-recuperar-senha">
+                <button type="button" class="btn-fechar-modal" id="btn-fechar-modal" aria-label="Fechar">&times;</button>
+                <h2>Recuperar senha</h2>
+                <p>Informe o e-mail cadastrado para receber o link de redefinição.</p>
+                <div class="campo">
+                    <label for="email-recuperacao">E-mail:</label>
+                    <input type="email" id="email-recuperacao" name="email-recuperacao" placeholder="Digite seu e-mail" required>
+                </div>
+                <div class="botoes">
+                    <button type="button" id="btn-enviar-recuperacao" class="botao-primario">Enviar</button>
+                    <button type="button" id="btn-cancelar-recuperacao" class="botao-secundario">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Script carregado no fim do body: garante que todo o HTML acima já existe
+         quando o JavaScript for procurar os elementos com getElementById -->
+    <script src="script.js"></script>
 </body>
 </html>

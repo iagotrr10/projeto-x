@@ -1,0 +1,609 @@
+/* ==========================================================================
+   WishADrink! - Tela de Login
+   CSS puro, sem frameworks. Organizado por seções para facilitar o estudo.
+   ========================================================================== */
+
+/* RESET
+   Zera margens/paddings padrão do navegador e ajusta o box-sizing.
+   Isso evita "surpresas" de espaçamento entre navegadores diferentes. */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* faz padding e border entrarem DENTRO da largura do elemento, não somarem a ela */
+}
+
+/* CONFIGURAÇÃO GERAL
+   Aqui ficam as variáveis (custom properties) de cor e fonte.
+   Usar variáveis facilita trocar a identidade visual inteira depois,
+   mudando só um valor em vez de caçar cor por cor no arquivo. */
+:root {
+    --roxo-principal: #5B2EE8;
+    --roxo-escuro: #4718C4;
+    --roxo-claro: #ECE7FB;
+    --amarelo: #FFD23F;
+    --rosa: #FF3E7F;
+    --cinza-texto: #4B4B55;
+    --cinza-borda: #DAD8E6;
+    --fundo-claro: #F7F6FB;
+    --branco: #FFFFFF;
+    --preto-texto: #16151F;
+}
+
+body {
+    font-family: "Barlow Semi Condensed", sans-serif;
+    color: var(--preto-texto);
+    line-height: 1.5;
+}
+
+img {
+    max-width: 100%; /* nenhuma imagem estoura o container em telas pequenas */
+    display: block;
+}
+
+button {
+    font-family: inherit; /* botões herdam a fonte do body, em vez da fonte padrão do navegador */
+    cursor: pointer;
+}
+
+input {
+    font-family: inherit;
+}
+
+/* estrutura geral da página */
+.login-page {
+    display: flex; /* coloca lado esquerdo e lado direito lado a lado */
+    min-height: 100vh; /* garante que a página ocupe no mínimo a altura inteira da tela */
+    width: 100%;
+    overflow-x: hidden; /* trava qualquer rolagem horizontal indesejada */
+}
+
+
+/* LADO ESQUERDO
+   Painel roxo com a imagem de bebidas como fundo e o texto de apresentação
+   escrito por cima em HTML puro. */
+.lado-esquerdo {
+    flex: 1 1 60%; /* agora ocupa 60% da largura disponível */
+    min-height: 100vh;
+    position: relative;
+
+    background-color: var(--roxo-principal); /* cor de fallback enquanto a imagem carrega ou caso ela falhe */
+    background-image:
+        linear-gradient(180deg, rgba(59, 20, 160, 0.35) 0%, rgba(59, 20, 160, 0.75) 100%),
+        url("../img/background.png");
+    background-size: cover, 130%; /* uma medida por camada: gradiente cobre o painel normalmente, imagem entra em "zoom in" */
+    background-position: center, center bottom; /* idem: uma posição por camada */
+    background-repeat: no-repeat;
+
+    color: var(--branco);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* alinha o bloco de texto ao topo, em vez de centralizar no meio dos 100vh */
+
+    padding: clamp(2rem, 6vw, 5rem); /* espaçamento que cresce/diminui com a tela, entre um mínimo e um máximo */
+}
+
+.lado-esquerdo h1 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: clamp(2rem, 6vw, 4rem); /* espaço entre o logo e o título, abaixo dele */
+    position: relative;
+    width: fit-content;
+}
+
+/* destaque colorido na letra "A" de WishADrink! */
+.destaque {
+    color: var(--amarelo);
+}
+
+/* emoji do copo, posicionado como um "acento" acima do logo, sem precisar de <img> */
+.lado-esquerdo h1::after {
+    content: "🍹";
+    position: absolute;
+    top: -0.6em;
+    right: -0.3em;
+    font-size: 0.5em;
+}
+
+.texto-apresentacao h2 {
+    font-size: clamp(1.9rem, 4.5vw, 2.75rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+    max-width: 20ch; /* impede que o título vire uma linha só gigante em telas largas */
+}
+
+.texto-apresentacao p {
+    font-size: clamp(1rem, 1.6vw, 1.15rem);
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 38ch;
+}
+
+
+/* LADO DIREITO
+   Painel claro com os controles de acessibilidade no topo e o formulário
+   centralizado no meio. */
+.lado-direito {
+    flex: 1 1 40%; /* agora ocupa 40% da largura disponível */
+    min-height: 100vh;
+    background-color: var(--fundo-claro);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* centraliza o formulário horizontalmente */
+    justify-content: center; /* centraliza o formulário verticalmente */
+    position: relative;
+
+    padding: clamp(1.5rem, 4vw, 4rem);
+}
+
+
+/* FORMULÁRIO */
+.formulario-login {
+    width: 100%;
+    max-width: 30rem; /* impede que o formulário "estique" demais em telas muito largas */
+    margin: 0 auto; /* centraliza o bloco horizontalmente dentro do espaço disponível do painel */
+}
+
+.formulario-login h2 {
+    font-size: clamp(1.6rem, 3vw, 2rem);
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-align: center; /* centraliza só este texto, não afeta labels/inputs abaixo */
+}
+
+.formulario-login > p {
+    color: var(--cinza-texto);
+    font-size: clamp(0.95rem, 1.5vw, 1.05rem);
+    margin-bottom: clamp(1.5rem, 3vw, 2rem);
+    text-align: center; /* mesma lógica: centraliza o subtítulo */
+}
+
+.formulario-login form {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1rem, 2vw, 1.4rem); /* espaço entre cada campo do formulário */
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* espaço entre o label e o input */
+}
+
+.campo label {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+
+/* INPUTS
+   Os ícones (pessoa, cadeado, olho) são inseridos via background-image
+   em SVG, então não precisam de <img> nem de JavaScript. */
+.campo input {
+    width: 100%;
+    padding: 0.95rem 1rem 0.95rem 3rem; /* espaço extra à esquerda para caber o ícone */
+    border: 2px solid var(--cinza-borda);
+    border-radius: 0.75rem; /* cantos arredondados, mantendo a identidade "moderna e descontraída" */
+    font-size: 1rem;
+    color: var(--preto-texto);
+    background-color: var(--branco);
+
+    background-repeat: no-repeat;
+    background-position: 1rem center; /* posiciona o ícone encostado à esquerda, centralizado verticalmente */
+    background-size: 1.15rem;
+
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campo input::placeholder {
+    color: #9C9AAE;
+}
+
+.campo input:focus {
+    outline: none; /* remove o contorno padrão feio do navegador... */
+    border-color: var(--roxo-principal);
+    box-shadow: 0 0 0 4px var(--roxo-claro); /* ...e substitui por um "brilho" roxo suave, mais bonito e ainda acessível */
+}
+
+/* ícone de pessoa no campo de login */
+#login {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B5B95' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20c0-4 4-6 8-6s8 2 8 6'/%3E%3C/svg%3E");
+}
+
+/* ícone de cadeado no campo de senha (o ícone de olho agora é um <button> real, veja .icone-olho) */
+#senha {
+    padding-right: 3rem; /* espaço extra à direita para caber o botão-olho */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239C9AAE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='9' rx='2'/%3E%3Cpath d='M8 11V7a4 4 0 0 1 8 0v4'/%3E%3C/svg%3E");
+}
+
+/* invólucro do campo de senha: existe só para o botão-olho poder ser
+   posicionado (position: absolute) em relação a ele, e não à tela inteira */
+.input-com-icone {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* botão-olho: sem fundo, sem borda, só o ícone via background-image */
+.icone-olho {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%); /* centraliza verticalmente dentro do input */
+    width: 1.75rem;
+    height: 1.75rem;
+    background-color: transparent;
+    border: none;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1.15rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239C9AAE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E");
+}
+
+/* quando a senha está visível (classe adicionada pelo JS), troca para o ícone de "olho riscado" */
+.icone-olho.ativo {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B5B95' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.94 10.94 0 0 1 12 19c-6 0-10-7-10-7a18.4 18.4 0 0 1 4.22-5.06M9.9 4.24A9.12 9.12 0 0 1 12 4c6 0 10 7 10 7a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'/%3E%3Cline x1='1' y1='1' x2='23' y2='23'/%3E%3C/svg%3E");
+}
+
+/* mensagem de erro por campo (Login/Senha). Some/aparece via a classe .escondido,
+   que o JavaScript adiciona/remove na validação do formulário */
+.mensagem-erro {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--rosa);
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 0.35rem;
+}
+
+/* utilitário genérico: esconde completamente qualquer elemento que o receba.
+   Usado nas mensagens de erro e controlado 100% pelo JavaScript. */
+.escondido {
+    display: none;
+}
+
+/* botões reutilizáveis fora do padrão Entrar/Limpar (usados no modal),
+   com a mesma cara visual: primário roxo preenchido, secundário outline */
+.botao-primario {
+    background-color: var(--roxo-principal);
+    color: var(--branco);
+}
+
+.botao-primario:hover {
+    background-color: var(--roxo-escuro);
+}
+
+.botao-secundario {
+    background-color: transparent;
+    border-color: var(--roxo-principal);
+    color: var(--roxo-principal);
+}
+
+.botao-secundario:hover {
+    background-color: var(--roxo-claro);
+}
+
+
+/* BOTÕES */
+.botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.botoes button {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border: 2px solid transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, transform 0.1s ease;
+}
+
+/* botão "Entrar": preenchido de roxo */
+button[type="submit"] {
+    background-color: var(--roxo-principal);
+    color: var(--branco);
+}
+
+button[type="submit"]:hover {
+    background-color: var(--roxo-escuro);
+}
+
+/* botão "Limpar": estilo outline (contorno), sem preenchimento */
+button[type="reset"] {
+    background-color: transparent;
+    border-color: var(--roxo-principal);
+    color: var(--roxo-principal);
+}
+
+button[type="reset"]:hover {
+    background-color: var(--roxo-claro);
+}
+
+.botoes button:active {
+    transform: scale(0.98); /* leve "afundada" ao clicar, dá sensação de resposta ao toque */
+}
+
+.cadastro {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.95rem;
+    color: var(--cinza-texto);
+}
+
+.cadastro a {
+    color: var(--roxo-principal);
+    font-weight: 700;
+    text-decoration: underline;
+}
+
+.esqueci-senha {
+    text-align: center; /* centraliza o parágrafo inteiro, igual ao .cadastro */
+    margin-top: 0.75rem;
+    font-size: 0.85rem; /* menor que o "Cadastre-se", reforça que é secundário */
+}
+
+.esqueci-senha a {
+    color: var(--roxo-principal);
+    text-decoration: none; /* sem sublinhado por padrão, fica mais discreto */
+}
+
+.esqueci-senha a:hover {
+    text-decoration: underline; /* sublinha só ao passar o mouse, como feedback de interação */
+}
+
+
+/* ACESSIBILIDADE
+   Barra discreta no topo do lado direito, com os controles de fonte e contraste. */
+.acessibilidade {
+    position: absolute;
+    top: clamp(1rem, 3vw, 2rem);
+    right: clamp(1rem, 3vw, 3rem);
+    display: flex; /* coloca os 3 botões um ao lado do outro */
+    gap: 0.6rem;
+}
+
+.acessibilidade button {
+    background-color: var(--branco);
+    border: 1px solid var(--cinza-borda);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--preto-texto);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.acessibilidade button:hover {
+    border-color: var(--roxo-principal);
+    color: var(--roxo-principal);
+}
+
+/* ícone de meia-lua no botão que tem "Modo Noturno" / contraste,
+   identificado pelo símbolo ◐ já presente no seu HTML */
+.acessibilidade button:last-child {
+    font-weight: 700;
+}
+
+
+/* MODAL DE RECUPERAÇÃO DE SENHA
+   O overlay cobre a tela inteira. Ele fica sempre no DOM, mas invisível
+   por padrão (opacity: 0 + pointer-events: none) - o JavaScript só
+   adiciona a classe .ativo, e é o CSS quem cuida da transição suave. */
+.overlay {
+    position: fixed;
+    inset: 0; /* atalho para top: 0; right: 0; bottom: 0; left: 0; */
+    background-color: rgba(22, 21, 31, 0.6); /* escurece o fundo da página */
+    display: flex;
+    align-items: center; /* centraliza o card verticalmente */
+    justify-content: center; /* centraliza o card horizontalmente */
+    padding: 1.5rem;
+    z-index: 100;
+
+    opacity: 0;
+    pointer-events: none; /* enquanto invisível, cliques "atravessam" o overlay */
+    transition: opacity 0.25s ease;
+}
+
+.overlay.ativo {
+    opacity: 1;
+    pointer-events: auto; /* só fica clicável quando realmente visível */
+}
+
+.modal-recuperar-senha {
+    background-color: var(--branco);
+    border-radius: 1rem; /* cantos arredondados, seguindo a identidade do projeto */
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    width: 100%;
+    max-width: 26rem; /* card não estica demais em telas largas */
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+
+    transform: translateY(16px) scale(0.97); /* estado inicial: um pouco menor e mais baixo */
+    transition: transform 0.25s ease; /* anima só quando o overlay ganha .ativo */
+}
+
+.overlay.ativo .modal-recuperar-senha {
+    transform: translateY(0) scale(1); /* estado final: tamanho e posição normais */
+}
+
+.modal-recuperar-senha h2 {
+    font-size: clamp(1.4rem, 3vw, 1.75rem);
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.modal-recuperar-senha > p {
+    color: var(--cinza-texto);
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+}
+
+.modal-recuperar-senha .campo {
+    margin-bottom: 1.5rem;
+}
+
+.modal-recuperar-senha .botoes {
+    margin-top: 0; /* dentro do modal o espaçamento já vem do gap do .campo acima */
+}
+
+.btn-fechar-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--cinza-texto);
+}
+
+.btn-fechar-modal:hover {
+    color: var(--roxo-principal);
+}
+
+
+/* MODO NOTURNO
+   document.body.classList.toggle("modo-noturno") liga/desliga esta classe;
+   todo o resto é resolvido aqui pelo CSS, sem inverter cores com filter. */
+body.modo-noturno .lado-direito {
+    background-color: #17151F;
+}
+
+body.modo-noturno .formulario-login h2,
+body.modo-noturno .campo label {
+    color: var(--branco);
+}
+
+body.modo-noturno .formulario-login > p,
+body.modo-noturno .cadastro,
+body.modo-noturno .esqueci-senha {
+    color: #B8B5C6;
+}
+
+body.modo-noturno .campo input {
+    background-color: #241F33;
+    border-color: #3A3552;
+    color: var(--branco);
+}
+
+body.modo-noturno .campo input::placeholder {
+    color: #7A7690;
+}
+
+/* os ícones (pessoa, cadeado, olho) são SVGs com cor fixa; usamos filter
+   só aqui, apenas para clarear esses ícones específicos no modo escuro */
+body.modo-noturno #login,
+body.modo-noturno #senha,
+body.modo-noturno .icone-olho {
+    filter: invert(1) brightness(1.6);
+}
+
+body.modo-noturno .acessibilidade button {
+    background-color: #241F33;
+    border-color: #3A3552;
+    color: var(--branco);
+}
+
+body.modo-noturno .modal-recuperar-senha {
+    background-color: #241F33;
+}
+
+body.modo-noturno .modal-recuperar-senha h2 {
+    color: var(--branco);
+}
+
+body.modo-noturno .modal-recuperar-senha > p {
+    color: #B8B5C6;
+}
+
+body.modo-noturno .btn-fechar-modal {
+    color: #B8B5C6;
+}
+
+
+/* RESPONSIVIDADE
+   Do desktop até o celular, em 3 etapas: telas grandes (padrão acima),
+   tablets (≤ 900px) e celulares (≤ 520px). */
+
+/* TABLETS: reduz paddings e fontes gradualmente, mas mantém os dois lados
+   ainda lado a lado até ficar realmente apertado */
+@media (max-width: 1024px) {
+    .lado-esquerdo,
+    .lado-direito {
+        padding: clamp(1.5rem, 4vw, 2.5rem);
+    }
+}
+
+/* A PARTIR DAQUI o layout vira uma coluna: primeiro a parte roxa,
+   depois o formulário, empilhados */
+@media (max-width: 900px) {
+    .login-page {
+        flex-direction: column; /* empilha lado esquerdo e lado direito */
+    }
+
+    .lado-esquerdo,
+    .lado-direito {
+        min-height: auto; /* evita alturas fixas que quebrariam em telas pequenas */
+        flex: 1 1 auto;
+    }
+
+    .lado-esquerdo {
+        padding-top: clamp(3rem, 8vw, 4rem);
+        padding-bottom: clamp(3rem, 8vw, 4rem);
+    }
+
+    .lado-direito {
+        padding-top: clamp(4.5rem, 12vw, 6rem); /* espaço extra para não colidir com a barra de acessibilidade */
+    }
+
+    .acessibilidade {
+        position: static; /* sai do modo "flutuante" e volta ao fluxo normal da página */
+        justify-content: center;
+        flex-wrap: wrap; /* permite quebrar linha se não couber tudo */
+        margin-bottom: 2rem;
+    }
+
+    .texto-apresentacao h2,
+    .texto-apresentacao p {
+        max-width: 100%; /* libera a largura total do texto, já que agora ele tem a coluna inteira */
+    }
+}
+
+/* CELULARES: formulário ocupa quase toda a largura, inputs e botões
+   ganham área de toque maior, nada estoura a tela */
+@media (max-width: 520px) {
+    .lado-esquerdo,
+    .lado-direito {
+        padding-left: 1.25rem;
+        padding-right: 1.25rem;
+    }
+
+    .formulario-login {
+        max-width: 100%; /* formulário usa praticamente toda a largura disponível */
+    }
+
+    .acessibilidade button {
+        padding: 0.55rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .campo input,
+    .botoes button {
+        padding-top: 1rem; /* área de toque um pouco maior para dedos em telas de celular */
+        padding-bottom: 1rem;
+    }
+
+    .modal-recuperar-senha {
+        padding: 1.5rem; /* menos respiro interno no card, já que a tela é bem menor */
+    }
+}
