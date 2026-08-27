@@ -6,6 +6,7 @@
   "use strict";
 
   const CHAVE_CARRINHO = "wad_carrinho";
+  const CHAVE_FAVORITOS = "wad_favoritos";
   const CHAVE_USUARIO = "wad_usuario";
   const CHAVE_USUARIOS = "wad_usuarios";
   const CHAVE_FONTE = "wad_escala_fonte";
@@ -339,17 +340,57 @@
   }
 
   /* ------------------------------------------------------------------ */
-  /* Renderização: grade de produtos (index.html / bebidas.html)         */
+  /* Favoritos                                                            */
+  /* ------------------------------------------------------------------ */
+  function obterFavoritos() {
+    return lerJSON(CHAVE_FAVORITOS, []);
+  }
+
+  function salvarFavoritos(favoritos) {
+    salvarJSON(CHAVE_FAVORITOS, favoritos);
+    atualizarBadgeFavoritos();
+  }
+
+  function estaFavoritado(produtoId) {
+    return obterFavoritos().includes(produtoId);
+  }
+
+  function alternarFavorito(produtoId) {
+    const favoritos = obterFavoritos();
+    const indice = favoritos.indexOf(produtoId);
+    let favoritado;
+    if (indice === -1) {
+      favoritos.push(produtoId);
+      favoritado = true;
+    } else {
+      favoritos.splice(indice, 1);
+      favoritado = false;
+    }
+    salvarFavoritos(favoritos);
+    return favoritado;
+  }
+
+  function atualizarBadgeFavoritos() {
+    const total = obterFavoritos().length;
+    document.querySelectorAll("#wad-badge-favoritos").forEach((badge) => {
+      badge.textContent = String(total);
+      badge.style.display = total > 0 ? "flex" : "none";
+    });
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Renderização: grade de produtos (index.html / bebidas.html / etc.)  */
   /* ------------------------------------------------------------------ */
   function criarCardProduto(produto) {
     const precoAntigoHtml = produto.precoAntigo
       ? `<span class="preco-antigo">${formatarPreco(produto.precoAntigo)}</span>`
       : "";
+    const favoritado = estaFavoritado(produto.id);
     return `
       <li>
         <article class="produto-card">
-          <button type="button" class="favorito" aria-label="Adicionar ${produto.nome} aos favoritos" aria-pressed="false">
-            <i class="bi bi-heart" aria-hidden="true"></i>
+          <button type="button" class="favorito" data-wad-favorito="${produto.id}" aria-label="Adicionar ${produto.nome} aos favoritos" aria-pressed="${favoritado}">
+            <i class="bi ${favoritado ? "bi-heart-fill" : "bi-heart"}" aria-hidden="true"></i>
           </button>
           <img src="${produto.imagem}" alt="${produto.nome}" width="240" height="240" loading="lazy">
           <h3>${produto.nome}</h3>
@@ -403,14 +444,16 @@
       adicionarAoCarrinho(botao.getAttribute("data-wad-adicionar"), 1);
     });
 
-    // Favoritar (apenas alterna visual, sem persistência)
+    // Favoritar (persistido em localStorage, disponível em todas as páginas)
     document.body.addEventListener("click", (evento) => {
-      const favorito = evento.target.closest(".favorito");
+      const favorito = evento.target.closest(".favorito[data-wad-favorito]");
       if (!favorito) return;
-      const ativo = favorito.getAttribute("aria-pressed") === "true";
-      favorito.setAttribute("aria-pressed", String(!ativo));
+      const produtoId = favorito.getAttribute("data-wad-favorito");
+      const favoritado = alternarFavorito(produtoId);
+      favorito.setAttribute("aria-pressed", String(favoritado));
       const icone = favorito.querySelector("i");
-      if (icone) icone.className = !ativo ? "bi bi-heart-fill" : "bi bi-heart";
+      if (icone) icone.className = favoritado ? "bi bi-heart-fill" : "bi bi-heart";
+      renderizarFavoritos();
     });
   }
 
@@ -503,6 +546,30 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Renderização: página de favoritos                                   */
+  /* ------------------------------------------------------------------ */
+  function renderizarFavoritos() {
+    const container = document.querySelector('[data-wad-produtos="favoritos"]');
+    if (!container) return;
+
+    const idsFavoritos = obterFavoritos();
+    const lista = idsFavoritos
+      .map((id) => produtos.find((produto) => produto.id === id))
+      .filter(Boolean);
+
+    const vazio = document.getElementById("wad-favoritos-vazio");
+
+    if (!lista.length) {
+      container.innerHTML = "";
+      if (vazio) vazio.style.display = "block";
+      return;
+    }
+
+    if (vazio) vazio.style.display = "none";
+    renderizarListaProdutos(lista, '[data-wad-produtos="favoritos"]');
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Renderização: resumo do checkout                                    */
   /* ------------------------------------------------------------------ */
   function iniciarResumoCheckout() {
@@ -578,11 +645,13 @@
     montarAreaUsuario();
     montarAcessoAdmin();
     atualizarBadgeCarrinho();
+    atualizarBadgeFavoritos();
     iniciarGradesDeProdutos();
     iniciarFiltrosCategoria();
     iniciarPaginaCarrinho();
     iniciarResumoCheckout();
     iniciarListaPedidos();
+    renderizarFavoritos();
   });
 
   /* ------------------------------------------------------------------ */
@@ -603,6 +672,10 @@
     removerDoCarrinho,
     atualizarQuantidade,
     calcularTotalCarrinho,
-    atualizarBadgeCarrinho
+    atualizarBadgeCarrinho,
+    obterFavoritos,
+    estaFavoritado,
+    alternarFavorito,
+    atualizarBadgeFavoritos
   };
 })();
