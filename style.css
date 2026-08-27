@@ -239,25 +239,11 @@ select:focus-visible {
 }
 .wad-brand { color: var(--color-white) !important; }
 
-.wad-logo {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.28rem;
-  flex-shrink: 0;
-  font-family: var(--font-display);
-  font-weight: 700;
-  line-height: 1;
-  white-space: nowrap;
+.wad-logo-img {
+  height: clamp(40px, 5vw, 55px); /* Altura responsiva */
+  width: auto;
+  display: block;
 }
-.wad-logo__wish,
-.wad-logo__drink { font-size: 1.3rem; }
-.wad-logo__wish { color: var(--color-white); }
-.wad-logo__a {
-  color: var(--color-primary);
-  font-size: 0.95rem;
-}
-.wad-logo__drink { color: var(--color-secondary); }
-
 .wad-carrinho-icone {
   position: relative;
   color: var(--color-white);
