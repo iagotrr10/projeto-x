@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wish a Drink | Ofertas</title>
-  <meta name="description" content="As melhores ofertas de bebidas do Wish a Drink.">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <title>Wish a Drink | Favoritos</title>
+  <meta name="description" content="Seus produtos favoritos no Wish a Drink.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" type="image/jpg" href="Assets/favicon.jpg">
   <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/header-footer.css">
   <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/ofertas.css">
+  <link rel="stylesheet" href="css/favoritos.css">
 </head>
 <body>
+
   <!-- BARRA DE ACESSIBILIDADE -->
   <div class="wad-a11y-bar d-flex justify-content-end align-items-center" role="region" aria-label="Barra de acessibilidade">
     <div class="container d-flex justify-content-end align-items-center flex-wrap gap-1">
@@ -32,7 +33,6 @@
     </div>
   </div>
 
-  <!-- HEADER -->
   <header class="site-header">
     <nav class="navbar" aria-label="Navegação principal">
 
@@ -43,7 +43,7 @@
       <ul class="nav-links">
         <li><a href="index.html" class="nav-link">Início</a></li>
         <li><a href="bebidas.html" class="nav-link">Bebidas</a></li>
-        <li><a href="ofertas.html" class="nav-link is-active" aria-current="page">Ofertas</a></li>
+        <li><a href="ofertas.html" class="nav-link">Ofertas</a></li>
         <li><a href="sobre.html" class="nav-link">Sobre nós</a></li>
       </ul>
 
@@ -58,8 +58,8 @@
 
         <div data-wad-area-usuario></div>
 
-        <a href="favoritos.html" class="icon-link icon-link--badge">
-          <i class="bi bi-heart" aria-hidden="true"></i>
+        <a href="favoritos.html" class="icon-link icon-link--badge" aria-current="page">
+          <i class="bi bi-heart-fill" aria-hidden="true"></i>
           <span>Favoritos</span>
           <span id="wad-badge-favoritos" class="badge" style="display:none">0</span>
         </a>
@@ -76,12 +76,18 @@
 
   <main>
     <div class="wad-pagina-header">
-      <h1><i class="bi bi-tags-fill"></i> Ofertas</h1>
-      <p>Tá em promoção? Melhor ainda. Confira os preços especiais desta semana.</p>
+      <h1><i class="bi bi-heart-fill"></i> Favoritos</h1>
+      <p>Os produtos que você marcou com <i class="bi bi-heart-fill" aria-hidden="true"></i> ficam guardados aqui.</p>
     </div>
 
     <section class="container py-4">
-      <ul class="produtos-grid" data-wad-produtos="ofertas" aria-live="polite"></ul>
+      <div id="wad-favoritos-vazio" class="wad-favoritos-vazio" style="display:none">
+        <i class="bi bi-heart" aria-hidden="true"></i>
+        <p class="mb-3">Você ainda não favoritou nenhum produto.</p>
+        <a href="bebidas.html" class="btn btn--accent">Ver bebidas</a>
+      </div>
+
+      <ul class="produtos-grid" data-wad-produtos="favoritos" aria-live="polite"></ul>
     </section>
   </main>
 
@@ -110,7 +116,6 @@
           <ul class="list-unstyled">
             <li><a href="login.html">Entrar</a></li>
             <li><a href="cadastro.html">Criar conta</a></li>
-            <li><a href="favoritos.html">Favoritos</a></li>
             <li><a href="alterar_senha.html">Alterar senha</a></li>
           </ul>
         </div>
