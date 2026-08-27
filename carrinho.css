@@ -1,0 +1,32 @@
+/* ==========================================================================
+   Wish a Drink — carrinho.css
+   Estilos exclusivos da página carrinho.html.
+   ========================================================================== */
+
+.wad-carrinho-item {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--color-border);
+}
+.wad-carrinho-item img { width: 72px; height: 72px; object-fit: contain; background: var(--color-surface); border-radius: var(--radius-sm); padding: .4rem; }
+.wad-carrinho-item .wad-qtd-controle { display: flex; align-items: center; gap: .5rem; }
+.wad-carrinho-item .wad-qtd-controle button {
+  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--color-border); background: var(--color-white);
+}
+.wad-carrinho-vazio { text-align: center; padding: 3rem 1rem; color: var(--color-text-secondary); }
+.wad-carrinho-vazio i { font-size: 3rem; color: var(--color-border); margin-bottom: 1rem; display: block; }
+
+
+/* ==========================================================================
+   Correção: rodapé "flutuando" no meio da tela quando o carrinho
+   está vazio (pouco conteúdo). Fixa o rodapé ao final da viewport.
+   ========================================================================== */
+body.wad-pagina-carrinho {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+body.wad-pagina-carrinho main {
+  flex: 1 0 auto;
+}
+body.wad-pagina-carrinho .wad-footer {
+  flex-shrink: 0;
+}

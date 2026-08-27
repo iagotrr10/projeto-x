@@ -1,0 +1,60 @@
+/* ==========================================================================
+   Wish a Drink — admin.css
+   Estilos exclusivos do painel administrativo (admin.html).
+   ========================================================================== */
+
+.wad-admin-body { background: var(--color-surface); }
+.wad-admin-shell { min-height: 100vh; display: flex; }
+.wad-admin-sidebar {
+  width: 250px; flex-shrink: 0; background: var(--color-dark); color: var(--color-white);
+  padding: 1.5rem 1rem; display: flex; flex-direction: column;
+}
+.wad-admin-sidebar .wad-logo { margin: 0 .75rem 2.5rem; }
+.wad-admin-sidebar .wad-logo__wish,
+.wad-admin-sidebar .wad-logo__drink { font-size: 1.5rem; }
+.wad-admin-nav { display: grid; gap: .35rem; }
+.wad-admin-nav button {
+  border: 0; border-radius: var(--radius-sm); background: transparent; color: #E8DDFB;
+  padding: .7rem .8rem; text-align: left; font-weight: 600;
+}
+.wad-admin-nav button:hover, .wad-admin-nav button.is-active { background: var(--color-secondary); color: var(--color-white); }
+.wad-admin-sidebar-footer { margin-top: auto; padding: 1rem .75rem 0; border-top: 1px solid rgba(255,255,255,.15); }
+.wad-admin-main { flex: 1; min-width: 0; padding: 2rem clamp(1rem, 4vw, 3rem); }
+.wad-admin-topbar { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+.wad-admin-topbar h1 { margin: 0; font-size: 2rem; }
+.wad-admin-badge { background: #FFF1B8; color: #765800; border-radius: var(--radius-pill); padding: .35rem .7rem; font-size: .75rem; font-weight: 700; }
+.wad-admin-section { display: none; }
+.wad-admin-section.is-active { display: block; }
+.wad-admin-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.wad-admin-stat, .wad-admin-panel { background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.25rem; }
+.wad-admin-stat small { color: var(--color-text-secondary); display: block; margin-bottom: .35rem; }
+.wad-admin-stat strong { color: var(--color-secondary); font-size: 1.7rem; }
+.wad-admin-panel { margin-bottom: 1.5rem; }
+.wad-admin-panel h2 { font-size: 1.2rem; margin-bottom: 1rem; }
+.wad-admin-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.wad-admin-table th, .wad-admin-table td { padding: .75rem .5rem; border-bottom: 1px solid var(--color-border); text-align: left; vertical-align: middle; }
+.wad-admin-table th { color: var(--color-text-secondary); font-size: .78rem; text-transform: uppercase; }
+.wad-admin-product { display: flex; align-items: center; gap: .7rem; }
+.wad-admin-product img { width: 42px; height: 42px; object-fit: contain; padding: .2rem; background: var(--color-surface); border-radius: var(--radius-sm); }
+.wad-admin-login { min-height: 100vh; display: grid; place-items: center; padding: 1rem; background: var(--color-dark); }
+.wad-admin-login .wad-auth-card { max-width: 400px; }
+.wad-admin-login .wad-logo { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+.wad-admin-login .wad-logo__wish { color: var(--color-dark); }
+.wad-admin-form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+.wad-admin-form-grid .full { grid-column: 1 / -1; }
+.wad-admin-empty { color: var(--color-text-secondary); text-align: center; padding: 1.5rem; }
+@media (max-width: 900px) {
+  .wad-admin-sidebar { width: 190px; }
+  .wad-admin-stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .wad-admin-shell { display: block; }
+  .wad-admin-sidebar { width: 100%; padding: 1rem; }
+  .wad-admin-sidebar .wad-logo { margin-bottom: 1rem; }
+  .wad-admin-nav { grid-template-columns: repeat(2, 1fr); }
+  .wad-admin-sidebar-footer { margin-top: 1rem; }
+  .wad-admin-topbar { align-items: flex-start; flex-direction: column; }
+  .wad-admin-table { display: block; overflow-x: auto; white-space: nowrap; }
+  .wad-admin-form-grid { grid-template-columns: 1fr; }
+  .wad-admin-form-grid .full { grid-column: auto; }
+}

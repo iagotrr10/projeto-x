@@ -1,0 +1,68 @@
+/* ==========================================================================
+   Wish a Drink — components.css
+   Componentes reutilizados em várias páginas: cabeçalho de página interna,
+   grade/cartão de produto, favoritos, filtros de categoria e caixa de resumo
+   (usada no carrinho e no checkout).
+   ========================================================================== */
+
+.wad-pagina-header {
+  background-color: var(--color-surface);
+  padding: 2.5rem 2rem;
+  text-align: center;
+}
+.wad-pagina-header h1 { font-size: 2rem; margin-bottom: .4rem; }
+.wad-pagina-header p { color: var(--color-text-secondary); font-size: .95rem; }
+
+
+/* ==========================================================================
+   Grade de produtos
+   ========================================================================== */
+.produtos-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.produto-card {
+  position: relative; background-color: var(--color-white); border: 1px solid var(--color-border);
+  border-radius: var(--radius-md); padding: 1rem; display: flex; flex-direction: column;
+}
+.produto-card img {
+  border-radius: var(--radius-sm); margin-bottom: 0.6rem; background-color: var(--color-surface);
+  width: 100%; aspect-ratio: 1 / 1; object-fit: contain; padding: 0.5rem;
+}
+.produto-card h3 { font-family: var(--font-body); font-weight: 500; font-size: 0.85rem; color: var(--color-text); margin-bottom: 0.3rem; }
+.produto-card .btn--primary { margin-top: auto; }
+.favorito { position: absolute; top: 0.75rem; right: 0.75rem; background: none; border: none; font-size: 1rem; color: var(--color-text-muted); z-index: 2; }
+.favorito:hover, .favorito[aria-pressed="true"] { color: var(--color-primary); }
+.preco { font-size: 0.8rem; margin-bottom: 0.6rem; }
+.preco-antigo { text-decoration: line-through; color: var(--color-text-muted); margin-right: 0.3rem; }
+.preco-atual { color: var(--color-primary); font-weight: 600; }
+
+.wad-filtros {
+  display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.5rem;
+}
+.wad-filtro-chip {
+  border: 1px solid var(--color-border); background: var(--color-white); color: var(--color-text-secondary);
+  border-radius: var(--radius-pill); padding: .4rem 1rem; font-size: .82rem; font-weight: 500;
+}
+.wad-filtro-chip:hover { border-color: var(--color-secondary); }
+.wad-filtro-chip.is-active { background: var(--color-secondary); color: var(--color-white); border-color: var(--color-secondary); }
+
+
+
+/* ==========================================================================
+   Caixa de resumo (carrinho e checkout)
+   ========================================================================== */
+.wad-resumo-box {
+  background: var(--color-surface); border-radius: var(--radius-md); padding: 1.5rem;
+  position: sticky; top: 1rem;
+}
+.wad-resumo-item { display: flex; justify-content: space-between; gap: .75rem; font-size: .85rem; padding: .5rem 0; border-bottom: 1px solid var(--color-border); }
+.wad-resumo-total { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.05rem; margin-top: .75rem; color: var(--wad-roxo); }
+
+
+/* ==========================================================================
+   Responsivo — grade de produtos
+   ========================================================================== */
+@media (max-width: 992px) {
+  .produtos-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 576px) {
+  .produtos-grid { grid-template-columns: 1fr 1fr; }
+}

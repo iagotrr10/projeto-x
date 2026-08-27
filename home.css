@@ -1,0 +1,90 @@
+/* ==========================================================================
+   Wish a Drink — home.css
+   Estilos exclusivos da página inicial (index.html): hero, layout de seções,
+   categorias e banner promocional.
+   ========================================================================== */
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.hero {
+  background-color: var(--color-dark);
+  padding: 3.5rem 2rem;
+  display: flex; align-items: center; justify-content: center; gap: 3rem;
+}
+.hero-content { max-width: 420px; }
+.hero h1 { font-size: 2.6rem; line-height: 1.15; color: var(--color-white); margin-bottom: 0.5rem; }
+.hero-highlight { color: var(--color-primary); }
+.hero-subtitle { font-size: 0.95rem; color: #E8DDFB; margin-bottom: 1.5rem; }
+.hero-illustration { display: flex; align-items: flex-end; gap: 10px; height: 140px; }
+.bottle { display: inline-block; width: 30px; border-radius: 10px 10px 4px 4px; }
+.bottle--1 { height: 90px;  background-color: var(--color-primary); }
+.bottle--2 { height: 130px; background-color: var(--color-accent); }
+.bottle--3 { height: 110px; background-color: var(--color-secondary); }
+.bottle--4 { height: 70px;  background-color: var(--color-primary); }
+.bottle--5 { height: 120px; background-color: var(--color-secondary); }
+
+
+
+/* ==========================================================================
+   Layout geral de seção (Home)
+   ========================================================================== */
+main > section { max-width: var(--container-width); margin-inline: auto; padding: 2.5rem 2rem; }
+main > .banner-promo { max-width: none; }
+.secao-header { margin-bottom: 1.25rem; }
+.secao-header h2 { font-size: 1.3rem; margin-bottom: 0.2rem; }
+.secao-header p { font-size: 0.85rem; color: var(--color-text-secondary); }
+.categorias > h2 { font-size: 1.3rem; margin-bottom: 1.25rem; }
+
+
+/* ==========================================================================
+   Categorias
+   ========================================================================== */
+.categorias-lista { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+.categoria-card {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  padding: 1rem 0.5rem; border-radius: var(--radius-md); background-color: var(--color-surface);
+  transition: transform 0.15s ease;
+}
+.categoria-card:hover { transform: translateY(-3px); }
+.categoria-icone {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.45rem;
+}
+.categoria-icone--cervejas { background: #FDE9C8; color: #B8860B; }
+.categoria-icone--refrigerantes { background: #FFD9EC; color: #FF2E88; }
+.categoria-icone--sucos { background: #E4D6FA; color: #7B2FF7; }
+.categoria-icone--energeticos { background: #FFF1B8; color: #C99A00; }
+.categoria-icone--destilados { background: #F5D6D6; color: #B8443F; }
+.categoria-icone--vinhos { background: #E8D2D8; color: #8B3A55; }
+.categoria-card.is-active { outline: 2px solid var(--color-secondary); }
+.categoria-card .categoria-nome { font-size: 0.8rem; font-weight: 500; color: var(--color-text); }
+
+
+
+/* ==========================================================================
+   Banner promocional
+   ========================================================================== */
+.banner-promo {
+  background-color: var(--color-dark); margin: 1rem 2rem 2.5rem; border-radius: var(--radius-md);
+  padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between;
+  max-width: calc(var(--container-width) - 4rem) !important; margin-inline: auto; flex-wrap: wrap; gap: 1rem;
+}
+.banner-promo p { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--color-white); }
+.banner-promo strong { color: var(--color-accent); }
+
+
+
+/* ==========================================================================
+   Responsivo — categorias
+   ========================================================================== */
+@media (max-width: 992px) {
+  .categorias-lista { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 576px) {
+  .categorias-lista { grid-template-columns: repeat(2, 1fr); }
+}

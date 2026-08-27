@@ -1,0 +1,9 @@
+/* ==========================================================================
+   Wish a Drink — favoritos.css
+   Estilos exclusivos da página favoritos.html (nova aba de produtos
+   favoritados). Reaproveita .produtos-grid / .produto-card de
+   components.css e o estado vazio segue o padrão de .wad-carrinho-vazio.
+   ========================================================================== */
+
+.wad-favoritos-vazio { text-align: center; padding: 3rem 1rem; color: var(--color-text-secondary); }
+.wad-favoritos-vazio i { font-size: 3rem; color: var(--color-border); margin-bottom: 1rem; display: block; }
