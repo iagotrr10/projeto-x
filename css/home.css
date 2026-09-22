@@ -1,0 +1,187 @@
+/* ==========================================================================
+   Wish a Drink — home.css
+   Estilos exclusivos da página inicial (index.html): hero, layout de seções,
+   categorias e banner promocional.
+   ========================================================================== */
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+.hero {
+  position: relative;
+  width: 100vw;
+  max-width: none;
+  min-height: clamp(360px, 52vh, 560px);
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+  padding: clamp(2.5rem, 4.5vw, 4.8rem) clamp(1.25rem, 3vw, 4rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 46, 136, 0.12), transparent 22%),
+    radial-gradient(circle at 82% 18%, rgba(123, 47, 247, 0.12), transparent 24%),
+    linear-gradient(135deg, #1b082e 0%, #2a0944 28%, #1b0c34 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+.hero::before,
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 520px;
+  padding-inline: 0.5rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.8rem, 5vw, 5.2rem);
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  color: var(--color-white);
+  margin-bottom: 0.9rem;
+  text-transform: uppercase;
+}
+
+.hero-highlight {
+  display: block;
+  color: var(--color-primary);
+  text-shadow: 0 0 20px rgba(255, 46, 136, 0.35);
+}
+
+.hero-subtitle {
+  font-size: 1.02rem;
+  color: #E8DDFB;
+  margin-bottom: 1.8rem;
+  max-width: 24rem;
+}
+
+.hero .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-width: 180px;
+  padding: 0.95rem 1.7rem;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 16px 28px rgba(255, 195, 0, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hero .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 22px 36px rgba(255, 195, 0, 0.3);
+}
+
+.hero-illustration {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.8rem;
+  min-width: min(36vw, 440px);
+  height: clamp(180px, 26vw, 260px);
+  padding-bottom: 1rem;
+}
+
+.bottle {
+  position: relative;
+  display: inline-block;
+  width: clamp(28px, 2vw, 42px);
+  border-radius: 14px 14px 8px 8px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.12), 0 18px 30px rgba(0,0,0,0.18);
+}
+
+.bottle::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -12px;
+  width: 62%;
+  height: 18px;
+  border-radius: 8px 8px 4px 4px;
+  background: linear-gradient(180deg, #f7f0ff 0%, #d7c5f2 100%);
+}
+
+.bottle--1 { height: 120px; background: linear-gradient(180deg, #ff4ab0 0%, #ff2e88 100%); }
+.bottle--2 { height: 180px; background: linear-gradient(180deg, #ffd34d 0%, #ffc300 100%); }
+.bottle--3 { height: 220px; background: linear-gradient(180deg, #9d6cff 0%, #7b2ff7 100%); }
+.bottle--4 { height: 140px; background: linear-gradient(180deg, #ff7fc4 0%, #ff2e88 100%); }
+.bottle--5 { height: 200px; background: linear-gradient(180deg, #b58dff 0%, #7b2ff7 100%); }
+
+
+
+/* ==========================================================================
+   Layout geral de seção (Home)
+   ========================================================================== */
+main > section { max-width: var(--container-width); margin-inline: auto; padding: 2.5rem 2rem; }
+main > .banner-promo { max-width: none; }
+.secao-header { margin-bottom: 1.25rem; }
+.secao-header h2 { font-size: 1.3rem; margin-bottom: 0.2rem; }
+.secao-header p { font-size: 0.85rem; color: var(--color-text-secondary); }
+.categorias > h2 { font-size: 1.3rem; margin-bottom: 1.25rem; }
+
+
+/* ==========================================================================
+   Categorias
+   ========================================================================== */
+.categorias-lista { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; }
+.categoria-card {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  padding: 1rem 0.5rem; border-radius: var(--radius-md); background-color: var(--color-surface);
+  transition: transform 0.15s ease;
+}
+.categoria-card:hover { transform: translateY(-3px); }
+.categoria-icone {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.45rem;
+}
+.categoria-icone--cervejas { background: #FDE9C8; color: #B8860B; }
+.categoria-icone--refrigerantes { background: #FFD9EC; color: #FF2E88; }
+.categoria-icone--sucos { background: #E4D6FA; color: #7B2FF7; }
+.categoria-icone--energeticos { background: #FFF1B8; color: #C99A00; }
+.categoria-icone--destilados { background: #F5D6D6; color: #B8443F; }
+.categoria-icone--vinhos { background: #E8D2D8; color: #8B3A55; }
+.categoria-card.is-active { outline: 2px solid var(--color-secondary); }
+.categoria-card .categoria-nome { font-size: 0.8rem; font-weight: 500; color: var(--color-text); }
+
+
+
+/* ==========================================================================
+   Banner promocional
+   ========================================================================== */
+.banner-promo {
+  background-color: var(--color-dark); margin: 1rem 2rem 2.5rem; border-radius: var(--radius-md);
+  padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between;
+  max-width: calc(var(--container-width) - 4rem) !important; margin-inline: auto; flex-wrap: wrap; gap: 1rem;
+}
+.banner-promo p { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--color-white); }
+.banner-promo strong { color: var(--color-accent); }
+
+
+
+/* ==========================================================================
+   Responsivo — categorias
+   ========================================================================== */
+@media (max-width: 992px) {
+  .categorias-lista { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 576px) {
+  .categorias-lista { grid-template-columns: repeat(2, 1fr); }
+}

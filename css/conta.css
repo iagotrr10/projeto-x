@@ -1,0 +1,16 @@
+/* ==========================================================================
+   Wish a Drink — conta.css
+   Estilos das páginas minha_conta.html e pedidos.html (menu lateral da
+   conta e cartões de pedido).
+   ========================================================================== */
+
+.wad-conta-sidebar { background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.25rem; }
+.wad-conta-sidebar .nav-link { color: var(--color-text-secondary); padding: .55rem .5rem; border-radius: var(--radius-sm); font-size: .9rem; }
+.wad-conta-sidebar .nav-link:hover { background: var(--color-surface); }
+.wad-conta-sidebar .nav-link.active { background: var(--color-surface); color: var(--wad-roxo); font-weight: 600; }
+
+.wad-pedido-card { border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1rem; }
+.wad-pedido-card .wad-pedido-status { font-size: .75rem; font-weight: 700; padding: .25rem .7rem; border-radius: var(--radius-pill); }
+.wad-status-entregue { background: #E4F7EA; color: #1F8A4C; }
+.wad-status-transporte { background: #FFF3D6; color: #B8860B; }
+.wad-status-preparo { background: #EDE3FB; color: var(--wad-roxo); }

@@ -1,0 +1,17 @@
+/* ==========================================================================
+   Wish a Drink — checkout.css
+   Estilos exclusivos da página checkout.html (indicador de etapas).
+   A caixa de resumo (.wad-resumo-box) fica em components.css, pois também
+   é usada em carrinho.html.
+   ========================================================================== */
+
+.wad-checkout-step {
+  font-size: .85rem; font-weight: 600; color: var(--color-text-muted);
+  display: flex; align-items: center; gap: .5rem;
+}
+.wad-checkout-step .wad-step-num {
+  width: 26px; height: 26px; border-radius: 50%; background: var(--color-border);
+  color: var(--color-white); display: flex; align-items: center; justify-content: center; font-size: .8rem;
+}
+.wad-checkout-step.ativo { color: var(--wad-roxo); }
+.wad-checkout-step.ativo .wad-step-num { background: var(--wad-roxo); }
