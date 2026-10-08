@@ -91,6 +91,17 @@
     return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   }
 
+  function escaparHTML(texto) {
+    // Escapa conteúdo antes de inseri-lo em textos e atributos HTML.
+    return String(texto ?? "").replace(/[&<>"']/g, (caractere) => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    })[caractere]);
+  }
+
   function lerJSON(chave, valorPadrao) {
     try {
       const bruto = localStorage.getItem(chave);
@@ -137,43 +148,59 @@
     return digito2 === Number(valor.charAt(10));
   }
 
+  function formatarCpf(cpf) {
+    const digitos = String(cpf || "").replace(/\D/g, "").slice(0, 11);
+    return digitos
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+
   function senhaForte(senha) {
     return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(String(senha || ""));
+  }
+
+  function normalizarDataNascimento(valor) {
+    return String(valor || "").replace(/\D/g, "").slice(0, 8);
   }
 
   /* ------------------------------------------------------------------ */
   /* Toasts (Bootstrap)                                                  */
   /* ------------------------------------------------------------------ */
   function mostrarToast(mensagem, tipo) {
-    const container = document.getElementById("wad-toast-container");
+    let container = document.getElementById("wad-toast-container");
     if (!container) {
-      window.alert(mensagem);
-      return;
+      // Páginas sem container próprio, como o admin, recebem um container posicionado.
+      container = document.createElement("div");
+      container.id = "wad-toast-container";
+      container.className = "toast-container position-fixed bottom-0 end-0 p-3";
+      container.style.zIndex = "1080";
+      document.body.appendChild(container);
     }
     const icone = tipo === "erro" ? "bi-exclamation-circle-fill text-danger" : "bi-check-circle-fill text-success";
     const classeExtra = tipo === "erro" ? "wad-toast-erro" : "wad-toast-sucesso";
 
-    const toastEl = document.createElement("div");
-    toastEl.className = `toast align-items-center border-0 ${classeExtra}`;
-    toastEl.setAttribute("role", "status");
-    toastEl.setAttribute("aria-live", "polite");
-    toastEl.setAttribute("aria-atomic", "true");
-    toastEl.innerHTML = `
+    const elementoToast = document.createElement("div");
+    elementoToast.className = `toast align-items-center border-0 ${classeExtra}`;
+    elementoToast.setAttribute("role", "status");
+    elementoToast.setAttribute("aria-live", "polite");
+    elementoToast.setAttribute("aria-atomic", "true");
+    elementoToast.innerHTML = `
       <div class="d-flex">
         <div class="toast-body">
-          <i class="bi ${icone} me-2"></i>${mensagem}
+          <i class="bi ${icone} me-2"></i>${escaparHTML(mensagem)}
         </div>
         <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
       </div>`;
-    container.appendChild(toastEl);
+    container.appendChild(elementoToast);
 
     if (window.bootstrap && window.bootstrap.Toast) {
-      const toast = new window.bootstrap.Toast(toastEl, { delay: 3500 });
-      toastEl.addEventListener("hidden.bs.toast", () => toastEl.remove());
+      const toast = new window.bootstrap.Toast(elementoToast, { delay: 3500 });
+      elementoToast.addEventListener("hidden.bs.toast", () => elementoToast.remove());
       toast.show();
     } else {
-      toastEl.style.display = "block";
-      setTimeout(() => toastEl.remove(), 3500);
+      elementoToast.style.display = "block";
+      setTimeout(() => elementoToast.remove(), 3500);
     }
   }
 
@@ -293,11 +320,11 @@
     const escuro = lerJSON(CHAVE_ESCURO, false);
     document.documentElement.classList.toggle("wad-modo-escuro", escuro);
 
-    const btnContraste = document.getElementById("wad-btn-contraste");
-    if (btnContraste) btnContraste.setAttribute("aria-pressed", String(contraste));
+    const botaoAlternarContraste = document.getElementById("wad-btn-contraste");
+    if (botaoAlternarContraste) botaoAlternarContraste.setAttribute("aria-pressed", String(contraste));
 
-    const btnEscuro = document.getElementById("wad-btn-modo-escuro");
-    if (btnEscuro) btnEscuro.setAttribute("aria-pressed", String(escuro));
+    const botaoAlternarModoEscuro = document.getElementById("wad-btn-modo-escuro");
+    if (botaoAlternarModoEscuro) botaoAlternarModoEscuro.setAttribute("aria-pressed", String(escuro));
   }
 
   function aplicarToggleSenha() {
@@ -326,11 +353,11 @@
   }
 
   function inicializarFormularioLogin() {
-    const form = document.getElementById("wad-form-login");
-    if (!form) return;
+    const formularioLogin = document.getElementById("wad-form-login");
+    if (!formularioLogin) return;
 
-    const params = new URLSearchParams(window.location.search);
-    if (params.get("reset") === "sucesso") {
+    const parametrosUrl = new URLSearchParams(window.location.search);
+    if (parametrosUrl.get("reset") === "sucesso") {
       mostrarToast("Senha redefinida com sucesso. Faça login com sua nova senha.", "sucesso");
     }
 
@@ -346,10 +373,10 @@
       });
     }
 
-    form.addEventListener("submit", (evento) => {
+    formularioLogin.addEventListener("submit", (evento) => {
       evento.preventDefault();
-      if (!form.checkValidity()) {
-        form.classList.add("was-validated");
+      if (!formularioLogin.checkValidity()) {
+        formularioLogin.classList.add("was-validated");
         return;
       }
 
@@ -365,19 +392,30 @@
   }
 
   function inicializarFormularioCadastro() {
-    const form = document.getElementById("wad-form-cadastro");
-    if (!form) return;
+    const formularioCadastro = document.getElementById("wad-form-cadastro");
+    if (!formularioCadastro) return;
 
     const campoNascimento = document.getElementById("nascimento");
+    const campoCpf = document.getElementById("cpf");
     const campoSenha = document.getElementById("senha");
     const campoConfirmar = document.getElementById("confirmar-senha");
     const avisoSenha = document.getElementById("senha-error");
     const barraForca = document.getElementById("wad-forca-barra");
 
     function idadeValida(dataTexto) {
-      if (!dataTexto) return false;
-      const nascimento = new Date(dataTexto);
+      const valor = normalizarDataNascimento(dataTexto);
+      if (!/^\d{8}$/.test(valor)) return false;
+
+      const dia = Number(valor.slice(0, 2));
+      const mes = Number(valor.slice(2, 4));
+      const ano = Number(valor.slice(4, 8));
       const hoje = new Date();
+      if (ano < 1900 || ano > hoje.getFullYear()) return false;
+      const ultimoDiaDoMes = new Date(ano, mes, 0).getDate();
+
+      if (mes < 1 || mes > 12 || dia < 1 || dia > ultimoDiaDoMes) return false;
+
+      const nascimento = new Date(ano, mes - 1, dia);
       let idade = hoje.getFullYear() - nascimento.getFullYear();
       const aindaNaoFezAniversario =
         hoje.getMonth() < nascimento.getMonth() ||
@@ -385,6 +423,15 @@
       if (aindaNaoFezAniversario) idade -= 1;
       return idade >= 18;
     }
+
+    campoNascimento.addEventListener("input", () => {
+      campoNascimento.value = normalizarDataNascimento(campoNascimento.value);
+    });
+
+    campoCpf.addEventListener("input", () => {
+      campoCpf.value = formatarCpf(campoCpf.value);
+      campoCpf.setCustomValidity(cpfValido(campoCpf.value) ? "" : "CPF inválido.");
+    });
 
     campoSenha.addEventListener("input", () => {
       const valor = campoSenha.value;
@@ -399,29 +446,41 @@
       barraForca.style.backgroundColor = cores[pontos];
     });
 
-    form.addEventListener("submit", (evento) => {
+    formularioCadastro.addEventListener("submit", (evento) => {
       evento.preventDefault();
 
       campoNascimento.setCustomValidity(idadeValida(campoNascimento.value) ? "" : "idade");
+      campoCpf.setCustomValidity(cpfValido(campoCpf.value) ? "" : "CPF inválido.");
 
       const senhasConferem = campoSenha.value === campoConfirmar.value;
       avisoSenha.classList.toggle("d-none", senhasConferem);
       campoConfirmar.setCustomValidity(senhasConferem ? "" : "As senhas não coincidem.");
 
-      if (!form.checkValidity()) {
-        form.classList.add("was-validated");
+      if (!formularioCadastro.checkValidity()) {
+        formularioCadastro.classList.add("was-validated");
+        return;
+      }
+
+      const cpf = campoCpf.value.replace(/\D/g, "");
+      const cpfJaCadastrado = obterUsuarios().some((usuario) => String(usuario.cpf || "").replace(/\D/g, "") === cpf);
+      if (cpfJaCadastrado) {
+        campoCpf.setCustomValidity("CPF já cadastrado.");
+        formularioCadastro.classList.add("was-validated");
+        mostrarToast("Este CPF já possui cadastro.", "erro");
         return;
       }
 
       const cadastroCriado = cadastrarUsuario({
         nome: document.getElementById("nome").value.trim(),
         email: document.getElementById("email").value.trim(),
+        cpf,
+        nascimento: normalizarDataNascimento(campoNascimento.value),
         senha: campoSenha.value
       });
 
       if (!cadastroCriado) {
         document.getElementById("email").setCustomValidity("E-mail já cadastrado.");
-        form.classList.add("was-validated");
+        formularioCadastro.classList.add("was-validated");
         mostrarToast("Este e-mail já possui cadastro.", "erro");
         return;
       }
@@ -438,57 +497,59 @@
     document.getElementById("email").addEventListener("input", (evento) => {
       evento.currentTarget.setCustomValidity("");
     });
+
+    campoCpf.addEventListener("input", () => campoCpf.setCustomValidity(""));
   }
 
   function inicializarFormularioRecuperacaoSenha() {
-    const form = document.getElementById("wad-form-recuperar");
-    if (!form) return;
+    const formularioRecuperacao = document.getElementById("wad-form-recuperar");
+    if (!formularioRecuperacao) return;
 
-    const emailInput = document.getElementById("wad-rec-email");
-    const novaSenhaInput = document.getElementById("wad-rec-nova-senha");
-    const confirmarInput = document.getElementById("wad-rec-confirmar-senha");
+    const campoEmailRecuperacao = document.getElementById("wad-rec-email");
+    const campoNovaSenha = document.getElementById("wad-rec-nova-senha");
+    const campoConfirmacaoSenha = document.getElementById("wad-rec-confirmar-senha");
 
-    const validarSenhas = () => {
-      const iguais = novaSenhaInput.value === confirmarInput.value && novaSenhaInput.value.length >= 8;
-      confirmarInput.setCustomValidity(iguais ? "" : "As senhas não coincidem.");
-      confirmarInput.classList.toggle("is-invalid", !iguais && confirmarInput.value.length > 0);
-      return iguais;
+    const validarConfirmacaoSenha = () => {
+      const senhasIguais = campoNovaSenha.value === campoConfirmacaoSenha.value && campoNovaSenha.value.length >= 8;
+      campoConfirmacaoSenha.setCustomValidity(senhasIguais ? "" : "As senhas não coincidem.");
+      campoConfirmacaoSenha.classList.toggle("is-invalid", !senhasIguais && campoConfirmacaoSenha.value.length > 0);
+      return senhasIguais;
     };
 
-    novaSenhaInput.addEventListener("input", validarSenhas);
-    confirmarInput.addEventListener("input", validarSenhas);
+    campoNovaSenha.addEventListener("input", validarConfirmacaoSenha);
+    campoConfirmacaoSenha.addEventListener("input", validarConfirmacaoSenha);
 
-    form.addEventListener("submit", (evento) => {
+    formularioRecuperacao.addEventListener("submit", (evento) => {
       evento.preventDefault();
-      const email = emailInput.value.trim();
-      const novaSenha = novaSenhaInput.value;
+      const emailInformado = campoEmailRecuperacao.value.trim();
+      const novaSenhaInformada = campoNovaSenha.value;
 
-      if (!emailValido(email)) {
-        emailInput.classList.add("is-invalid");
+      if (!emailValido(emailInformado)) {
+        campoEmailRecuperacao.classList.add("is-invalid");
         mostrarToast("Informe um e-mail válido.", "erro");
         return;
       }
 
-      emailInput.classList.remove("is-invalid");
+      campoEmailRecuperacao.classList.remove("is-invalid");
 
-      if (!senhaForte(novaSenha)) {
-        novaSenhaInput.classList.add("is-invalid");
+      if (!senhaForte(novaSenhaInformada)) {
+        campoNovaSenha.classList.add("is-invalid");
         mostrarToast("A nova senha deve ter ao menos 8 caracteres, com maiúscula, minúscula, número e símbolo.", "erro");
         return;
       }
 
-      novaSenhaInput.classList.remove("is-invalid");
+      campoNovaSenha.classList.remove("is-invalid");
 
-      if (!validarSenhas()) {
-        confirmarInput.classList.add("is-invalid");
+      if (!validarConfirmacaoSenha()) {
+        campoConfirmacaoSenha.classList.add("is-invalid");
         mostrarToast("As senhas precisam ser iguais para continuar.", "erro");
         return;
       }
 
-      const resultado = recuperarSenha(email, novaSenha);
+      const resultado = recuperarSenha(emailInformado, novaSenhaInformada);
 
       if (!resultado.ok) {
-        emailInput.classList.add("is-invalid");
+        campoEmailRecuperacao.classList.add("is-invalid");
         mostrarToast(resultado.mensagem, "erro");
         return;
       }
@@ -524,33 +585,33 @@
 
   function iniciarBarraAcessibilidade() {
     const barra = document.querySelector(".wad-a11y-bar");
-    const btnMais = document.getElementById("wad-btn-fonte-mais");
-    const btnMenos = document.getElementById("wad-btn-fonte-menos");
-    const btnContraste = document.getElementById("wad-btn-contraste");
-    const btnEscuro = document.getElementById("wad-btn-modo-escuro");
+    const botaoAumentarFonte = document.getElementById("wad-btn-fonte-mais");
+    const botaoDiminuirFonte = document.getElementById("wad-btn-fonte-menos");
+    const botaoAlternarContraste = document.getElementById("wad-btn-contraste");
+    const botaoAlternarModoEscuro = document.getElementById("wad-btn-modo-escuro");
 
     if (barra && !document.querySelector(".wad-a11y-fab")) {
       barra.id = "wad-a11y-painel";
-      const fab = document.createElement("button");
-      fab.type = "button";
-      fab.className = "wad-a11y-fab";
-      fab.setAttribute("aria-label", "Abrir opções de acessibilidade");
-      fab.setAttribute("aria-expanded", "false");
-      fab.setAttribute("aria-controls", "wad-a11y-painel");
-      fab.innerHTML = '<i class="bi bi-universal-access-circle" aria-hidden="true"></i>';
-      document.body.appendChild(fab);
+      const botaoAcessibilidade = document.createElement("button");
+      botaoAcessibilidade.type = "button";
+      botaoAcessibilidade.className = "wad-a11y-fab";
+      botaoAcessibilidade.setAttribute("aria-label", "Abrir opções de acessibilidade");
+      botaoAcessibilidade.setAttribute("aria-expanded", "false");
+      botaoAcessibilidade.setAttribute("aria-controls", "wad-a11y-painel");
+      botaoAcessibilidade.innerHTML = '<i class="bi bi-universal-access-circle" aria-hidden="true"></i>';
+      document.body.appendChild(botaoAcessibilidade);
 
       const fecharPainel = () => {
         barra.classList.remove("is-open");
-        fab.setAttribute("aria-expanded", "false");
-        fab.setAttribute("aria-label", "Abrir opções de acessibilidade");
+        botaoAcessibilidade.setAttribute("aria-expanded", "false");
+        botaoAcessibilidade.setAttribute("aria-label", "Abrir opções de acessibilidade");
       };
 
-      fab.addEventListener("click", (evento) => {
+      botaoAcessibilidade.addEventListener("click", (evento) => {
         evento.stopPropagation();
         const aberto = barra.classList.toggle("is-open");
-        fab.setAttribute("aria-expanded", String(aberto));
-        fab.setAttribute("aria-label", aberto ? "Fechar opções de acessibilidade" : "Abrir opções de acessibilidade");
+        botaoAcessibilidade.setAttribute("aria-expanded", String(aberto));
+        botaoAcessibilidade.setAttribute("aria-label", aberto ? "Fechar opções de acessibilidade" : "Abrir opções de acessibilidade");
       });
 
       document.addEventListener("keydown", (evento) => {
@@ -558,35 +619,35 @@
       });
       document.addEventListener("click", (evento) => {
         if (!barra.classList.contains("is-open")) return;
-        if (!barra.contains(evento.target) && !fab.contains(evento.target)) fecharPainel();
+        if (!barra.contains(evento.target) && !botaoAcessibilidade.contains(evento.target)) fecharPainel();
       });
     }
 
-    if (btnMais) {
-      btnMais.addEventListener("click", () => {
+    if (botaoAumentarFonte) {
+      botaoAumentarFonte.addEventListener("click", () => {
         let escala = parseFloat(localStorage.getItem(CHAVE_FONTE)) || 1;
         escala = Math.min(1.3, escala + 0.1);
         localStorage.setItem(CHAVE_FONTE, String(escala));
         aplicarPreferencias();
       });
     }
-    if (btnMenos) {
-      btnMenos.addEventListener("click", () => {
+    if (botaoDiminuirFonte) {
+      botaoDiminuirFonte.addEventListener("click", () => {
         let escala = parseFloat(localStorage.getItem(CHAVE_FONTE)) || 1;
         escala = Math.max(0.85, escala - 0.1);
         localStorage.setItem(CHAVE_FONTE, String(escala));
         aplicarPreferencias();
       });
     }
-    if (btnContraste) {
-      btnContraste.addEventListener("click", () => {
+    if (botaoAlternarContraste) {
+      botaoAlternarContraste.addEventListener("click", () => {
         const atual = lerJSON(CHAVE_CONTRASTE, false);
         salvarJSON(CHAVE_CONTRASTE, !atual);
         aplicarPreferencias();
       });
     }
-    if (btnEscuro) {
-      btnEscuro.addEventListener("click", () => {
+    if (botaoAlternarModoEscuro) {
+      botaoAlternarModoEscuro.addEventListener("click", () => {
         const atual = lerJSON(CHAVE_ESCURO, false);
         salvarJSON(CHAVE_ESCURO, !atual);
         aplicarPreferencias();
@@ -603,6 +664,7 @@
 
   function entrar(usuario) {
     salvarJSON(CHAVE_USUARIO, usuario);
+    montarAreaUsuario();
   }
 
   function obterUsuarios() {
@@ -610,25 +672,68 @@
   }
 
   function cadastrarUsuario(usuario) {
-    const usuarios = obterUsuarios();
+    // TODO: hash no backend
+    const usuariosCadastrados = obterUsuarios();
     const email = usuario.email.trim().toLowerCase();
-    const jaCadastrado = usuarios.some((item) => item.email.toLowerCase() === email);
-    if (jaCadastrado) return false;
-    usuarios.push({ ...usuario, email });
-    salvarJSON(CHAVE_USUARIOS, usuarios);
-    entrar({ nome: usuario.nome, email });
+    const emailJaCadastrado = usuariosCadastrados.some((usuarioExistente) => usuarioExistente.email.toLowerCase() === email);
+    const cpf = String(usuario.cpf || "").replace(/\D/g, "");
+    const cpfJaCadastrado = cpf && usuariosCadastrados.some((usuarioExistente) => String(usuarioExistente.cpf || "").replace(/\D/g, "") === cpf);
+    if (emailJaCadastrado || cpfJaCadastrado) return false;
+    usuariosCadastrados.push({ ...usuario, email, cpf });
+    salvarJSON(CHAVE_USUARIOS, usuariosCadastrados);
+    entrar({ nome: usuario.nome, email, cpf });
     return true;
   }
 
   function autenticarUsuario(email, senha) {
-    const usuario = obterUsuarios().find((item) => item.email.toLowerCase() === email.trim().toLowerCase() && item.senha === senha);
-    if (!usuario) return false;
-    entrar({ nome: usuario.nome, email: usuario.email });
+    // TODO: hash no backend
+    const usuarioCadastrado = obterUsuarios().find((usuarioExistente) => usuarioExistente.email.toLowerCase() === email.trim().toLowerCase() && usuarioExistente.senha === senha);
+    if (!usuarioCadastrado) return false;
+    entrar({ nome: usuarioCadastrado.nome, email: usuarioCadastrado.email, cpf: usuarioCadastrado.cpf || "" });
     return true;
   }
 
+  function atualizarDadosUsuario(dadosAtualizados) {
+    const usuarioAtual = obterUsuario();
+    if (!usuarioAtual) return { ok: false, mensagem: "Faça login para alterar seus dados." };
+
+    const usuariosCadastrados = obterUsuarios();
+    const indiceUsuarioAtual = usuariosCadastrados.findIndex((usuarioCadastrado) =>
+      usuarioCadastrado.email.toLowerCase() === usuarioAtual.email.toLowerCase()
+    );
+    if (indiceUsuarioAtual === -1) return { ok: false, mensagem: "Não encontramos os dados desta conta." };
+
+    const nomeAtualizado = String(dadosAtualizados.nome || "").trim();
+    const emailAtualizado = String(dadosAtualizados.email || "").trim().toLowerCase();
+    const cpfAtualizado = String(dadosAtualizados.cpf || "").replace(/\D/g, "");
+
+    if (!nomeAtualizado) return { ok: false, campo: "nome", mensagem: "Informe seu nome completo." };
+    if (!emailValido(emailAtualizado)) return { ok: false, campo: "email", mensagem: "Informe um e-mail válido." };
+    if (!cpfValido(cpfAtualizado)) return { ok: false, campo: "cpf", mensagem: "Informe um CPF válido." };
+
+    const emailJaUtilizado = usuariosCadastrados.some((usuarioCadastrado, indice) =>
+      indice !== indiceUsuarioAtual && usuarioCadastrado.email.toLowerCase() === emailAtualizado
+    );
+    if (emailJaUtilizado) return { ok: false, campo: "email", mensagem: "Este e-mail já possui cadastro." };
+
+    const cpfJaUtilizado = usuariosCadastrados.some((usuarioCadastrado, indice) =>
+      indice !== indiceUsuarioAtual && String(usuarioCadastrado.cpf || "").replace(/\D/g, "") === cpfAtualizado
+    );
+    if (cpfJaUtilizado) return { ok: false, campo: "cpf", mensagem: "Este CPF já possui cadastro." };
+
+    usuariosCadastrados[indiceUsuarioAtual] = {
+      ...usuariosCadastrados[indiceUsuarioAtual],
+      nome: nomeAtualizado,
+      email: emailAtualizado,
+      cpf: cpfAtualizado
+    };
+    salvarJSON(CHAVE_USUARIOS, usuariosCadastrados);
+    entrar({ nome: nomeAtualizado, email: emailAtualizado, cpf: cpfAtualizado });
+    return { ok: true };
+  }
+
   function validarSenhaForte(senha) {
-    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(String(senha || ""));
+    return senhaForte(senha);
   }
 
   function gerarTokenRecuperacao() {
@@ -641,9 +746,15 @@
   }
 
   function recuperarSenha(email, novaSenha) {
+    // TODO: validar código de recuperação no backend antes de salvar qualquer senha.
     const emailNormalizado = String(email || "").trim().toLowerCase();
-    if (!emailNormalizado || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailNormalizado)) {
+    if (!emailValido(emailNormalizado)) {
       return { ok: false, mensagem: "Informe um e-mail válido." };
+    }
+
+    // A redefinição do administrador deve exigir verificação enviada pelo backend.
+    if (emailNormalizado === ADMIN_PADRAO.email.toLowerCase()) {
+      return { ok: false, mensagem: "A senha desta conta só pode ser redefinida pelo responsável pelo sistema." };
     }
 
     if (!validarSenhaForte(novaSenha)) {
@@ -677,6 +788,9 @@
 
   function logout() {
     localStorage.removeItem(CHAVE_USUARIO);
+    sessionStorage.removeItem("wad_admin_autenticado");
+    montarAreaUsuario();
+    montarAcessoAdmin();
     mostrarToast("Você saiu da sua conta.", "sucesso");
     setTimeout(() => { window.location.href = "index.html"; }, 900);
   }
@@ -695,11 +809,12 @@
 
     areas.forEach((area) => {
       if (usuario) {
+        const nome = String(usuario.nome || "");
         area.innerHTML = `
           <div class="wad-user-box">
-            <a href="minha_conta.html" class="wad-user-link" aria-label="Abrir informações da conta de ${usuario.nome}">
-              <div class="wad-avatar" aria-hidden="true">${iniciaisDoNome(usuario.nome)}</div>
-              <span>Olá, <strong>${usuario.nome.split(" ")[0]}</strong></span>
+            <a href="minha_conta.html" class="wad-user-link" aria-label="Abrir informações da conta de ${escaparHTML(nome)}">
+              <div class="wad-avatar" aria-hidden="true">${escaparHTML(iniciaisDoNome(nome))}</div>
+              <span>Olá, <strong>${escaparHTML(nome.split(" ")[0])}</strong></span>
             </a>
             <button type="button" class="wad-btn-logout" data-wad-logout>
               <i class="bi bi-box-arrow-right"></i> Sair
@@ -716,11 +831,17 @@
     });
   }
 
-  function montarAcessoAdmin() {
+  function ehAdmin() {
+    // TODO: validar no servidor (backend PHP/MySQL)
     const usuario = obterUsuario();
-    const eAdmin = sessionStorage.getItem("wad_admin_autenticado") === "true" ||
-      usuario?.email?.toLowerCase() === ADMIN_PADRAO.email.toLowerCase();
-    if (!eAdmin) return;
+    return usuario?.email?.toLowerCase() === ADMIN_PADRAO.email.toLowerCase();
+  }
+
+  function montarAcessoAdmin() {
+    if (!ehAdmin()) {
+      document.querySelectorAll("[data-wad-admin-link]").forEach((linkAdmin) => linkAdmin.remove());
+      return;
+    }
     document.querySelectorAll("header nav").forEach((navegacao) => {
       if (navegacao.querySelector("[data-wad-admin-link]")) return;
       const link = document.createElement("a");
@@ -850,17 +971,17 @@
     return `
       <li>
         <article class="produto-card">
-          <button type="button" class="favorito" data-wad-favorito="${produto.id}" aria-label="Adicionar ${produto.nome} aos favoritos" aria-pressed="${favoritado}">
+          <button type="button" class="favorito" data-wad-favorito="${escaparHTML(produto.id)}" aria-label="Adicionar ${escaparHTML(produto.nome)} aos favoritos" aria-pressed="${favoritado}">
             <i class="bi ${favoritado ? "bi-heart-fill" : "bi-heart"}" aria-hidden="true"></i>
           </button>
-          <img src="${produto.imagem}" alt="${produto.nome}" width="240" height="240" loading="lazy">
-          <h3>${produto.nome}</h3>
-          <p class="produto-descricao">${produto.descricao}</p>
+          <img src="${escaparHTML(produto.imagem)}" alt="${escaparHTML(produto.nome)}" width="240" height="240" loading="lazy">
+          <h3>${escaparHTML(produto.nome)}</h3>
+          <p class="produto-descricao">${escaparHTML(produto.descricao)}</p>
           <p class="preco">
             ${precoAntigoHtml}
             <span class="preco-atual">${formatarPreco(produto.preco)}</span>
           </p>
-          <button type="button" class="btn btn--primary btn--full" data-wad-adicionar="${produto.id}">Adicionar</button>
+          <button type="button" class="btn btn--primary btn--full" data-wad-adicionar="${escaparHTML(produto.id)}">Adicionar</button>
         </article>
       </li>`;
   }
@@ -876,6 +997,9 @@
   function iniciarGradesDeProdutos() {
     const parametros = new URLSearchParams(window.location.search);
     const termoBusca = normalizarTexto(parametros.get("q") || "");
+    const categoriaSolicitada = parametros.get("categoria");
+    const categoriasValidas = new Set(produtos.map((produto) => produto.categoria));
+    const categoriaInicial = categoriasValidas.has(categoriaSolicitada) ? categoriaSolicitada : "todos";
     const campoBusca = document.getElementById("busca");
     if (campoBusca && termoBusca) campoBusca.value = parametros.get("q");
 
@@ -888,6 +1012,10 @@
           : filtro === "todos"
             ? produtos
             : produtos.filter((produto) => produto.categoria === filtro);
+
+      if (filtro === "todos" && categoriaInicial !== "todos") {
+        lista = lista.filter((produto) => produto.categoria === categoriaInicial);
+      }
 
       if (termoBusca && filtro === "todos") {
         lista = lista.filter((produto) => {
@@ -922,12 +1050,19 @@
   function iniciarFiltrosCategoria() {
     const chips = document.querySelectorAll("[data-wad-filtro]");
     if (!chips.length) return;
+    const parametros = new URLSearchParams(window.location.search);
+    const categoriaSolicitada = parametros.get("categoria");
+    const categoriasValidas = new Set(Array.from(chips, (chip) => chip.getAttribute("data-wad-filtro")));
+    const categoriaInicial = categoriasValidas.has(categoriaSolicitada) ? categoriaSolicitada : "todos";
+    chips.forEach((chip) => {
+      chip.classList.toggle("is-active", chip.getAttribute("data-wad-filtro") === categoriaInicial);
+    });
     chips.forEach((chip) => {
       chip.addEventListener("click", () => {
-        chips.forEach((c) => c.classList.remove("is-active"));
+        chips.forEach((filtroCategoria) => filtroCategoria.classList.remove("is-active"));
         chip.classList.add("is-active");
         const categoria = chip.getAttribute("data-wad-filtro");
-        const lista = categoria === "todos" ? produtos : produtos.filter((p) => p.categoria === categoria);
+        const lista = categoria === "todos" ? produtos : produtos.filter((produto) => produto.categoria === categoria);
         renderizarListaProdutos(lista, "[data-wad-produtos]");
       });
     });
@@ -956,18 +1091,18 @@
 
     container.innerHTML = carrinho.map((item) => `
       <div class="wad-carrinho-item">
-        <img src="${item.imagem}" alt="${item.nome}" width="72" height="72">
+        <img src="${escaparHTML(item.imagem)}" alt="${escaparHTML(item.nome)}" width="72" height="72">
         <div class="flex-grow-1">
-          <h3 class="h6 mb-1">${item.nome}</h3>
-          <span class="preco-atual">${formatarPreco(item.preco)}</span>
+          <h3 class="h6 mb-1">${escaparHTML(item.nome)}</h3>
+          <span class="preco-atual">${formatarPreco(Number(item.preco))}</span>
         </div>
         <div class="wad-qtd-controle">
-          <button type="button" aria-label="Diminuir quantidade de ${item.nome}" data-wad-menos="${item.id}">−</button>
-          <span aria-live="polite">${item.quantidade}</span>
-          <button type="button" aria-label="Aumentar quantidade de ${item.nome}" data-wad-mais="${item.id}">+</button>
+          <button type="button" aria-label="Diminuir quantidade de ${escaparHTML(item.nome)}" data-wad-menos="${escaparHTML(item.id)}">−</button>
+          <span aria-live="polite">${escaparHTML(item.quantidade)}</span>
+          <button type="button" aria-label="Aumentar quantidade de ${escaparHTML(item.nome)}" data-wad-mais="${escaparHTML(item.id)}">+</button>
         </div>
         <strong class="ms-3">${formatarPreco(item.preco * item.quantidade)}</strong>
-        <button type="button" class="btn-close ms-3" aria-label="Remover ${item.nome} do carrinho" data-wad-remover="${item.id}"></button>
+        <button type="button" class="btn-close ms-3" aria-label="Remover ${escaparHTML(item.nome)} do carrinho" data-wad-remover="${escaparHTML(item.id)}"></button>
       </div>
     `).join("");
 
@@ -994,12 +1129,12 @@
       const carrinho = obterCarrinho();
 
       if (menos) {
-        const item = carrinho.find((i) => i.id === menos.getAttribute("data-wad-menos"));
-        if (item) atualizarQuantidade(item.id, item.quantidade - 1);
+        const itemCarrinho = carrinho.find((produtoCarrinho) => produtoCarrinho.id === menos.getAttribute("data-wad-menos"));
+        if (itemCarrinho) atualizarQuantidade(itemCarrinho.id, itemCarrinho.quantidade - 1);
       }
       if (mais) {
-        const item = carrinho.find((i) => i.id === mais.getAttribute("data-wad-mais"));
-        if (item) atualizarQuantidade(item.id, item.quantidade + 1);
+        const itemCarrinho = carrinho.find((produtoCarrinho) => produtoCarrinho.id === mais.getAttribute("data-wad-mais"));
+        if (itemCarrinho) atualizarQuantidade(itemCarrinho.id, itemCarrinho.quantidade + 1);
       }
       if (remover) {
         removerDoCarrinho(remover.getAttribute("data-wad-remover"));
@@ -1038,16 +1173,24 @@
     const resumo = document.getElementById("wad-checkout-resumo");
     if (!resumo) return;
     const carrinho = obterCarrinho();
+    const formularioCheckout = document.getElementById("wad-form-checkout");
 
     if (!carrinho.length) {
       resumo.innerHTML = `<p class="text-muted small mb-0">Seu carrinho está vazio. <a href="bebidas.html">Ver bebidas</a></p>`;
+      if (formularioCheckout) {
+        formularioCheckout.setAttribute("aria-disabled", "true");
+        formularioCheckout.querySelectorAll("input, select, textarea, button").forEach((campoFormulario) => {
+          campoFormulario.disabled = true;
+        });
+        formularioCheckout.addEventListener("submit", (evento) => evento.preventDefault());
+      }
       return;
     }
 
     const total = calcularTotalCarrinho();
     resumo.innerHTML = carrinho.map((item) => `
       <div class="wad-resumo-item">
-        <span>${item.quantidade}x ${item.nome}</span>
+        <span>${escaparHTML(item.quantidade)}x ${escaparHTML(item.nome)}</span>
         <span>${formatarPreco(item.preco * item.quantidade)}</span>
       </div>
     `).join("") + `
@@ -1055,20 +1198,24 @@
       <div class="wad-resumo-total"><span>Total</span><span>${formatarPreco(total)}</span></div>
     `;
 
-    const form = document.getElementById("wad-form-checkout");
-    if (form) {
+    if (formularioCheckout) {
+      const usuarioAtual = obterUsuario();
+      const campoNome = document.getElementById("wad-checkout-nome");
       const campoCpf = document.getElementById("wad-cpf-cliente");
+
+      if (usuarioAtual && campoNome) campoNome.value = usuarioAtual.nome || "";
+      if (usuarioAtual?.cpf && campoCpf) {
+        campoCpf.value = formatarCpf(usuarioAtual.cpf);
+      }
 
       if (campoCpf) {
         campoCpf.addEventListener("input", () => {
-          const valor = campoCpf.value.replace(/\D/g, "");
-          const mascarado = valor.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-          campoCpf.value = mascarado.slice(0, 14);
+          campoCpf.value = formatarCpf(campoCpf.value);
           campoCpf.setCustomValidity(cpfValido(campoCpf.value) ? "" : "CPF inválido");
         });
       }
 
-      form.addEventListener("submit", (evento) => {
+      formularioCheckout.addEventListener("submit", (evento) => {
         evento.preventDefault();
 
         if (campoCpf) {
@@ -1077,13 +1224,13 @@
           if (!cpfValidoNoFormulario) {
             campoCpf.reportValidity();
             campoCpf.focus();
-            form.classList.add("was-validated");
+            formularioCheckout.classList.add("was-validated");
             return;
           }
         }
 
-        if (!form.checkValidity()) {
-          form.classList.add("was-validated");
+        if (!formularioCheckout.checkValidity()) {
+          formularioCheckout.classList.add("was-validated");
           return;
         }
 
@@ -1171,10 +1318,15 @@
     entrar,
     cadastrarUsuario,
     autenticarUsuario,
+    atualizarDadosUsuario,
     validarSenhaForte,
     recuperarSenha,
     gerarTokenRecuperacao,
     emailValido,
+    cpfValido,
+    formatarCpf,
+    escaparHTML,
+    ehAdmin,
     senhaForte,
     aplicarToggleSenha,
     inicializarPaginasAutenticacao,

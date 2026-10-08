@@ -109,8 +109,9 @@
                 <input type="email" class="form-control" id="wad-dados-email" required>
               </div>
               <div class="col-md-6">
-                <label class="form-label">CPF</label>
-                <input type="text" class="form-control" value="123.456.789-00" readonly>
+                <label for="wad-dados-cpf" class="form-label">CPF</label>
+                <input type="text" class="form-control" id="wad-dados-cpf" name="cpf" inputmode="numeric" autocomplete="off" maxlength="14" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00" aria-describedby="wad-dados-cpf-feedback" required>
+                <div class="invalid-feedback" id="wad-dados-cpf-feedback">Informe um CPF válido e não utilizado por outra conta.</div>
               </div>
               <div class="col-md-6">
                 <label class="form-label">Telefone</label>
@@ -188,28 +189,67 @@
   
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      const usuario = window.WAD.obterUsuario();
-      if (!usuario) {
+      const usuarioAtual = window.WAD.obterUsuario();
+      if (!usuarioAtual) {
         window.WAD.mostrarToast("Faça login para acessar sua conta.", "erro");
         setTimeout(() => { window.location.href = "login.html"; }, 1200);
         return;
       }
 
-      document.getElementById("wad-conta-nome").textContent = usuario.nome;
-      document.getElementById("wad-conta-email").textContent = usuario.email;
-       if (sessionStorage.getItem("wad_admin_autenticado") === "true" || usuario.email.toLowerCase() === "admin@wishadrink.com") {
-         document.getElementById("wad-conta-admin").classList.remove("d-none");
-       }
-      document.getElementById("wad-conta-avatar").textContent = usuario.nome
-        .trim().split(/\s+/).map((parte) => parte[0]).join("").slice(0, 2).toUpperCase();
-      document.getElementById("wad-dados-nome").value = usuario.nome;
-      document.getElementById("wad-dados-email").value = usuario.email;
+      const contasSalvas = window.WAD.obterUsuarios();
+      const contaCadastrada = contasSalvas.find((conta) => conta.email.toLowerCase() === usuarioAtual.email.toLowerCase());
+      const campoNome = document.getElementById("wad-dados-nome");
+      const campoEmail = document.getElementById("wad-dados-email");
+      const campoCpf = document.getElementById("wad-dados-cpf");
+      const formularioDados = document.getElementById("wad-form-dados");
 
-      document.getElementById("wad-form-dados").addEventListener("submit", (e) => {
-        e.preventDefault();
-        const novoNome = document.getElementById("wad-dados-nome").value.trim();
-        const novoEmail = document.getElementById("wad-dados-email").value.trim();
-        window.WAD.entrar({ nome: novoNome, email: novoEmail });
+      function mostrarIniciais(nomeCompleto) {
+        return nomeCompleto.trim().split(/\s+/).map((parteNome) => parteNome[0]).join("").slice(0, 2).toUpperCase();
+      }
+
+      document.getElementById("wad-conta-nome").textContent = usuarioAtual.nome;
+      document.getElementById("wad-conta-email").textContent = usuarioAtual.email;
+      if (window.WAD.ehAdmin()) {
+        document.getElementById("wad-conta-admin").classList.remove("d-none");
+      }
+      document.getElementById("wad-conta-avatar").textContent = mostrarIniciais(usuarioAtual.nome);
+      campoNome.value = usuarioAtual.nome;
+      campoEmail.value = usuarioAtual.email;
+      campoCpf.value = window.WAD.formatarCpf(usuarioAtual.cpf || contaCadastrada?.cpf);
+
+      campoCpf.addEventListener("input", () => {
+        campoCpf.value = window.WAD.formatarCpf(campoCpf.value);
+        campoCpf.setCustomValidity(window.WAD.cpfValido(campoCpf.value) ? "" : "CPF inválido.");
+      });
+      campoEmail.addEventListener("input", () => campoEmail.setCustomValidity(""));
+
+      formularioDados.addEventListener("submit", (evento) => {
+        evento.preventDefault();
+        campoCpf.setCustomValidity(window.WAD.cpfValido(campoCpf.value) ? "" : "CPF inválido.");
+        if (!formularioDados.checkValidity()) {
+          formularioDados.classList.add("was-validated");
+          return;
+        }
+
+        // A API atualiza cadastro e sessão e rejeita CPF/e-mail já utilizados.
+        const resultado = window.WAD.atualizarDadosUsuario({
+          nome: campoNome.value,
+          email: campoEmail.value,
+          cpf: campoCpf.value
+        });
+
+        if (!resultado.ok) {
+          const campoComErro = resultado.campo === "cpf" ? campoCpf : campoEmail;
+          if (resultado.campo) campoComErro.setCustomValidity(resultado.mensagem);
+          formularioDados.classList.add("was-validated");
+          window.WAD.mostrarToast(resultado.mensagem, "erro");
+          return;
+        }
+
+        document.getElementById("wad-conta-nome").textContent = campoNome.value.trim();
+        document.getElementById("wad-conta-email").textContent = campoEmail.value.trim();
+        document.getElementById("wad-conta-avatar").textContent = mostrarIniciais(campoNome.value.trim());
+        formularioDados.classList.remove("was-validated");
         window.WAD.mostrarToast("Dados atualizados com sucesso!", "sucesso");
       });
     });

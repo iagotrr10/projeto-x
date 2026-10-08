@@ -101,7 +101,7 @@
             <div><label class="form-label" for="product-name">Nome</label><input class="form-control" id="product-name" required></div>
             <div><label class="form-label" for="product-category">Categoria</label><select class="form-select" id="product-category"><option value="cervejas">Cervejas</option><option value="refrigerantes">Refrigerantes</option><option value="sucos">Sucos</option><option value="energeticos">Energéticos</option><option value="destilados">Destilados</option><option value="vinhos">Vinhos</option></select></div>
             <div><label class="form-label" for="product-price">Preço</label><input class="form-control" id="product-price" type="number" min="0" step="0.01" required></div>
-            <div><label class="form-label" for="product-image">Imagem</label><input class="form-control" id="product-image" value="Assets/Logo.png" required></div>
+            <div><label class="form-label" for="product-image">Imagem</label><input class="form-control" id="product-image" value="Assets/logo-wishadrink.png" required></div>
             <div class="full"><button class="btn btn-wad-primario" type="submit"><i class="bi bi-plus-circle me-1"></i>Adicionar ao catálogo beta</button></div>
           </form>
         </div>
@@ -136,40 +136,143 @@
   <script src="script.js"></script>
   <script>
     (() => {
-      const EMAIL = "admin@wishadrink.com";
-      const SENHA = "Admin123!";
-      const SESSION_KEY = "wad_admin_autenticado";
-      const produtosBetaKey = "wad_admin_produtos_beta";
-      const login = document.getElementById("admin-login");
-      const app = document.getElementById("admin-app");
-      const formLogin = document.getElementById("admin-login-form");
-      const errorLogin = document.getElementById("admin-login-error");
-      const titulo = document.getElementById("admin-section-title");
-      const titulos = { dashboard: "Visão geral", produtos: "Produtos", pedidos: "Pedidos", usuarios: "Usuários", configuracoes: "Configurações" };
+      const CHAVE_SESSAO = "wad_usuario";
+      const CHAVE_PRODUTOS_ADMIN = "wad_admin_produtos_beta";
+      sessionStorage.removeItem("wad_admin_autenticado");
+      const secaoLoginAdmin = document.getElementById("admin-login");
+      const painelAdmin = document.getElementById("admin-app");
+      const formularioLoginAdmin = document.getElementById("admin-login-form");
+      const mensagemErroLogin = document.getElementById("admin-login-error");
+      const tituloSecaoAdmin = document.getElementById("admin-section-title");
+      const titulosDasSecoes = {
+        dashboard: "Visão geral",
+        produtos: "Produtos",
+        pedidos: "Pedidos",
+        usuarios: "Usuários",
+        configuracoes: "Configurações"
+      };
 
-      function produtosAdmin() {
-        try { return JSON.parse(localStorage.getItem(produtosBetaKey)) || []; } catch (erro) { return []; }
+      function obterProdutosAdministrativos() {
+        try {
+          const produtosSalvos = localStorage.getItem(CHAVE_PRODUTOS_ADMIN);
+          return produtosSalvos ? JSON.parse(produtosSalvos) : [];
+        } catch {
+          return [];
+        }
       }
-      function formatar(valor) { return Number(valor).toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); }
-      function mostrarPainel() { login.classList.add("d-none"); app.classList.remove("d-none"); renderizarProdutos(); renderizarUsuario(); document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length + produtosAdmin().length; }
-      function renderizarProdutos() {
-        const produtos = [...window.WAD.produtos, ...produtosAdmin()];
-        document.getElementById("admin-product-list").innerHTML = `<table class="wad-admin-table"><thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th></tr></thead><tbody>${produtos.map((produto) => `<tr><td><div class="wad-admin-product"><img src="${produto.imagem}" alt=""><span>${produto.nome}</span></div></td><td>${produto.categoria}</td><td>${formatar(produto.preco)}</td></tr>`).join("")}</tbody></table>`;
+
+      function mostrarPainelAdmin() {
+        secaoLoginAdmin.classList.add("d-none");
+        painelAdmin.classList.remove("d-none");
+        renderizarProdutosAdmin();
+        renderizarUsuarioAdmin();
+        document.getElementById("admin-stat-products").textContent =
+          window.WAD.produtos.length + obterProdutosAdministrativos().length;
       }
-      function renderizarUsuario() {
-        const usuario = window.WAD.obterUsuario();
-        document.getElementById("admin-user-list").innerHTML = usuario ? `<div class="wad-admin-product"><div class="wad-avatar">${usuario.nome.slice(0, 2).toUpperCase()}</div><div><strong>${usuario.nome}</strong><div class="text-muted small">${usuario.email}</div></div></div>` : `<p class="wad-admin-empty">Nenhum usuário de demonstração cadastrado.</p>`;
-        document.getElementById("admin-stat-users").textContent = usuario ? "1" : "0";
+
+      function renderizarProdutosAdmin() {
+        const produtosExibidos = [...window.WAD.produtos, ...obterProdutosAdministrativos()];
+        const escaparHTML = window.WAD.escaparHTML;
+        const linhasProdutos = produtosExibidos.map((produto) => `
+          <tr>
+            <td><div class="wad-admin-product"><img src="${escaparHTML(produto.imagem)}" alt=""><span>${escaparHTML(produto.nome)}</span></div></td>
+            <td>${escaparHTML(produto.categoria)}</td>
+            <td>${window.WAD.formatarPreco(Number(produto.preco))}</td>
+          </tr>`).join("");
+
+        // Produtos do localStorage são dados editáveis: escape antes de montar a tabela.
+        document.getElementById("admin-product-list").innerHTML = `
+          <table class="wad-admin-table">
+            <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th></tr></thead>
+            <tbody>${linhasProdutos}</tbody>
+          </table>`;
       }
-      formLogin.addEventListener("submit", (evento) => { evento.preventDefault(); const email = document.getElementById("admin-email").value.trim(); const senha = document.getElementById("admin-password").value; if (email.toLowerCase() === EMAIL.toLowerCase() && senha === SENHA) { sessionStorage.setItem(SESSION_KEY, "true"); window.WAD.entrar({ nome: "WishAdmin", email: EMAIL }); mostrarPainel(); } else { errorLogin.textContent = "E-mail ou senha incorretos. Tente novamente."; errorLogin.classList.remove("d-none"); } });
-      formLogin.querySelectorAll("input").forEach((campo) => campo.addEventListener("input", () => errorLogin.classList.add("d-none")));
-      document.querySelectorAll("[data-admin-section]").forEach((botao) => botao.addEventListener("click", () => { document.querySelectorAll("[data-admin-section]").forEach((item) => item.classList.remove("is-active")); document.querySelectorAll("[data-admin-panel]").forEach((item) => item.classList.remove("is-active")); botao.classList.add("is-active"); document.querySelector(`[data-admin-panel="${botao.dataset.adminSection}"]`).classList.add("is-active"); titulo.textContent = titulos[botao.dataset.adminSection]; }));
-      document.getElementById("admin-product-form").addEventListener("submit", (evento) => { evento.preventDefault(); const novos = produtosAdmin(); novos.push({ nome: document.getElementById("product-name").value.trim(), categoria: document.getElementById("product-category").value, preco: Number(document.getElementById("product-price").value), imagem: document.getElementById("product-image").value.trim() }); localStorage.setItem(produtosBetaKey, JSON.stringify(novos)); evento.target.reset(); renderizarProdutos(); document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length + novos.length; });
-      document.getElementById("admin-logout").addEventListener("click", () => { sessionStorage.removeItem(SESSION_KEY); localStorage.removeItem("wad_usuario"); app.classList.add("d-none"); login.classList.remove("d-none"); formLogin.reset(); });
-      document.getElementById("admin-dark-mode").addEventListener("click", () => { const ativo = document.documentElement.classList.toggle("wad-modo-escuro"); localStorage.setItem("wad_modo_escuro", JSON.stringify(ativo)); });
-      document.getElementById("admin-contrast").addEventListener("click", () => { const ativo = document.documentElement.classList.toggle("wad-alto-contraste"); localStorage.setItem("wad_alto_contraste", JSON.stringify(ativo)); });
-      document.getElementById("admin-clear-data").addEventListener("click", () => { localStorage.removeItem(produtosBetaKey); renderizarProdutos(); document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length; });
-      if (sessionStorage.getItem(SESSION_KEY) === "true") mostrarPainel();
+
+      function renderizarUsuarioAdmin() {
+        const usuarioAtual = window.WAD.obterUsuario();
+        const escaparHTML = window.WAD.escaparHTML;
+        const nomeUsuario = String(usuarioAtual?.nome || "");
+        const listaUsuarios = document.getElementById("admin-user-list");
+
+        listaUsuarios.innerHTML = usuarioAtual
+          ? `<div class="wad-admin-product"><div class="wad-avatar">${escaparHTML(nomeUsuario.slice(0, 2).toUpperCase())}</div><div><strong>${escaparHTML(nomeUsuario)}</strong><div class="text-muted small">${escaparHTML(usuarioAtual.email)}</div></div></div>`
+          : `<p class="wad-admin-empty">Nenhum usuário de demonstração cadastrado.</p>`;
+        document.getElementById("admin-stat-users").textContent = usuarioAtual ? "1" : "0";
+      }
+
+      formularioLoginAdmin.addEventListener("submit", (evento) => {
+        evento.preventDefault();
+        const emailInformado = document.getElementById("admin-email").value.trim();
+        const senhaInformada = document.getElementById("admin-password").value;
+        const sessaoAnterior = localStorage.getItem(CHAVE_SESSAO);
+        const autenticado = window.WAD.autenticarUsuario(emailInformado, senhaInformada);
+
+        if (autenticado && window.WAD.ehAdmin()) {
+          mostrarPainelAdmin();
+          return;
+        }
+
+        // Uma tentativa inválida não deve substituir uma sessão de cliente já ativa.
+        if (sessaoAnterior === null) localStorage.removeItem(CHAVE_SESSAO);
+        else localStorage.setItem(CHAVE_SESSAO, sessaoAnterior);
+        mensagemErroLogin.textContent = "E-mail ou senha incorretos. Tente novamente.";
+        mensagemErroLogin.classList.remove("d-none");
+      });
+
+      formularioLoginAdmin.querySelectorAll("input").forEach((campoFormulario) => {
+        campoFormulario.addEventListener("input", () => mensagemErroLogin.classList.add("d-none"));
+      });
+
+      document.querySelectorAll("[data-admin-section]").forEach((botaoSecao) => {
+        botaoSecao.addEventListener("click", () => {
+          document.querySelectorAll("[data-admin-section]").forEach((botao) => botao.classList.remove("is-active"));
+          document.querySelectorAll("[data-admin-panel]").forEach((painel) => painel.classList.remove("is-active"));
+          botaoSecao.classList.add("is-active");
+          document.querySelector(`[data-admin-panel="${botaoSecao.dataset.adminSection}"]`).classList.add("is-active");
+          tituloSecaoAdmin.textContent = titulosDasSecoes[botaoSecao.dataset.adminSection];
+        });
+      });
+
+      document.getElementById("admin-product-form").addEventListener("submit", (evento) => {
+        evento.preventDefault();
+        const produtosBeta = obterProdutosAdministrativos();
+        produtosBeta.push({
+          nome: document.getElementById("product-name").value.trim(),
+          categoria: document.getElementById("product-category").value,
+          preco: Number(document.getElementById("product-price").value),
+          imagem: document.getElementById("product-image").value.trim()
+        });
+        localStorage.setItem(CHAVE_PRODUTOS_ADMIN, JSON.stringify(produtosBeta));
+        evento.target.reset();
+        renderizarProdutosAdmin();
+        document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length + produtosBeta.length;
+      });
+
+      document.getElementById("admin-logout").addEventListener("click", () => {
+        localStorage.removeItem(CHAVE_SESSAO);
+        sessionStorage.removeItem("wad_admin_autenticado");
+        painelAdmin.classList.add("d-none");
+        secaoLoginAdmin.classList.remove("d-none");
+        formularioLoginAdmin.reset();
+      });
+
+      document.getElementById("admin-dark-mode").addEventListener("click", () => {
+        const modoEscuroAtivo = document.documentElement.classList.toggle("wad-modo-escuro");
+        localStorage.setItem("wad_modo_escuro", JSON.stringify(modoEscuroAtivo));
+      });
+
+      document.getElementById("admin-contrast").addEventListener("click", () => {
+        const altoContrasteAtivo = document.documentElement.classList.toggle("wad-alto-contraste");
+        localStorage.setItem("wad_alto_contraste", JSON.stringify(altoContrasteAtivo));
+      });
+
+      document.getElementById("admin-clear-data").addEventListener("click", () => {
+        localStorage.removeItem(CHAVE_PRODUTOS_ADMIN);
+        renderizarProdutosAdmin();
+        document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length;
+      });
+
+      if (window.WAD.ehAdmin()) mostrarPainelAdmin();
     })();
   </script>
 </body>

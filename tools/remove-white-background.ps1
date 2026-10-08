@@ -1,49 +1,73 @@
-Add-Type -Path "$env:WINDIR\Microsoft.NET\Framework64\v4.0.30319\System.Drawing.dll"
+<#
+.SYNOPSIS
+  Remove o fundo branco conectado as bordas das imagens e salva como PNG.
+.DESCRIPTION
+  Compatível com Windows PowerShell 5.1. Faz cópia dos originais em _originais.
+#>
+param(
+  [string]$Pasta = (Join-Path $PSScriptRoot '..\Assets\images\produtos\cervejas'),
+  [ValidateRange(0, 255)][int]$Limiar = 225
+)
 
-$folder = Join-Path $PSScriptRoot '..\Assets\images\produtos\cervejas'
-$files = Get-ChildItem $folder -File | Where-Object { $_.Extension -in '.png', '.jpg', '.jpeg' }
-$processed = 0
+$ErrorActionPreference = 'Stop'
+Add-Type -AssemblyName System.Drawing
 
-foreach ($file in $files) {
-  $source = [System.Drawing.Bitmap]::new($file.FullName)
-  $outputName = [System.IO.Path]::GetFileNameWithoutExtension($file.Name) + '.png'
-  $output = Join-Path $folder $outputName
-  $bitmap = [System.Drawing.Bitmap]::new($source.Width, $source.Height, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
-  $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
-  $graphics.DrawImage($source, 0, 0, $source.Width, $source.Height)
-  $graphics.Dispose()
+if (-not (Test-Path -LiteralPath $Pasta)) { throw "Pasta não encontrada: $Pasta" }
+$Pasta = (Resolve-Path -LiteralPath $Pasta).Path
+$backup = Join-Path $Pasta '_originais'
+New-Item -ItemType Directory -Force -Path $backup | Out-Null
 
-  $queue = [System.Collections.Generic.Queue[System.Drawing.Point]]::new()
-  $visited = [System.Collections.Generic.HashSet[string]]::new()
-  for ($x = 0; $x -lt $bitmap.Width; $x++) {
-    $queue.Enqueue([System.Drawing.Point]::new($x, 0))
-    $queue.Enqueue([System.Drawing.Point]::new($x, $bitmap.Height - 1))
+$arquivos = Get-ChildItem -LiteralPath $Pasta -File | Where-Object { $_.Extension -in '.png', '.jpg', '.jpeg' }
+$processadas = 0
+
+foreach ($arquivo in $arquivos) {
+  $copia = Join-Path $backup $arquivo.Name
+  if (-not (Test-Path -LiteralPath $copia)) { Copy-Item -LiteralPath $arquivo.FullName -Destination $copia }
+
+  $origem = [System.Drawing.Bitmap]::new($copia)
+  $imagem = [System.Drawing.Bitmap]::new($origem.Width, $origem.Height, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+  $grafico = [System.Drawing.Graphics]::FromImage($imagem)
+  $grafico.DrawImage($origem, 0, 0, $origem.Width, $origem.Height)
+  $grafico.Dispose()
+  $origem.Dispose()
+
+  $largura = $imagem.Width
+  $altura = $imagem.Height
+  $visitado = New-Object 'bool[]' ($largura * $altura)
+  $fila = [System.Collections.Generic.Queue[int]]::new()
+  for ($x = 0; $x -lt $largura; $x++) { $fila.Enqueue($x); $fila.Enqueue(($altura - 1) * $largura + $x) }
+  for ($y = 1; $y -lt ($altura - 1); $y++) { $fila.Enqueue($y * $largura); $fila.Enqueue($y * $largura + $largura - 1) }
+
+  while ($fila.Count -gt 0) {
+    $indice = $fila.Dequeue()
+    if ($visitado[$indice]) { continue }
+    $visitado[$indice] = $true
+    $x = $indice % $largura
+    $y = [int][math]::Floor($indice / $largura)
+    $pixel = $imagem.GetPixel($x, $y)
+    if ($pixel.R -lt $Limiar -or $pixel.G -lt $Limiar -or $pixel.B -lt $Limiar) { continue }
+    $imagem.SetPixel($x, $y, [System.Drawing.Color]::FromArgb(0, $pixel.R, $pixel.G, $pixel.B))
+    if ($x -gt 0) { $fila.Enqueue($indice - 1) }
+    if ($x -lt ($largura - 1)) { $fila.Enqueue($indice + 1) }
+    if ($y -gt 0) { $fila.Enqueue($indice - $largura) }
+    if ($y -lt ($altura - 1)) { $fila.Enqueue($indice + $largura) }
   }
-  for ($y = 1; $y -lt ($bitmap.Height - 1); $y++) {
-    $queue.Enqueue([System.Drawing.Point]::new(0, $y))
-    $queue.Enqueue([System.Drawing.Point]::new($bitmap.Width - 1, $y))
-  }
 
-  while ($queue.Count -gt 0) {
-    $point = $queue.Dequeue()
-    $key = "$($point.X):$($point.Y)"
-    if (-not $visited.Add($key)) { continue }
-    $pixel = $bitmap.GetPixel($point.X, $point.Y)
-    if ($pixel.R -lt 225 -or $pixel.G -lt 225 -or $pixel.B -lt 225) { continue }
-    $bitmap.SetPixel($point.X, $point.Y, [System.Drawing.Color]::FromArgb(0, $pixel.R, $pixel.G, $pixel.B))
-    if ($point.X -gt 0) { $queue.Enqueue([System.Drawing.Point]::new($point.X - 1, $point.Y)) }
-    if ($point.X -lt ($bitmap.Width - 1)) { $queue.Enqueue([System.Drawing.Point]::new($point.X + 1, $point.Y)) }
-    if ($point.Y -gt 0) { $queue.Enqueue([System.Drawing.Point]::new($point.X, $point.Y - 1)) }
-    if ($point.Y -lt ($bitmap.Height - 1)) { $queue.Enqueue([System.Drawing.Point]::new($point.X, $point.Y + 1)) }
+  $destino = Join-Path $Pasta (([System.IO.Path]::GetFileNameWithoutExtension($arquivo.Name)) + '.png')
+  $temporario = "$destino.tmp"
+  $imagem.Save($temporario, [System.Drawing.Imaging.ImageFormat]::Png)
+  $imagem.Dispose()
+  if (Test-Path -LiteralPath $destino) {
+    $backupSubstituicao = "$temporario.bak"
+    [System.IO.File]::Replace($temporario, $destino, $backupSubstituicao)
+    Remove-Item -LiteralPath $backupSubstituicao -Force
+  } else {
+    Move-Item -LiteralPath $temporario -Destination $destino
   }
-
-  $temporary = "$output.tmp.png"
-  $bitmap.Save($temporary, [System.Drawing.Imaging.ImageFormat]::Png)
-  $bitmap.Dispose()
-  $source.Dispose()
-  Move-Item -Force $temporary $output
-  if ($file.FullName -ne (Resolve-Path $output).Path) { Remove-Item $file.FullName -Force }
-  $processed++
+  if ($arquivo.FullName -ne $destino -and (Test-Path -LiteralPath $arquivo.FullName)) {
+    Remove-Item -LiteralPath $arquivo.FullName -Force
+  }
+  $processadas++
 }
 
-Write-Output "Imagens processadas: $processed"
+Write-Output "Imagens processadas: $processadas (originais em $backup)"

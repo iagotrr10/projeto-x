@@ -8,11 +8,11 @@
   min-height: 60vh;
   display: flex; align-items: center; justify-content: center;
   padding: 3rem 1rem;
-  background-color: var(--color-surface);
+  background-color: var(--cor-superficie);
 }
 .wad-auth-card {
-  background: var(--color-white);
-  border-radius: var(--radius-md);
+  background: var(--cor-branca);
+  border-radius: var(--raio-medio);
   box-shadow: 0 10px 30px rgba(42, 9, 68, .08);
   padding: 2.5rem 2rem;
   width: 100%;
@@ -20,11 +20,11 @@
 }
 .wad-icon-topo {
   width: 56px; height: 56px; border-radius: 50%;
-  background: var(--color-surface); color: var(--wad-roxo);
+  background: var(--cor-superficie); color: var(--wad-roxo);
   display: flex; align-items: center; justify-content: center;
   font-size: 1.6rem; margin: 0 auto 1rem;
 }
 .wad-auth-card .form-control:focus,
 .wad-auth-card .form-select:focus { border-color: var(--wad-roxo); box-shadow: 0 0 0 .2rem rgba(123,47,247,.15); }
-.wad-forca-senha { height: 5px; border-radius: var(--radius-pill); background: var(--color-border); overflow: hidden; margin-top: .4rem; }
-.wad-forca-senha span { display: block; height: 100%; width: 0%; background: var(--color-primary); transition: width .2s ease, background-color .2s ease; }
+.wad-forca-senha { height: 5px; border-radius: var(--raio-pilula); background: var(--cor-borda); overflow: hidden; margin-top: .4rem; }
+.wad-forca-senha span { display: block; height: 100%; width: 0%; background: var(--cor-principal); transition: width .2s ease, background-color .2s ease; }

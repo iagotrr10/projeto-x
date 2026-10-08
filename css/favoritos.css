@@ -5,5 +5,5 @@
    components.css e o estado vazio segue o padrão de .wad-carrinho-vazio.
    ========================================================================== */
 
-.wad-favoritos-vazio { text-align: center; padding: 3rem 1rem; color: var(--color-text-secondary); }
-.wad-favoritos-vazio i { font-size: 3rem; color: var(--color-border); margin-bottom: 1rem; display: block; }
+.wad-favoritos-vazio { text-align: center; padding: 3rem 1rem; color: var(--cor-texto-secundario); }
+.wad-favoritos-vazio i { font-size: 3rem; color: var(--cor-borda); margin-bottom: 1rem; display: block; }
