@@ -1,0 +1,21 @@
+/* ==========================================================================
+   Wish a Drink — conta.css
+   Estilos das páginas minha_conta.html e pedidos.html (menu lateral da
+   conta e cartões de pedido).
+   ========================================================================== */
+
+.wad-conta-sidebar { background: var(--cor-branca); border: 1px solid var(--cor-borda); border-radius: var(--raio-medio); padding: 1.25rem; }
+.wad-conta-sidebar .nav-link { color: var(--cor-texto-secundario); padding: .55rem .5rem; border-radius: var(--raio-pequeno); font-size: .9rem; }
+.wad-conta-sidebar .nav-link:hover { background: var(--cor-superficie); }
+.wad-conta-sidebar .nav-link.active { background: var(--cor-superficie); color: var(--wad-roxo); font-weight: 600; }
+
+.wad-pedido-card { border: 1px solid var(--cor-borda); border-radius: var(--raio-medio); padding: 1.25rem; margin-bottom: 1rem; }
+.wad-pedido-card .wad-pedido-status { font-size: .75rem; font-weight: 700; padding: .25rem .7rem; border-radius: var(--raio-pilula); }
+.wad-status-entregue { background: #E4F7EA; color: #1F8A4C; }
+.wad-status-transporte { background: #FFF3D6; color: #B8860B; }
+.wad-status-preparo { background: #EDE3FB; color: var(--wad-roxo); }
+.wad-status-recebido { background: #EDE3FB; color: var(--wad-roxo); }
+.wad-status-preparando { background: #FFF3D6; color: #8A6500; }
+.wad-status-enviado { background: #E8F1FF; color: #2458A6; }
+.wad-status-cancelado { background: #FBE4E7; color: #A52834; }
+.wad-pedido-card hr { border-color: var(--cor-borda); }

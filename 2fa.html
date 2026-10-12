@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish a Drink | Verificação em 2 etapas</title>
+  <meta name="description" content="Confirme sua identidade com o segundo fator de autenticação.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/jpg" href="Assets/favicon.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+    <link rel="stylesheet" href="css/auth.css"><link rel="stylesheet" href="css/twofa.css">
+</head>
+<body>
+
+  <!-- BARRA DE ACESSIBILIDADE -->
+  <div class="wad-a11y-bar d-flex justify-content-end align-items-center" role="region" aria-label="Barra de acessibilidade">
+    <div class="container d-flex justify-content-end align-items-center flex-wrap gap-1">
+      <span class="me-2 d-none d-sm-inline"><i class="bi bi-universal-access-circle"></i> Acessibilidade:</span>
+      <button id="wad-btn-fonte-menos" type="button" aria-label="Diminuir tamanho da fonte">A-</button>
+      <button id="wad-btn-fonte-mais" type="button" aria-label="Aumentar tamanho da fonte">A+</button>
+      <button id="wad-btn-contraste" type="button" aria-pressed="false" aria-label="Alternar alto contraste">
+        <i class="bi bi-circle-half"></i> Contraste
+      </button>
+      <button id="wad-btn-modo-escuro" type="button" aria-pressed="false" aria-label="Alternar modo escuro">
+        <i class="bi bi-moon-stars-fill"></i> Modo escuro
+      </button>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navegação principal">
+
+      <a href="index.html" class="wad-logo" aria-label="Wish a Drink, página inicial">
+        <img src="Assets/logo-wishadrink.png" alt="Wish a Drink" class="wad-logo-img">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Início</a></li>
+        <li><a href="bebidas.html" class="nav-link">Bebidas</a></li>
+        <li><a href="ofertas.html" class="nav-link">Ofertas</a></li>
+        <li><a href="sobre.html" class="nav-link">Sobre nós</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="search-form" role="search" action="bebidas.html" method="get">
+          <label for="busca" class="sr-only">Buscar bebida</label>
+          <input type="search" id="busca" name="q" placeholder="O que você tá procurando?">
+          <button type="submit" aria-label="Buscar">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </button>
+        </form>
+
+        <div data-wad-area-usuario></div>
+
+        <a href="favoritos.html" class="icon-link icon-link--badge">
+          <i class="bi bi-heart" aria-hidden="true"></i>
+          <span>Favoritos</span>
+          <span id="wad-badge-favoritos" class="badge" style="display:none">0</span>
+        </a>
+
+        <a href="carrinho.html" class="icon-link icon-link--badge">
+          <i class="bi bi-bag" aria-hidden="true"></i>
+          <span>Carrinho</span>
+          <span id="wad-badge-carrinho" class="badge wad-badge-carrinho" style="display:none">0</span>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <main class="wad-auth-wrapper">
+    <div class="wad-auth-card">
+      <div class="wad-icon-topo"><i class="bi bi-shield-lock-fill"></i></div>
+      <h1 class="h4 text-center fw-bold mb-1" style="color:var(--wad-roxo)">Verificação em 2 etapas</h1>
+      <p class="text-center text-muted small mb-4" id="wad-2fa-instrucao">Carregando...</p>
+
+      <form id="wad-form-2fa" novalidate>
+        <div class="mb-3">
+          <label for="wad-2fa-codigo" class="form-label">Código de 6 dígitos</label>
+          <input type="text" class="form-control wad-codigo-2fa" id="wad-2fa-codigo" inputmode="numeric"
+                 autocomplete="one-time-code" maxlength="6" pattern="\d{6}" placeholder="000000" required>
+          <div class="invalid-feedback">Digite os 6 dígitos do código.</div>
+        </div>
+        <button type="submit" class="btn btn-wad-primario w-100 py-2 fw-bold">
+          Confirmar <i class="bi bi-check2-circle"></i>
+        </button>
+      </form>
+
+      <div class="text-center mt-3" id="wad-2fa-reenvio">
+        <button type="button" class="btn btn-link btn-sm" id="wad-2fa-reenviar" disabled>Reenviar código</button>
+      </div>
+
+      <hr class="my-4">
+      <p class="text-center small mb-0"><a href="login.html">Voltar e entrar com outra conta</a></p>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="wad-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a href="index.html" class="wad-logo" aria-label="Wish a Drink">
+            <span class="wad-logo__wish">wish</span>
+            <span class="wad-logo__a">a</span>
+            <span class="wad-logo__drink">drink</span>
+          </a>
+          <p class="small mb-0">Sua loja completa de bebidas, do simples suco ao rótulo premium, com entrega rápida e segura.</p>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Institucional</h6>
+          <ul class="list-unstyled">
+            <li><a href="sobre.html">Sobre nós</a></li>
+            <li><a href="sobre.html#privacidade">Política de privacidade</a></li>
+            <li><a href="sobre.html#termos">Termos de uso</a></li>
+            <li><a href="modelagem.html">Modelagem do banco</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Minha conta</h6>
+          <ul class="list-unstyled">
+            <li><a href="login.html">Entrar</a></li>
+            <li><a href="cadastro.html">Criar conta</a></li>
+            <li><a href="alterar_senha.html">Ajuda com senha</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2026 Wish a Drink. Venda proibida para menores de 18 anos. Beba com moderação.</div>
+    </div>
+  </footer>
+
+  <div id="wad-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const contexto = JSON.parse(sessionStorage.getItem("wad_2fa") || "null");
+      if (!contexto) { window.location.href = "login.html"; return; }
+
+      const form = document.getElementById("wad-form-2fa");
+      const campo = document.getElementById("wad-2fa-codigo");
+      const btnReenviar = document.getElementById("wad-2fa-reenviar");
+      const instrucao = document.getElementById("wad-2fa-instrucao");
+
+      if (contexto.metodo === "totp") {
+        instrucao.textContent = "Abra o seu app autenticador e digite o código atual do Wish a Drink.";
+        document.getElementById("wad-2fa-reenvio").classList.add("d-none");
+      } else {
+        instrucao.textContent = "Enviamos um código para " + contexto.emailMascarado + ". Ele vale por 5 minutos.";
+      }
+
+      // só dígitos no campo
+      campo.addEventListener("input", () => { campo.value = campo.value.replace(/\D/g, "").slice(0, 6); });
+      campo.focus();
+
+      // reenvio com contagem regressiva de 30 s
+      let restante = 0;
+      function iniciarContagem(segundos) {
+        restante = segundos;
+        btnReenviar.disabled = true;
+        const timer = setInterval(() => {
+          restante -= 1;
+          if (restante <= 0) {
+            clearInterval(timer);
+            btnReenviar.disabled = false;
+            btnReenviar.textContent = "Reenviar código";
+          } else {
+            btnReenviar.textContent = "Reenviar código (" + restante + "s)";
+          }
+        }, 1000);
+        btnReenviar.textContent = "Reenviar código (" + restante + "s)";
+      }
+      if (contexto.metodo !== "totp") iniciarContagem(30);
+
+      function reiniciarLogin(mensagem) {
+        sessionStorage.removeItem("wad_2fa");
+        window.WAD.mostrarToast(mensagem, "erro");
+        setTimeout(() => { window.location.href = "login.html"; }, 1800);
+      }
+
+      btnReenviar.addEventListener("click", async () => {
+        btnReenviar.disabled = true;
+        const { ok, dados } = await window.WAD.api("api/resend_2fa.php", { metodo: "POST" });
+        if (ok) {
+          window.WAD.mostrarToast("Enviamos um novo código.", "sucesso");
+          iniciarContagem(30);
+        } else if (dados.reiniciar) {
+          reiniciarLogin(dados.erro);
+        } else {
+          window.WAD.mostrarToast(dados.erro || "Não foi possível reenviar.", "erro");
+          iniciarContagem(30);
+        }
+      });
+
+      form.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        if (!/^\d{6}$/.test(campo.value)) {
+          form.classList.add("was-validated");
+          campo.classList.add("is-invalid");
+          return;
+        }
+        campo.classList.remove("is-invalid");
+        const botao = form.querySelector('button[type="submit"]');
+        botao.disabled = true;
+
+        const { ok, dados } = await window.WAD.api("api/verify_2fa.php", { metodo: "POST", corpo: { codigo: campo.value } });
+        botao.disabled = false;
+
+        if (!ok) {
+          if (dados.reiniciar) { reiniciarLogin(dados.erro); return; }
+          window.WAD.mostrarToast(dados.erro || "Código inválido.", "erro");
+          campo.select();
+          return;
+        }
+        sessionStorage.removeItem("wad_2fa");
+        window.WAD.entrar({ ...dados.usuario, servidor: true });
+        window.WAD.mostrarToast("Login realizado com sucesso!", "sucesso");
+        const destinoPedido = sessionStorage.getItem("wad_2fa_destino");
+        sessionStorage.removeItem("wad_2fa_destino");
+        const destino = destinoPedido && dados.usuario.perfil === "master" ? destinoPedido : dados.destino;
+        setTimeout(() => { window.location.href = destino || "minha_conta.html"; }, 900);
+      });
+    });
+  </script>
+</body>
+</html>

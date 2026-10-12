@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish a Drink | Usuários do sistema</title>
+  <meta name="description" content="Lista de usuários, exclusão e log de acessos (exclusivo do usuário master).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/jpg" href="Assets/favicon.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/usuarios.css">
+</head>
+<body>
+
+  <!-- BARRA DE ACESSIBILIDADE -->
+  <div class="wad-a11y-bar d-flex justify-content-end align-items-center" role="region" aria-label="Barra de acessibilidade">
+    <div class="container d-flex justify-content-end align-items-center flex-wrap gap-1">
+      <span class="me-2 d-none d-sm-inline"><i class="bi bi-universal-access-circle"></i> Acessibilidade:</span>
+      <button id="wad-btn-fonte-menos" type="button" aria-label="Diminuir tamanho da fonte">A-</button>
+      <button id="wad-btn-fonte-mais" type="button" aria-label="Aumentar tamanho da fonte">A+</button>
+      <button id="wad-btn-contraste" type="button" aria-pressed="false" aria-label="Alternar alto contraste">
+        <i class="bi bi-circle-half"></i> Contraste
+      </button>
+      <button id="wad-btn-modo-escuro" type="button" aria-pressed="false" aria-label="Alternar modo escuro">
+        <i class="bi bi-moon-stars-fill"></i> Modo escuro
+      </button>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navegação principal">
+
+      <a href="index.html" class="wad-logo" aria-label="Wish a Drink, página inicial">
+        <img src="Assets/logo-wishadrink.png" alt="Wish a Drink" class="wad-logo-img">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Início</a></li>
+        <li><a href="bebidas.html" class="nav-link">Bebidas</a></li>
+        <li><a href="ofertas.html" class="nav-link">Ofertas</a></li>
+        <li><a href="sobre.html" class="nav-link">Sobre nós</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="search-form" role="search" action="bebidas.html" method="get">
+          <label for="busca" class="sr-only">Buscar bebida</label>
+          <input type="search" id="busca" name="q" placeholder="O que você tá procurando?">
+          <button type="submit" aria-label="Buscar">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </button>
+        </form>
+
+        <div data-wad-area-usuario></div>
+
+        <a href="favoritos.html" class="icon-link icon-link--badge">
+          <i class="bi bi-heart" aria-hidden="true"></i>
+          <span>Favoritos</span>
+          <span id="wad-badge-favoritos" class="badge" style="display:none">0</span>
+        </a>
+
+        <a href="carrinho.html" class="icon-link icon-link--badge">
+          <i class="bi bi-bag" aria-hidden="true"></i>
+          <span>Carrinho</span>
+          <span id="wad-badge-carrinho" class="badge wad-badge-carrinho" style="display:none">0</span>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <main>
+    <div class="wad-pagina-header">
+      <h1><i class="bi bi-people-fill"></i> Usuários do sistema</h1>
+      <p>Área exclusiva do usuário master: pesquise usuários, consulte pedidos e logs de acesso.</p>
+    </div>
+
+    <div class="container py-4">
+      <div id="wad-usuarios-aviso" class="alert alert-secondary" role="status">Verificando permissão de acesso...</div>
+
+      <div id="wad-usuarios-conteudo" class="d-none">
+
+        <section class="card p-3 p-md-4 mb-4" aria-labelledby="wad-criar-conta-titulo">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+              <h2 class="h5 mb-1" id="wad-criar-conta-titulo">Criar conta de teste</h2>
+              <p class="small text-muted mb-0">Cria uma conta comum ativa para testar cadastro, login e pedidos.</p>
+            </div>
+          </div>
+          <div id="wad-criar-conta-aviso" class="alert d-none" role="status" aria-live="polite"></div>
+          <form id="wad-form-criar-conta" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="wad-novo-nome" class="form-label">Nome completo</label>
+                <input id="wad-novo-nome" name="nome" class="form-control" required minlength="3" maxlength="120" autocomplete="name">
+              </div>
+              <div class="col-md-6">
+                <label for="wad-novo-email" class="form-label">E-mail</label>
+                <input id="wad-novo-email" name="email" type="email" class="form-control" required maxlength="150" autocomplete="email">
+              </div>
+              <div class="col-md-4">
+                <label for="wad-novo-cpf" class="form-label">CPF</label>
+                <input id="wad-novo-cpf" name="cpf" class="form-control" inputmode="numeric" required maxlength="14" placeholder="000.000.000-00">
+              </div>
+              <div class="col-md-4">
+                <label for="wad-novo-nascimento" class="form-label">Data de nascimento</label>
+                <input id="wad-novo-nascimento" name="nascimento" type="date" class="form-control" required>
+              </div>
+              <div class="col-md-4">
+                <label for="wad-novo-telefone" class="form-label">Telefone <span class="text-muted">(opcional)</span></label>
+                <input id="wad-novo-telefone" name="telefone" type="tel" class="form-control" inputmode="tel" maxlength="20" autocomplete="tel">
+              </div>
+              <div class="col-md-6">
+                <label for="wad-novo-endereco" class="form-label">Endereço de entrega <span class="text-muted">(opcional)</span></label>
+                <input id="wad-novo-endereco" name="endereco" class="form-control" maxlength="255" autocomplete="street-address">
+              </div>
+              <div class="col-md-6">
+                <label for="wad-novo-senha" class="form-label">Senha inicial</label>
+                <input id="wad-novo-senha" name="senha" type="password" class="form-control" required minlength="8" maxlength="72" autocomplete="new-password" aria-describedby="wad-novo-senha-ajuda">
+                <div id="wad-novo-senha-ajuda" class="form-text">8+ caracteres, com maiúscula, minúscula, número e símbolo. Compartilhe a senha inicial com cuidado.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="wad-novo-2fa" class="form-label">Verificação em duas etapas</label>
+                <select id="wad-novo-2fa" name="metodo_2fa" class="form-select" required>
+                  <option value="email">Código por e-mail</option>
+                  <option value="totp">App autenticador (TOTP)</option>
+                </select>
+                <div class="form-text">O envio de código por e-mail depende da configuração SMTP do projeto.</div>
+              </div>
+              <div class="col-12">
+                <button type="submit" id="wad-criar-conta-enviar" class="btn btn-wad-primario">
+                  <i class="bi bi-person-plus"></i> Criar conta
+                </button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <form id="wad-form-busca" class="card wad-usuarios-busca p-3 mb-4" role="search" novalidate>
+          <div class="row g-2 align-items-end">
+            <div class="col-md-3">
+              <label for="wad-busca-modo" class="form-label">Pesquisar por</label>
+              <select id="wad-busca-modo" class="form-select">
+                <option value="todos">Todos os usuários</option>
+                <option value="nome">Parte do nome</option>
+                <option value="cpf">CPF</option>
+              </select>
+            </div>
+            <div class="col-md-5">
+              <label for="wad-busca-q" class="form-label">Termo da pesquisa</label>
+              <input id="wad-busca-q" class="form-control" type="search" maxlength="120" autocomplete="off" disabled
+                     placeholder="Escolha “Parte do nome” ou “CPF” para pesquisar">
+            </div>
+            <div class="col-md-4 d-flex gap-2">
+              <button type="submit" class="btn btn-wad-primario flex-fill"><i class="bi bi-search"></i> Pesquisar</button>
+              <button type="button" id="wad-busca-limpar" class="btn btn-outline-secondary">Limpar</button>
+            </div>
+          </div>
+        </form>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+          <h2 class="h5 mb-0" id="wad-usuarios-titulo" aria-live="polite">Usuários</h2>
+          <div class="d-flex flex-wrap gap-2">
+            <button type="button" id="wad-log-geral" class="btn btn-outline-secondary btn-sm">
+              <i class="bi bi-journal-text"></i> Ver log geral de acessos
+            </button>
+            <button type="button" id="wad-meu-log-paginas" class="btn btn-outline-primary btn-sm">
+              <i class="bi bi-clock-history"></i> Meu log de páginas
+            </button>
+          </div>
+        </div>
+
+        <div class="wad-tabela-wrap">
+          <table class="wad-tabela" id="wad-tabela-usuarios">
+            <caption class="sr-only">Lista de usuários comuns do sistema</caption>
+            <thead>
+              <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">CPF</th>
+                <th scope="col">2º fator</th>
+                <th scope="col">Conta criada</th>
+                <th scope="col">Último acesso</th>
+                <th scope="col" class="text-end">Ações</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <section id="wad-pedidos-painel" class="card mt-4 d-none" aria-labelledby="wad-pedidos-titulo" tabindex="-1">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-3 wad-log-cabecalho">
+            <div>
+              <h2 class="h5 mb-1" id="wad-pedidos-titulo">Pedidos do usuário</h2>
+              <p class="small text-muted mb-0" id="wad-pedidos-usuario"></p>
+            </div>
+            <button type="button" id="wad-pedidos-fechar" class="btn btn-outline-secondary btn-sm">Fechar</button>
+          </div>
+          <div class="wad-tabela-wrap wad-log-scroll">
+            <table class="wad-tabela" id="wad-tabela-pedidos">
+              <caption class="sr-only">Pedidos do usuário selecionado e itens comprados</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Pedido</th>
+                  <th scope="col">Data</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Bebidas e quantidades</th>
+                  <th scope="col">Total</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="wad-atividade-painel" class="card mt-4 d-none" aria-labelledby="wad-atividade-titulo" tabindex="-1">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 p-3 wad-log-cabecalho">
+            <div>
+              <h2 class="h5 mb-1" id="wad-atividade-titulo">Páginas acessadas</h2>
+              <p class="small text-muted mb-0" id="wad-atividade-conta"></p>
+            </div>
+            <button type="button" id="wad-atividade-fechar" class="btn btn-outline-secondary btn-sm">Fechar</button>
+          </div>
+          <div class="wad-tabela-wrap wad-log-scroll">
+            <table class="wad-tabela" id="wad-tabela-atividade">
+              <caption class="sr-only">Histórico de páginas acessadas pelo usuário selecionado</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Dia e hora</th>
+                  <th scope="col">Página</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="wad-log-painel" class="card mt-4 d-none" aria-labelledby="wad-log-titulo" tabindex="-1">
+          <div class="d-flex justify-content-between align-items-center p-3 wad-log-cabecalho">
+            <h2 class="h5 mb-0" id="wad-log-titulo">Resumo do log</h2>
+            <button type="button" id="wad-log-fechar" class="btn btn-outline-secondary btn-sm">Fechar</button>
+          </div>
+          <div class="wad-tabela-wrap wad-log-scroll">
+            <table class="wad-tabela" id="wad-tabela-log">
+              <caption class="sr-only">Entradas no sistema, da mais recente para a mais antiga</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Dia e hora</th>
+                  <th scope="col">Nome</th>
+                  <th scope="col">Segundo fator (2FA)</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Confirmação de exclusão -->
+    <div class="modal fade" id="wad-modal-excluir" tabindex="-1" aria-labelledby="wad-modal-titulo" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5" id="wad-modal-titulo">Excluir usuário</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            <p class="mb-2">Tem certeza que deseja excluir <strong id="wad-excluir-nome"></strong>?</p>
+            <p class="small text-muted mb-0">A ação é permanente e remove a conta e os logs. Se houver vendas ou pedidos, os dados cadastrais do cliente são preservados para manter o histórico.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" id="wad-excluir-confirmar">Excluir definitivamente</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="wad-modal-editar" tabindex="-1" aria-labelledby="wad-modal-editar-titulo" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+          <form id="wad-form-editar-usuario" novalidate>
+            <div class="modal-header">
+              <h2 class="modal-title h5" id="wad-modal-editar-titulo">Editar usuário</h2>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+              <div id="wad-editar-aviso" class="alert d-none" role="alert" aria-live="polite"></div>
+              <input type="hidden" id="wad-editar-id">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="wad-editar-nome" class="form-label">Nome completo</label>
+                  <input id="wad-editar-nome" class="form-control" required minlength="3" maxlength="120" autocomplete="name">
+                </div>
+                <div class="col-md-6">
+                  <label for="wad-editar-email" class="form-label">E-mail</label>
+                  <input id="wad-editar-email" type="email" class="form-control" required maxlength="150" autocomplete="email">
+                </div>
+                <div class="col-md-4">
+                  <label for="wad-editar-cpf" class="form-label">CPF</label>
+                  <input id="wad-editar-cpf" class="form-control" inputmode="numeric" required maxlength="14">
+                </div>
+                <div class="col-md-4">
+                  <label for="wad-editar-nascimento" class="form-label">Data de nascimento</label>
+                  <input id="wad-editar-nascimento" type="date" class="form-control" required>
+                </div>
+                <div class="col-md-4">
+                  <label for="wad-editar-telefone" class="form-label">Telefone</label>
+                  <input id="wad-editar-telefone" type="tel" class="form-control" inputmode="tel" maxlength="20" autocomplete="tel">
+                </div>
+                <div class="col-12">
+                  <label for="wad-editar-endereco" class="form-label">Endereço cadastral</label>
+                  <input id="wad-editar-endereco" class="form-control" maxlength="255" autocomplete="street-address">
+                </div>
+                <div class="col-12">
+                  <label for="wad-editar-senha" class="form-label">Nova senha <span class="text-muted">(opcional)</span></label>
+                  <input id="wad-editar-senha" type="password" class="form-control" minlength="8" maxlength="72" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}" autocomplete="new-password" aria-describedby="wad-editar-senha-ajuda">
+                  <div id="wad-editar-senha-ajuda" class="form-text">Deixe em branco para manter a senha atual. Se preencher, use 8+ caracteres, maiúscula, minúscula, número e símbolo. A senha nova passa a valer imediatamente e encerra sessões existentes.</div>
+                </div>
+                <div class="col-12">
+                  <label for="wad-editar-confirmar-senha" class="form-label">Confirmar nova senha</label>
+                  <input id="wad-editar-confirmar-senha" type="password" class="form-control" minlength="8" maxlength="72" autocomplete="new-password">
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" id="wad-editar-salvar" class="btn btn-wad-primario">Salvar alterações</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="wad-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a href="index.html" class="wad-logo" aria-label="Wish a Drink">
+            <span class="wad-logo__wish">wish</span>
+            <span class="wad-logo__a">a</span>
+            <span class="wad-logo__drink">drink</span>
+          </a>
+          <p class="small mb-0">Sua loja completa de bebidas, do simples suco ao rótulo premium, com entrega rápida e segura.</p>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Institucional</h6>
+          <ul class="list-unstyled">
+            <li><a href="sobre.html">Sobre nós</a></li>
+            <li><a href="sobre.html#privacidade">Política de privacidade</a></li>
+            <li><a href="sobre.html#termos">Termos de uso</a></li>
+            <li><a href="modelagem.html">Modelagem do banco</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Minha conta</h6>
+          <ul class="list-unstyled">
+            <li><a href="login.html">Entrar</a></li>
+            <li><a href="cadastro.html">Criar conta</a></li>
+            <li><a href="alterar_senha.html">Ajuda com senha</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2026 Wish a Drink. Venda proibida para menores de 18 anos. Beba com moderação.</div>
+    </div>
+  </footer>
+
+  <div id="wad-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const W = window.WAD;
+      const $ = (id) => document.getElementById(id);
+      const ROTULO_2FA = { email: "Código por e-mail", totp: "App autenticador (TOTP)" };
+      const ROTULO_STATUS_PEDIDO = {
+        recebido: "Recebido",
+        preparando: "Em preparo",
+        enviado: "Enviado",
+        entregue: "Entregue",
+        cancelado: "Cancelado"
+      };
+
+      // Monta uma célula sempre com textContent (nunca innerHTML): nomes vêm do banco.
+      function celula(texto, classe) {
+        const td = document.createElement("td");
+        td.textContent = texto == null || texto === "" ? "—" : texto;
+        if (classe) td.className = classe;
+        return td;
+      }
+      function selo2fa(metodo) {
+        const span = document.createElement("span");
+        span.className = "wad-selo-2fa wad-selo-2fa--" + metodo;
+        span.textContent = ROTULO_2FA[metodo] || metodo;
+        return span;
+      }
+      // "2026-10-08 14:32:05" -> "08/10/2026 às 14:32:05" (sem converter fuso: é a hora do servidor)
+      function dataHora(texto) {
+        const m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}:\d{2}:\d{2})/.exec(texto || "");
+        return m ? `${m[3]}/${m[2]}/${m[1]} às ${m[4]}` : null;
+      }
+      function dataCadastro(texto) {
+        const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(texto || "");
+        return m ? `${m[3]}/${m[2]}/${m[1]}` : "—";
+      }
+      const ROTULO_PAGINA = {
+        "index.html": "Início",
+        "bebidas.html": "Bebidas",
+        "ofertas.html": "Ofertas",
+        "sobre.html": "Sobre nós",
+        "carrinho.html": "Carrinho",
+        "checkout.html": "Checkout",
+        "login.html": "Login",
+        "cadastro.html": "Cadastro",
+        "minha_conta.html": "Minha conta",
+        "pedidos.html": "Meus pedidos",
+        "favoritos.html": "Favoritos",
+        "alterar_senha.html": "Ajuda com senha",
+        "2fa.html": "Verificação em duas etapas",
+        "usuarios.html": "Usuários",
+        "admin.html": "Administração",
+        "modelagem.html": "Modelagem do banco"
+      };
+      const ROTULO_CAMPOS_NOVO_USUARIO = {
+        nome: "wad-novo-nome",
+        email: "wad-novo-email",
+        cpf: "wad-novo-cpf",
+        nascimento: "wad-novo-nascimento",
+        telefone: "wad-novo-telefone",
+        senha: "wad-novo-senha"
+      };
+
+      // 1) Só o master vê esta tela (o servidor confere de novo em cada requisição).
+      const sessao = await W.api("api/me.php");
+      const aviso = $("wad-usuarios-aviso");
+      if (!sessao.ok || !sessao.dados.logado) {
+        aviso.textContent = "Faça login como usuário master para acessar esta área.";
+        aviso.className = "alert alert-warning";
+        setTimeout(() => { window.location.href = "login.html"; }, 1800);
+        return;
+      }
+      if (sessao.dados.usuario.perfil !== "master") {
+        aviso.textContent = "Acesso restrito ao usuário master.";
+        aviso.className = "alert alert-danger";
+        return;
+      }
+      aviso.classList.add("d-none");
+      $("wad-usuarios-conteudo").classList.remove("d-none");
+
+      // 2) Pesquisa
+      const selModo = $("wad-busca-modo");
+      const campoQ = $("wad-busca-q");
+      let usuarioDoLog = null; // id do usuário cujo log está aberto
+
+      const formularioNovoUsuario = $("wad-form-criar-conta");
+      const campoNovoCpf = $("wad-novo-cpf");
+      formularioNovoUsuario.querySelectorAll("input:not(#wad-novo-cpf)").forEach((campo) => {
+        campo.addEventListener("input", () => campo.setCustomValidity(""));
+      });
+      campoNovoCpf.addEventListener("input", () => {
+        const digitos = campoNovoCpf.value.replace(/\D/g, "").slice(0, 11);
+        campoNovoCpf.value = digitos
+          .replace(/(\d{3})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        campoNovoCpf.setCustomValidity(W.cpfValido(campoNovoCpf.value) ? "" : "CPF inválido.");
+      });
+      formularioNovoUsuario.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        formularioNovoUsuario.classList.add("was-validated");
+        if (!formularioNovoUsuario.checkValidity()) return;
+
+        const form = new FormData(formularioNovoUsuario);
+        const nascimento = String(form.get("nascimento") || "");
+        const corpo = {
+          nome: String(form.get("nome") || "").trim(),
+          email: String(form.get("email") || "").trim(),
+          cpf: campoNovoCpf.value.replace(/\D/g, ""),
+          nascimento,
+          telefone: String(form.get("telefone") || "").trim(),
+          endereco: String(form.get("endereco") || "").trim(),
+          senha: String(form.get("senha") || ""),
+          metodo_2fa: String(form.get("metodo_2fa") || "")
+        };
+        const botao = $("wad-criar-conta-enviar");
+        const avisoCriacao = $("wad-criar-conta-aviso");
+        botao.disabled = true;
+        avisoCriacao.classList.add("d-none");
+        const { ok, status, dados } = await W.api("api/admin_user_create.php", { metodo: "POST", corpo });
+        botao.disabled = false;
+
+        if (!ok) {
+          const mensagens = dados.campos || {};
+          Object.entries(ROTULO_CAMPOS_NOVO_USUARIO).forEach(([campo, id]) => {
+            $(id).setCustomValidity(mensagens[campo] || "");
+          });
+          if (status === 409) {
+            $("wad-novo-email").setCustomValidity(dados.erro);
+            campoNovoCpf.setCustomValidity(dados.erro);
+          }
+          avisoCriacao.textContent = dados.erro || "Não foi possível criar a conta.";
+          avisoCriacao.className = "alert alert-danger";
+          if (Object.keys(mensagens).length) {
+            avisoCriacao.textContent += " " + Object.values(mensagens).join(" ");
+          }
+          formularioNovoUsuario.classList.add("was-validated");
+            formularioNovoUsuario.querySelector(":invalid")?.reportValidity();
+            return;
+        }
+
+        formularioNovoUsuario.reset();
+        formularioNovoUsuario.classList.remove("was-validated");
+        Object.values(ROTULO_CAMPOS_NOVO_USUARIO).forEach((id) => $(id).setCustomValidity(""));
+        avisoCriacao.className = "alert alert-success";
+        avisoCriacao.replaceChildren();
+        const mensagem = document.createElement("p");
+        mensagem.className = "mb-0";
+        mensagem.textContent = `Conta de ${dados.usuario.nome} criada. Ela já pode entrar com a senha inicial definida.`;
+        avisoCriacao.appendChild(mensagem);
+        if (dados.totp_secret) {
+          const instrucoes = document.createElement("p");
+          instrucoes.className = "mt-2 mb-1";
+          instrucoes.textContent = "Chave do app autenticador — copie e guarde agora; ela não será exibida novamente:";
+          const chave = document.createElement("code");
+          chave.className = "d-block user-select-all";
+          chave.textContent = dados.totp_secret;
+          avisoCriacao.append(instrucoes, chave);
+        }
+        avisoCriacao.classList.remove("d-none");
+        await pesquisar();
+      });
+
+      function ajustarCampo() {
+        const modo = selModo.value;
+        campoQ.disabled = modo === "todos";
+        if (modo === "todos") { campoQ.value = ""; campoQ.placeholder = "Escolha “Parte do nome” ou “CPF” para pesquisar"; }
+        if (modo === "nome") { campoQ.placeholder = "Ex.: mar (encontra Maria, Amarildo...)"; campoQ.inputMode = "text"; campoQ.focus(); }
+        if (modo === "cpf") { campoQ.placeholder = "Digite o CPF ou parte dele"; campoQ.inputMode = "numeric"; campoQ.focus(); }
+      }
+      selModo.addEventListener("change", ajustarCampo);
+
+      async function pesquisar() {
+        const modo = selModo.value;
+        const q = campoQ.value.trim();
+        if (modo !== "todos" && !q) {
+          W.mostrarToast("Digite o termo da pesquisa.", "erro");
+          campoQ.focus();
+          return;
+        }
+        const params = new URLSearchParams({ modo });
+        if (modo !== "todos") params.set("q", q);
+        const { ok, dados } = await W.api("api/users.php?" + params.toString());
+        if (!ok) { W.mostrarToast(dados.erro || "Não foi possível pesquisar.", "erro"); return; }
+
+        const corpo = $("wad-tabela-usuarios").querySelector("tbody");
+        corpo.replaceChildren();
+        const contexto = modo === "nome" ? ` com “${q}” no nome` : modo === "cpf" ? ` com CPF contendo “${q}”` : "";
+        $("wad-usuarios-titulo").textContent = `${dados.total} usuário(s) encontrado(s)${contexto}`;
+
+        if (!dados.usuarios.length) {
+          const tr = document.createElement("tr");
+          const td = celula("Nenhum usuário encontrado.", "text-center py-4");
+          td.colSpan = 7;
+          tr.appendChild(td);
+          corpo.appendChild(tr);
+          return;
+        }
+        dados.usuarios.forEach((u) => {
+          const tr = document.createElement("tr");
+          tr.appendChild(celula(u.nome));
+          tr.appendChild(celula(u.email));
+          tr.appendChild(celula(u.cpf));
+          const tdFator = document.createElement("td");
+          tdFator.appendChild(selo2fa(u.metodo_2fa));
+          tr.appendChild(tdFator);
+          tr.appendChild(celula(dataCadastro(u.criado_em)));
+          tr.appendChild(celula(dataHora(u.ultimo_acesso) || "Nunca entrou"));
+
+          const tdAcoes = document.createElement("td");
+          tdAcoes.className = "text-end wad-acoes";
+          const btnEditar = document.createElement("button");
+          btnEditar.type = "button";
+          btnEditar.className = "btn btn-outline-primary btn-sm";
+          btnEditar.innerHTML = '<i class="bi bi-pencil-square" aria-hidden="true"></i> Editar';
+          btnEditar.setAttribute("aria-label", "Editar cadastro de " + u.nome);
+          btnEditar.addEventListener("click", () => abrirEdicao(u));
+          const btnLog = document.createElement("button");
+          btnLog.type = "button";
+          btnLog.className = "btn btn-outline-secondary btn-sm";
+          btnLog.innerHTML = '<i class="bi bi-journal-text" aria-hidden="true"></i> Log';
+          btnLog.setAttribute("aria-label", "Ver log de " + u.nome);
+          btnLog.addEventListener("click", () => abrirLog(u.id, u.nome));
+          const btnAtividade = document.createElement("button");
+          btnAtividade.type = "button";
+          btnAtividade.className = "btn btn-outline-info btn-sm";
+          btnAtividade.innerHTML = '<i class="bi bi-clock-history" aria-hidden="true"></i> Páginas';
+          btnAtividade.setAttribute("aria-label", "Ver páginas acessadas por " + u.nome);
+          btnAtividade.addEventListener("click", () => abrirAtividade(u.id));
+          const btnPedidos = document.createElement("button");
+          btnPedidos.type = "button";
+          btnPedidos.className = "btn btn-outline-primary btn-sm";
+          btnPedidos.innerHTML = '<i class="bi bi-receipt" aria-hidden="true"></i> Pedidos';
+          btnPedidos.setAttribute("aria-label", "Ver pedidos de " + u.nome);
+          btnPedidos.addEventListener("click", () => abrirPedidos(u.id));
+          const btnExcluir = document.createElement("button");
+          btnExcluir.type = "button";
+          btnExcluir.className = "btn btn-outline-danger btn-sm";
+          btnExcluir.innerHTML = '<i class="bi bi-trash" aria-hidden="true"></i> Excluir';
+          btnExcluir.setAttribute("aria-label", "Excluir " + u.nome);
+          btnExcluir.addEventListener("click", () => pedirExclusao(u.id, u.nome));
+          tdAcoes.append(btnEditar, btnLog, btnAtividade, btnPedidos, btnExcluir);
+          tr.appendChild(tdAcoes);
+          corpo.appendChild(tr);
+        });
+      }
+
+      $("wad-form-busca").addEventListener("submit", (e) => { e.preventDefault(); pesquisar(); });
+      $("wad-busca-limpar").addEventListener("click", () => { selModo.value = "todos"; ajustarCampo(); pesquisar(); });
+
+      // 3) Log de acessos (mais recentes primeiro — a ordenação vem do servidor)
+      async function abrirLog(id, nome) {
+        const url = id ? "api/user_logs.php?id=" + encodeURIComponent(id) : "api/user_logs.php";
+        const { ok, dados } = await W.api(url);
+        if (!ok) { W.mostrarToast(dados.erro || "Não foi possível carregar o log.", "erro"); return; }
+        usuarioDoLog = id || null;
+
+        $("wad-log-titulo").textContent = id ? `Resumo do log — ${nome}` : "Resumo do log — todos os usuários";
+        const corpo = $("wad-tabela-log").querySelector("tbody");
+        corpo.replaceChildren();
+        if (!dados.logs.length) {
+          const tr = document.createElement("tr");
+          const td = celula("Nenhuma entrada registrada ainda.", "text-center py-4");
+          td.colSpan = 3;
+          tr.appendChild(td);
+          corpo.appendChild(tr);
+        }
+        dados.logs.forEach((l) => {
+          const tr = document.createElement("tr");
+          tr.appendChild(celula(dataHora(l.data_hora)));
+          tr.appendChild(celula(l.nome));
+          const td = document.createElement("td");
+          td.appendChild(selo2fa(l.metodo_2fa));
+          tr.appendChild(td);
+          corpo.appendChild(tr);
+        });
+        const painel = $("wad-log-painel");
+        painel.classList.remove("d-none");
+        painel.scrollIntoView({ behavior: "smooth", block: "start" });
+        painel.focus({ preventScroll: true });
+      }
+      $("wad-log-geral").addEventListener("click", () => abrirLog(null, null));
+      $("wad-log-fechar").addEventListener("click", () => { $("wad-log-painel").classList.add("d-none"); usuarioDoLog = null; });
+
+      async function abrirAtividade(id) {
+        const url = id ? "api/page_activity.php?id=" + encodeURIComponent(id) : "api/page_activity.php";
+        const { ok, dados } = await W.api(url);
+        if (!ok) { W.mostrarToast(dados.erro || "Não foi possível carregar o histórico de páginas.", "erro"); return; }
+
+        $("wad-atividade-titulo").textContent = id
+          ? `Páginas acessadas por ${dados.usuario.nome} (${dados.total})`
+          : `Meu log de páginas (${dados.total})`;
+        $("wad-atividade-conta").textContent =
+          `${dados.usuario.email} · conta criada em ${dataCadastro(dados.usuario.criado_em)}`;
+        const corpo = $("wad-tabela-atividade").querySelector("tbody");
+        corpo.replaceChildren();
+        if (!dados.logs.length) {
+          const tr = document.createElement("tr");
+          const td = celula("Ainda não há páginas registradas. Os acessos passam a ser anotados a partir de agora.", "text-center py-4");
+          td.colSpan = 2;
+          tr.appendChild(td);
+          corpo.appendChild(tr);
+        }
+        dados.logs.forEach((log) => {
+          const tr = document.createElement("tr");
+          tr.appendChild(celula(dataHora(log.Data_Hora) || "—"));
+          tr.appendChild(celula(ROTULO_PAGINA[log.Pagina] || log.Pagina));
+          corpo.appendChild(tr);
+        });
+        const painel = $("wad-atividade-painel");
+        painel.classList.remove("d-none");
+        painel.scrollIntoView({ behavior: "smooth", block: "start" });
+        painel.focus({ preventScroll: true });
+      }
+      $("wad-meu-log-paginas").addEventListener("click", () => abrirAtividade(null));
+      $("wad-atividade-fechar").addEventListener("click", () => $("wad-atividade-painel").classList.add("d-none"));
+
+      async function abrirPedidos(id) {
+        const { ok, dados } = await W.api("api/admin_pedidos.php?id=" + encodeURIComponent(id));
+        if (!ok) { W.mostrarToast(dados.erro || "Não foi possível carregar os pedidos.", "erro"); return; }
+
+        $("wad-pedidos-titulo").textContent = `Pedidos de ${dados.usuario.nome} (${dados.total})`;
+        $("wad-pedidos-usuario").textContent = dados.usuario.email;
+        const corpo = $("wad-tabela-pedidos").querySelector("tbody");
+        corpo.replaceChildren();
+        if (!dados.pedidos.length) {
+          const tr = document.createElement("tr");
+          tr.appendChild(celula("Este usuário ainda não fez pedidos.", "text-center py-4"));
+          corpo.appendChild(tr);
+        }
+        dados.pedidos.forEach((pedido) => {
+          const tr = document.createElement("tr");
+          tr.appendChild(celula("Pedido nº " + pedido.id));
+          tr.appendChild(celula(dataHora(pedido.Data) || "—"));
+          tr.appendChild(celula(ROTULO_STATUS_PEDIDO[pedido.Status] || pedido.Status));
+          const resumoItens = pedido.itens.length
+            ? pedido.itens.map((item) => `${item.quantidade} × ${item.nome}`).join(", ")
+            : "Itens indisponíveis";
+          tr.appendChild(celula(resumoItens));
+          tr.appendChild(celula(Number(pedido.VT).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })));
+          corpo.appendChild(tr);
+        });
+        const painel = $("wad-pedidos-painel");
+        painel.classList.remove("d-none");
+        painel.scrollIntoView({ behavior: "smooth", block: "start" });
+        painel.focus({ preventScroll: true });
+      }
+      $("wad-pedidos-fechar").addEventListener("click", () => $("wad-pedidos-painel").classList.add("d-none"));
+
+      const modalEdicao = new bootstrap.Modal($("wad-modal-editar"));
+      const formularioEdicao = $("wad-form-editar-usuario");
+      const cpfEdicao = $("wad-editar-cpf");
+      const CAMPOS_EDICAO = {
+        nome: "wad-editar-nome",
+        email: "wad-editar-email",
+        cpf: "wad-editar-cpf",
+        nascimento: "wad-editar-nascimento",
+        telefone: "wad-editar-telefone",
+        senha: "wad-editar-senha"
+      };
+      function abrirEdicao(usuario) {
+        $("wad-editar-id").value = usuario.id;
+        $("wad-editar-nome").value = usuario.nome || "";
+        $("wad-editar-email").value = usuario.email || "";
+        cpfEdicao.value = usuario.cpf_digitos || "";
+        $("wad-editar-nascimento").value = usuario.nascimento || "";
+        $("wad-editar-telefone").value = usuario.telefone || "";
+        $("wad-editar-endereco").value = usuario.endereco || "";
+        $("wad-editar-senha").value = "";
+        $("wad-editar-confirmar-senha").value = "";
+        Object.values(CAMPOS_EDICAO).forEach((id) => $(id).setCustomValidity(""));
+        $("wad-editar-aviso").classList.add("d-none");
+        formularioEdicao.classList.remove("was-validated");
+        modalEdicao.show();
+      }
+      cpfEdicao.addEventListener("input", () => {
+        const digitos = cpfEdicao.value.replace(/\D/g, "").slice(0, 11);
+        cpfEdicao.value = digitos
+          .replace(/(\d{3})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d)/, "$1.$2")
+          .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+        cpfEdicao.setCustomValidity(W.cpfValido(cpfEdicao.value) ? "" : "CPF inválido.");
+      });
+      formularioEdicao.querySelectorAll("input:not(#wad-editar-cpf)").forEach((campo) => {
+        campo.addEventListener("input", () => campo.setCustomValidity(""));
+      });
+      function validarSenhaEdicao() {
+        const senha = $("wad-editar-senha").value;
+        const confirmacao = $("wad-editar-confirmar-senha");
+        confirmacao.setCustomValidity(senha && senha !== confirmacao.value ? "As senhas não coincidem." : "");
+      }
+      $("wad-editar-senha").addEventListener("input", validarSenhaEdicao);
+      $("wad-editar-confirmar-senha").addEventListener("input", validarSenhaEdicao);
+      formularioEdicao.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        formularioEdicao.classList.add("was-validated");
+        if (!formularioEdicao.checkValidity()) return;
+
+        const senha = $("wad-editar-senha").value;
+        const corpo = {
+          id: Number($("wad-editar-id").value),
+          nome: $("wad-editar-nome").value.trim(),
+          email: $("wad-editar-email").value.trim(),
+          cpf: cpfEdicao.value.replace(/\D/g, ""),
+          nascimento: $("wad-editar-nascimento").value,
+          telefone: $("wad-editar-telefone").value.trim(),
+          endereco: $("wad-editar-endereco").value.trim(),
+          senha
+        };
+        const botao = $("wad-editar-salvar");
+        const avisoEdicao = $("wad-editar-aviso");
+        botao.disabled = true;
+        avisoEdicao.classList.add("d-none");
+        const { ok, dados } = await W.api("api/admin_user_update.php", { metodo: "POST", corpo });
+        botao.disabled = false;
+
+        if (!ok) {
+          const mensagens = dados.campos || {};
+          Object.entries(CAMPOS_EDICAO).forEach(([campo, id]) => {
+            $(id).setCustomValidity(mensagens[campo] || "");
+          });
+          avisoEdicao.textContent = dados.erro || "Não foi possível atualizar a conta.";
+          avisoEdicao.className = "alert alert-danger";
+          if (Object.keys(mensagens).length) {
+            avisoEdicao.textContent += " " + Object.values(mensagens).join(" ");
+          }
+          formularioEdicao.classList.add("was-validated");
+          formularioEdicao.querySelector(":invalid")?.reportValidity();
+          return;
+        }
+
+        modalEdicao.hide();
+        W.mostrarToast(
+          `Cadastro de ${dados.usuario.nome} atualizado.` + (senha ? " A senha nova encerrou as sessões anteriores." : ""),
+          "sucesso"
+        );
+        await pesquisar();
+      });
+
+      // 4) Exclusão (com confirmação)
+      const modal = new bootstrap.Modal($("wad-modal-excluir"));
+      let idParaExcluir = null;
+      function pedirExclusao(id, nome) {
+        idParaExcluir = id;
+        $("wad-excluir-nome").textContent = nome;
+        modal.show();
+      }
+      $("wad-excluir-confirmar").addEventListener("click", async () => {
+        if (!idParaExcluir) return;
+        const botao = $("wad-excluir-confirmar");
+        botao.disabled = true;
+        const { ok, dados } = await W.api("api/user_delete.php", { metodo: "POST", corpo: { id: idParaExcluir } });
+        botao.disabled = false;
+        modal.hide();
+        if (!ok) { W.mostrarToast(dados.erro || "Não foi possível excluir.", "erro"); return; }
+        W.mostrarToast(`Usuário ${dados.nome} excluído.` + (dados.cliente_mantido ? " (Cadastro de cliente mantido por ter vendas ou pedidos.)" : ""), "sucesso");
+        if (usuarioDoLog === idParaExcluir) { $("wad-log-painel").classList.add("d-none"); usuarioDoLog = null; }
+        idParaExcluir = null;
+        pesquisar();
+      });
+
+      ajustarCampo();
+      pesquisar(); // começa listando todos
+    });
+  </script>
+</body>
+</html>

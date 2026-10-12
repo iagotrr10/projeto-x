@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish a Drink | Minha Conta</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/jpg" href="Assets/favicon.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/conta.css">
+</head>
+<body data-wad-protegida>
+  <!-- BARRA DE ACESSIBILIDADE -->
+  <div class="wad-a11y-bar d-flex justify-content-end align-items-center" role="region" aria-label="Barra de acessibilidade">
+    <div class="container d-flex justify-content-end align-items-center flex-wrap gap-1">
+      <span class="me-2 d-none d-sm-inline"><i class="bi bi-universal-access-circle"></i> Acessibilidade:</span>
+      <button id="wad-btn-fonte-menos" type="button" aria-label="Diminuir tamanho da fonte">A-</button>
+      <button id="wad-btn-fonte-mais" type="button" aria-label="Aumentar tamanho da fonte">A+</button>
+      <button id="wad-btn-contraste" type="button" aria-pressed="false" aria-label="Alternar alto contraste">
+        <i class="bi bi-circle-half"></i> Contraste
+      </button>
+      <button id="wad-btn-modo-escuro" type="button" aria-pressed="false" aria-label="Alternar modo escuro">
+        <i class="bi bi-moon-stars-fill"></i> Modo escuro
+      </button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navegação principal">
+
+      <a href="index.html" class="wad-logo" aria-label="Wish a Drink, página inicial">
+        <img src="Assets/logo-wishadrink.png" alt="Wish a Drink" class="wad-logo-img">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Início</a></li>
+        <li><a href="bebidas.html" class="nav-link">Bebidas</a></li>
+        <li><a href="ofertas.html" class="nav-link">Ofertas</a></li>
+        <li><a href="sobre.html" class="nav-link">Sobre nós</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="search-form" role="search" action="bebidas.html" method="get">
+          <label for="busca" class="sr-only">Buscar bebida</label>
+          <input type="search" id="busca" name="q" placeholder="O que você tá procurando?">
+          <button type="submit" aria-label="Buscar">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </button>
+        </form>
+
+        <div data-wad-area-usuario></div>
+
+        <a href="favoritos.html" class="icon-link icon-link--badge">
+          <i class="bi bi-heart" aria-hidden="true"></i>
+          <span>Favoritos</span>
+          <span id="wad-badge-favoritos" class="badge" style="display:none">0</span>
+        </a>
+
+        <a href="carrinho.html" class="icon-link icon-link--badge">
+          <i class="bi bi-bag" aria-hidden="true"></i>
+          <span>Carrinho</span>
+          <span id="wad-badge-carrinho" class="badge wad-badge-carrinho" style="display:none">0</span>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- CONTEÚDO -->
+  
+  <main class="container my-5">
+    <h1 class="visually-hidden">Minha conta</h1>
+    <div class="row g-4">
+      <!-- Sidebar -->
+      <div class="col-md-3">
+        <div class="wad-conta-sidebar">
+          <div class="text-center mb-3">
+            <div class="wad-avatar mx-auto mb-2" id="wad-conta-avatar" style="width:60px; height:60px; font-size:1.4rem; background:var(--wad-roxo); color:var(--wad-amarelo);">--</div>
+            <h2 class="h5 fw-bold mb-0" id="wad-conta-nome">Visitante</h2>
+            <small class="text-muted" id="wad-conta-email"></small>
+          </div>
+          <nav class="nav flex-column">
+            <a class="nav-link active" href="#wad-section-dados"><i class="bi bi-person"></i> Meus dados</a>
+            <a class="nav-link" href="#wad-section-endereco"><i class="bi bi-geo-alt"></i> Meu endereço</a>
+            <a class="nav-link" href="pedidos.html"><i class="bi bi-box-seam"></i> Meus pedidos</a>
+            <a class="nav-link" href="alterar_senha.html"><i class="bi bi-shield-lock"></i> Ajuda com senha</a>
+             <a class="nav-link d-none" id="wad-conta-admin" href="admin.html"><i class="bi bi-shield-check"></i> Admin beta</a>
+            <a class="nav-link text-danger" href="#" onclick="window.WAD.logout(); return false;"><i class="bi bi-box-arrow-right"></i> Sair</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Conteúdo -->
+      <div class="col-md-9">
+        <section class="card border-0 shadow-sm p-4 mb-4" id="wad-section-dados">
+          <h2 class="h4 fw-bold mb-4" style="color:var(--wad-roxo)">Meus dados</h2>
+          <p class="text-muted small">Dados pessoais informados no cadastro. Data de nascimento e telefone são apenas para consulta.</p>
+          <form id="wad-form-dados" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="wad-dados-nome" class="form-label">Nome completo</label>
+                <input type="text" class="form-control" id="wad-dados-nome" required>
+              </div>
+              <div class="col-md-6">
+                <label for="wad-dados-email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="wad-dados-email" required>
+              </div>
+              <div class="col-md-6">
+                <label for="wad-dados-cpf" class="form-label">CPF</label>
+                <input type="text" class="form-control" id="wad-dados-cpf" name="cpf" inputmode="numeric" autocomplete="off" maxlength="14" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" placeholder="000.000.000-00" aria-describedby="wad-dados-cpf-feedback" required>
+                <div class="invalid-feedback" id="wad-dados-cpf-feedback">Informe um CPF válido e não utilizado por outra conta.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="wad-dados-telefone" class="form-label">Telefone</label>
+                <input type="tel" class="form-control" id="wad-dados-telefone" readonly>
+              </div>
+              <div class="col-md-6">
+                <label for="wad-dados-nascimento" class="form-label">Data de nascimento</label>
+                <input type="date" class="form-control" id="wad-dados-nascimento" readonly>
+              </div>
+            </div>
+            <div class="mt-4">
+              <button type="submit" class="btn btn-wad-primario px-4">Salvar alterações</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card border-0 shadow-sm p-4" id="wad-section-endereco">
+          <h2 class="h4 fw-bold mb-2" style="color:var(--wad-roxo)">Meu endereço de entrega</h2>
+          <p class="text-muted small">Este endereço será preenchido automaticamente no checkout. Você poderá ajustá-lo antes de concluir o pedido.</p>
+          <form id="wad-form-endereco" novalidate>
+            <div class="row g-3">
+              <div class="col-md-8">
+                <label for="wad-endereco-rua" class="form-label">Rua e número</label>
+                <input type="text" class="form-control" id="wad-endereco-rua" maxlength="255" required>
+                <div class="invalid-feedback">Informe rua e número.</div>
+              </div>
+              <div class="col-md-4">
+                <label for="wad-endereco-cep" class="form-label">CEP</label>
+                <input type="text" class="form-control" id="wad-endereco-cep" inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000" pattern="\d{5}-?\d{3}" required>
+                <div class="invalid-feedback">Informe um CEP válido com 8 dígitos.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="wad-endereco-cidade" class="form-label">Cidade</label>
+                <input type="text" class="form-control" id="wad-endereco-cidade" maxlength="120" required>
+                <div class="invalid-feedback">Informe a cidade.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="wad-endereco-estado" class="form-label">Estado</label>
+                <select class="form-select" id="wad-endereco-estado" required>
+                  <option value="">Selecione</option>
+                  <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option>
+                  <option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option>
+                  <option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option>
+                  <option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option>
+                  <option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option>
+                  <option>SE</option><option>TO</option>
+                </select>
+                <div class="invalid-feedback">Selecione o estado.</div>
+              </div>
+              <div class="col-12">
+                <label for="wad-endereco-complemento" class="form-label">Complemento <span class="text-muted small">(opcional)</span></label>
+                <input type="text" class="form-control" id="wad-endereco-complemento" maxlength="120" placeholder="Apartamento, bloco ou referência">
+              </div>
+            </div>
+            <div class="mt-4">
+              <button type="submit" class="btn btn-wad-primario px-4">Salvar endereço</button>
+            </div>
+          </form>
+        </section>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="wad-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a href="index.html" class="wad-logo" aria-label="Wish a Drink">
+            <span class="wad-logo__wish">wish</span>
+            <span class="wad-logo__a">a</span>
+            <span class="wad-logo__drink">drink</span>
+          </a>
+          <p class="small mb-0">Sua loja completa de bebidas, do simples suco ao rótulo premium, com entrega rápida e segura.</p>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Institucional</h6>
+          <ul class="list-unstyled">
+            <li><a href="sobre.html">Sobre nós</a></li>
+            <li><a href="sobre.html#privacidade">Política de privacidade</a></li>
+            <li><a href="sobre.html#termos">Termos de uso</a></li>
+            <li><a href="modelagem.html">Modelagem do banco</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Minha conta</h6>
+          <ul class="list-unstyled">
+            <li><a href="login.html">Entrar</a></li>
+            <li><a href="cadastro.html">Criar conta</a></li>
+            <li><a href="favoritos.html">Favoritos</a></li>
+            <li><a href="alterar_senha.html">Ajuda com senha</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2026 Wish a Drink. Venda proibida para menores de 18 anos. Beba com moderação.</div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="wad-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const usuarioAtual = window.WAD.obterUsuario();
+      if (!usuarioAtual) {
+        window.WAD.mostrarToast("Faça login para acessar sua conta.", "erro");
+        setTimeout(() => { window.location.href = "login.html"; }, 1200);
+        return;
+      }
+
+      const campoNome = document.getElementById("wad-dados-nome");
+      const campoEmail = document.getElementById("wad-dados-email");
+      const campoCpf = document.getElementById("wad-dados-cpf");
+      const campoTelefone = document.getElementById("wad-dados-telefone");
+      const campoNascimento = document.getElementById("wad-dados-nascimento");
+      const formularioDados = document.getElementById("wad-form-dados");
+      const formularioEndereco = document.getElementById("wad-form-endereco");
+      const campoCep = document.getElementById("wad-endereco-cep");
+
+      function mostrarIniciais(nomeCompleto) {
+        return nomeCompleto.trim().split(/\s+/).map((parteNome) => parteNome[0]).join("").slice(0, 2).toUpperCase();
+      }
+
+      document.getElementById("wad-conta-nome").textContent = usuarioAtual.nome;
+      document.getElementById("wad-conta-email").textContent = usuarioAtual.email;
+      if (window.WAD.ehAdmin()) {
+        document.getElementById("wad-conta-admin").classList.remove("d-none");
+      }
+      document.getElementById("wad-conta-avatar").textContent = mostrarIniciais(usuarioAtual.nome);
+      campoNome.value = usuarioAtual.nome;
+      campoEmail.value = usuarioAtual.email;
+      campoCpf.value = window.WAD.formatarCpf(usuarioAtual.cpf);
+
+      window.WAD.api("api/me.php").then(({ ok, dados }) => {
+        if (!ok || !dados.logado || !dados.dados) {
+          window.WAD.mostrarToast(dados.erro || "Não foi possível carregar os dados do cadastro.", "erro");
+          return;
+        }
+        campoNome.value = dados.dados.nome || "";
+        campoEmail.value = dados.dados.email || "";
+        campoCpf.value = window.WAD.formatarCpf(dados.dados.cpf || "");
+        campoTelefone.value = dados.dados.telefone || "";
+        campoNascimento.value = dados.dados.nascimento || "";
+        const endereco = dados.dados.endereco || {};
+        document.getElementById("wad-endereco-rua").value = endereco.rua_numero || "";
+        campoCep.value = endereco.cep ? `${endereco.cep.slice(0, 5)}-${endereco.cep.slice(5)}` : "";
+        document.getElementById("wad-endereco-cidade").value = endereco.cidade || "";
+        document.getElementById("wad-endereco-estado").value = endereco.estado || "";
+        document.getElementById("wad-endereco-complemento").value = endereco.complemento || "";
+      }).catch(() => window.WAD.mostrarToast("Não foi possível carregar os dados do cadastro.", "erro"));
+
+      campoCpf.addEventListener("input", () => {
+        campoCpf.value = window.WAD.formatarCpf(campoCpf.value);
+        campoCpf.setCustomValidity(window.WAD.cpfValido(campoCpf.value) ? "" : "CPF inválido.");
+      });
+      campoEmail.addEventListener("input", () => campoEmail.setCustomValidity(""));
+      campoCep.addEventListener("input", () => {
+        const digitos = campoCep.value.replace(/\D/g, "").slice(0, 8);
+        campoCep.value = digitos.length > 5 ? `${digitos.slice(0, 5)}-${digitos.slice(5)}` : digitos;
+      });
+
+      formularioDados.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        campoCpf.setCustomValidity(window.WAD.cpfValido(campoCpf.value) ? "" : "CPF inválido.");
+        if (!formularioDados.checkValidity()) {
+          formularioDados.classList.add("was-validated");
+          return;
+        }
+
+        // O servidor (api/perfil.php) atualiza o cadastro e rejeita CPF/e-mail já utilizados.
+        const resultado = await window.WAD.atualizarDadosUsuario({
+          nome: campoNome.value,
+          email: campoEmail.value,
+          cpf: campoCpf.value
+        });
+
+        if (!resultado.ok) {
+          const campoComErro = resultado.campo === "cpf" ? campoCpf : campoEmail;
+          if (resultado.campo) campoComErro.setCustomValidity(resultado.mensagem);
+          formularioDados.classList.add("was-validated");
+          window.WAD.mostrarToast(resultado.mensagem, "erro");
+          return;
+        }
+
+        document.getElementById("wad-conta-nome").textContent = campoNome.value.trim();
+        document.getElementById("wad-conta-email").textContent = campoEmail.value.trim();
+        document.getElementById("wad-conta-avatar").textContent = mostrarIniciais(campoNome.value.trim());
+        formularioDados.classList.remove("was-validated");
+        window.WAD.mostrarToast("Dados atualizados com sucesso!", "sucesso");
+      });
+
+      formularioEndereco.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        if (!formularioEndereco.checkValidity()) {
+          formularioEndereco.classList.add("was-validated");
+          return;
+        }
+        const resultado = await window.WAD.api("api/endereco.php", {
+          metodo: "POST",
+          corpo: {
+            rua_numero: document.getElementById("wad-endereco-rua").value,
+            cep: campoCep.value.replace(/\D/g, ""),
+            cidade: document.getElementById("wad-endereco-cidade").value,
+            estado: document.getElementById("wad-endereco-estado").value,
+            complemento: document.getElementById("wad-endereco-complemento").value
+          }
+        });
+        if (!resultado.ok) {
+          formularioEndereco.classList.add("was-validated");
+          window.WAD.mostrarToast(resultado.dados.erro || "Não foi possível salvar o endereço.", "erro");
+          return;
+        }
+        formularioEndereco.classList.remove("was-validated");
+        window.WAD.mostrarToast("Endereço de entrega salvo com sucesso!", "sucesso");
+      });
+    });
+  </script>
+</body>
+</html>

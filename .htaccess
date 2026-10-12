@@ -1,0 +1,6 @@
+# Apache: bloqueia pastas internas e listagem de diretórios
+Options -Indexes
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(config|lib|sql|setup|storage)(/|$) - [F,L]
+</IfModule>

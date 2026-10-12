@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish a Drink | Checkout</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/jpg" href="Assets/favicon.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+  <!-- BARRA DE ACESSIBILIDADE -->
+  <div class="wad-a11y-bar d-flex justify-content-end align-items-center" role="region" aria-label="Barra de acessibilidade">
+    <div class="container d-flex justify-content-end align-items-center flex-wrap gap-1">
+      <span class="me-2 d-none d-sm-inline"><i class="bi bi-universal-access-circle"></i> Acessibilidade:</span>
+      <button id="wad-btn-fonte-menos" type="button" aria-label="Diminuir tamanho da fonte">A-</button>
+      <button id="wad-btn-fonte-mais" type="button" aria-label="Aumentar tamanho da fonte">A+</button>
+      <button id="wad-btn-contraste" type="button" aria-pressed="false" aria-label="Alternar alto contraste">
+        <i class="bi bi-circle-half"></i> Contraste
+      </button>
+      <button id="wad-btn-modo-escuro" type="button" aria-pressed="false" aria-label="Alternar modo escuro">
+        <i class="bi bi-moon-stars-fill"></i> Modo escuro
+      </button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navegação principal">
+
+      <a href="index.html" class="wad-logo" aria-label="Wish a Drink, página inicial">
+        <img src="Assets/logo-wishadrink.png" alt="Wish a Drink" class="wad-logo-img">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Início</a></li>
+        <li><a href="bebidas.html" class="nav-link">Bebidas</a></li>
+        <li><a href="ofertas.html" class="nav-link">Ofertas</a></li>
+        <li><a href="sobre.html" class="nav-link">Sobre nós</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="search-form" role="search" action="bebidas.html" method="get">
+          <label for="busca" class="sr-only">Buscar bebida</label>
+          <input type="search" id="busca" name="q" placeholder="O que você tá procurando?">
+          <button type="submit" aria-label="Buscar">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </button>
+        </form>
+
+        <div data-wad-area-usuario></div>
+
+        <a href="favoritos.html" class="icon-link icon-link--badge">
+          <i class="bi bi-heart" aria-hidden="true"></i>
+          <span>Favoritos</span>
+          <span id="wad-badge-favoritos" class="badge" style="display:none">0</span>
+        </a>
+
+        <a href="carrinho.html" class="icon-link icon-link--badge">
+          <i class="bi bi-bag" aria-hidden="true"></i>
+          <span>Carrinho</span>
+          <span id="wad-badge-carrinho" class="badge wad-badge-carrinho" style="display:none">0</span>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- CONTEÚDO -->
+  
+  <main class="container my-5">
+    <h1 class="h3 fw-bold mb-4" style="color:var(--wad-roxo)"><i class="bi bi-credit-card"></i> Finalizar Pedido</h1>
+
+    <!-- Steps -->
+    <div class="wad-checkout-steps d-flex justify-content-center gap-4 mb-5">
+      <div class="wad-checkout-step ativo"><span class="wad-step-num">1</span> Carrinho</div>
+      <div class="wad-checkout-step ativo"><span class="wad-step-num">2</span> Entrega</div>
+      <div class="wad-checkout-step"><span class="wad-step-num">3</span> Confirmação</div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-7">
+        <div class="card border-0 shadow-sm p-4">
+          <h5 class="fw-bold mb-3">Dados de entrega</h5>
+          <form id="wad-form-checkout" novalidate>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label" for="wad-checkout-nome">Nome completo</label>
+                <input type="text" class="form-control" id="wad-checkout-nome" maxlength="120" required>
+                <div class="invalid-feedback">Informe o nome.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="wad-cpf-cliente">CPF</label>
+                <input type="text" class="form-control" id="wad-cpf-cliente" inputmode="numeric" maxlength="14" placeholder="000.000.000-00" required>
+                <div class="invalid-feedback">CPF inválido. Informe um CPF válido.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="wad-checkout-telefone">Telefone</label>
+                <input type="tel" class="form-control" id="wad-checkout-telefone" inputmode="tel" autocomplete="tel" maxlength="15" placeholder="(11) 99999-9999" required>
+                <div class="invalid-feedback">Informe um telefone completo com DDD.</div>
+              </div>
+              <div class="col-md-8">
+                <label class="form-label" for="wad-checkout-endereco">Rua e número</label>
+                <input type="text" class="form-control" id="wad-checkout-endereco" maxlength="255" placeholder="Rua, número" required>
+                <div class="invalid-feedback">Informe rua e número.</div>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label" for="wad-checkout-cep">CEP</label>
+                <input type="text" class="form-control" id="wad-checkout-cep" inputmode="numeric" autocomplete="postal-code" placeholder="00000-000" maxlength="9" pattern="\d{5}-?\d{3}" required>
+                <div class="invalid-feedback">Informe um CEP válido.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="wad-checkout-cidade">Cidade</label>
+                <input type="text" class="form-control" id="wad-checkout-cidade" maxlength="120" required>
+                <div class="invalid-feedback">Informe a cidade.</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="wad-checkout-estado">Estado</label>
+                <select class="form-select" id="wad-checkout-estado" required>
+                  <option value="">Selecione</option>
+                  <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+                  <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+                  <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+                  <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+                  <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                  <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+                  <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+                  <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+                  <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label" for="wad-checkout-complemento">Complemento <span class="text-muted small">(opcional)</span></label>
+                <input type="text" class="form-control" id="wad-checkout-complemento" maxlength="120" placeholder="Apto, bloco, referência">
+              </div>
+            </div>
+
+            <hr class="my-4">
+            <h5 class="fw-bold mb-3">Forma de pagamento</h5>
+            <p class="small text-warning-emphasis">Protótipo: a forma de pagamento fica registrada no pedido, mas ainda não há cobrança ou integração com banco.</p>
+            <div class="row g-3">
+              <div class="col-md-6 col-lg-4">
+                <div class="form-check border rounded p-3">
+                  <input class="form-check-input" type="radio" name="pagamento" id="pix" value="pix" checked>
+                  <label class="form-check-label fw-bold ms-2" for="pix"><i class="bi bi-qr-code"></i> PIX</label>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="form-check border rounded p-3">
+                  <input class="form-check-input" type="radio" name="pagamento" id="cartao" value="cartao">
+                  <label class="form-check-label fw-bold ms-2" for="cartao"><i class="bi bi-credit-card"></i> Cartão de Crédito</label>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="form-check border rounded p-3">
+                  <input class="form-check-input" type="radio" name="pagamento" id="debito" value="debito">
+                  <label class="form-check-label fw-bold ms-2" for="debito"><i class="bi bi-credit-card-2-front"></i> Cartão de Débito</label>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="form-check border rounded p-3">
+                  <input class="form-check-input" type="radio" name="pagamento" id="dinheiro" value="dinheiro">
+                  <label class="form-check-label fw-bold ms-2" for="dinheiro"><i class="bi bi-cash-coin"></i> Dinheiro na entrega</label>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="form-check border rounded p-3">
+                  <input class="form-check-input" type="radio" name="pagamento" id="boleto" value="boleto">
+                  <label class="form-check-label fw-bold ms-2" for="boleto"><i class="bi bi-receipt"></i> Boleto bancário</label>
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-wad-primario w-100 py-2 fw-bold mt-4">
+              Confirmar pedido <i class="bi bi-check-lg"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="col-lg-5">
+        <div class="wad-resumo-box">
+          <h5 class="fw-bold mb-3">Resumo da compra</h5>
+          <div id="wad-checkout-resumo"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer class="wad-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a href="index.html" class="wad-logo" aria-label="Wish a Drink">
+            <span class="wad-logo__wish">wish</span>
+            <span class="wad-logo__a">a</span>
+            <span class="wad-logo__drink">drink</span>
+          </a>
+          <p class="small mb-0">Sua loja completa de bebidas, do simples suco ao rótulo premium, com entrega rápida e segura.</p>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Institucional</h6>
+          <ul class="list-unstyled">
+            <li><a href="sobre.html">Sobre nós</a></li>
+            <li><a href="sobre.html#privacidade">Política de privacidade</a></li>
+            <li><a href="sobre.html#termos">Termos de uso</a></li>
+            <li><a href="modelagem.html">Modelagem do banco</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Minha conta</h6>
+          <ul class="list-unstyled">
+            <li><a href="login.html">Entrar</a></li>
+            <li><a href="cadastro.html">Criar conta</a></li>
+            <li><a href="favoritos.html">Favoritos</a></li>
+            <li><a href="alterar_senha.html">Ajuda com senha</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2026 Wish a Drink. Venda proibida para menores de 18 anos. Beba com moderação.</div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="wad-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+  
+</body>
+</html>

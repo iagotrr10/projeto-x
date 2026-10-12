@@ -1,0 +1,15 @@
+/* ==========================================================================
+   Wish a Drink — carrinho.css
+   Estilos exclusivos da página carrinho.html.
+   ========================================================================== */
+
+.wad-carrinho-item {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--cor-borda);
+}
+.wad-carrinho-item img { width: 72px; height: 72px; object-fit: contain; background: var(--cor-superficie); border-radius: var(--raio-pequeno); padding: .4rem; }
+.wad-carrinho-item .wad-qtd-controle { display: flex; align-items: center; gap: .5rem; }
+.wad-carrinho-item .wad-qtd-controle button {
+  width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--cor-borda); background: var(--cor-branca);
+}
+.wad-carrinho-vazio { text-align: center; padding: 3rem 1rem; color: var(--cor-texto-secundario); }
+.wad-carrinho-vazio i { font-size: 3rem; color: var(--cor-borda); margin-bottom: 1rem; display: block; }

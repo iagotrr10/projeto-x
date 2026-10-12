@@ -1,0 +1,1187 @@
+/* ==========================================================================
+   Wish a Drink — base.css
+   Variáveis globais, reset, tipografia base, botões, marca (logo),
+   barra de acessibilidade, modo escuro, alto contraste e toasts.
+   Este arquivo é carregado em TODAS as páginas do site.
+   ========================================================================== */
+
+:root {
+  /* Cores da marca */
+  --cor-principal: #FF2E88;      /* Rosa neon */
+  --cor-secundaria: #7B2FF7;    /* Roxo elétrico */
+  --cor-destaque: #FFC300;       /* Amarelo vibrante */
+  --cor-escura: #2A0944;         /* Roxo noite */
+  --cor-fundo: #FFF3F8;           /* Fundo creme rosado */
+  --cor-branca: #FFFFFF;
+
+  /* Texto */
+  --cor-texto: #2A0944;
+  --cor-texto-secundario: #6B5B7A;
+  --cor-texto-atenuado: #A99BB8;
+
+  /* Bordas e superfícies */
+  --cor-borda: #F0DCE8;
+  --cor-superficie: #FBEFF6;
+
+  /* Tipografia */
+  --fonte-titulo: 'Barlow Semi Condensed', sans-serif;
+  --fonte-corpo: 'Barlow', sans-serif;
+
+  /* Espaçamento e forma */
+  --raio-pequeno: 8px;
+  --raio-medio: 12px;
+  --raio-pilula: 999px;
+  --largura-container: 1200px;
+
+  /* Aliases usados nas páginas internas (login, cadastro, conta, checkout...) */
+  --wad-rosa: var(--cor-principal);
+  --wad-roxo: var(--cor-secundaria);
+  --wad-amarelo: var(--cor-destaque);
+  --wad-escuro: var(--cor-escura);
+
+  /* Escala de fonte controlada pela barra de acessibilidade */
+  --wad-escala-fonte: 1;
+}
+
+/* ---------- Reset básico ---------- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: calc(100% * var(--wad-escala-fonte));
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: var(--fonte-corpo);
+  color: var(--cor-texto);
+  background-color: var(--cor-branca);
+  line-height: 1.5;
+  font-size: 1rem;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  color: var(--cor-escura);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Foco visível para navegação por teclado */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid var(--cor-secundaria);
+  outline-offset: 2px;
+}
+
+/* ---------- Botões ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: var(--raio-pilula);
+  padding: 0.7rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn:hover { opacity: 0.9; }
+
+.btn--accent {
+  background-color: var(--cor-destaque);
+  color: var(--cor-escura);
+}
+
+.btn--accent:hover {
+  background-color:#ffb700 ;
+  color: #050505;
+  transition: .8;
+}
+
+.btn--primary {
+  background-color: var(--cor-secundaria);
+  color: var(--cor-branca);
+  border-radius: var(--raio-pequeno);
+  font-size: 0.85rem;
+  justify-content: center;
+}
+
+.btn--primary:hover,
+.btn--primary:focus-visible {
+  background-color: #5B1DB7;
+  color: #F8F4FF;
+}
+
+.btn--full { width: 100%; }
+
+.btn-wad-primario {
+  background-color: var(--wad-roxo);
+  color: var(--cor-branca);
+  border: none;
+  border-radius: var(--raio-pilula);
+  transition: opacity .15s ease, transform .15s ease;
+}
+.btn-wad-primario:hover { transition: .30s ease; opacity: 9; color: var(--cor-branca); background-color:#3ABA49; }
+.btn-wad-primario:focus-visible { outline: 3px solid var(--cor-destaque); outline-offset: 2px; }
+
+
+
+/* ==========================================================================
+   Acessibilidade — botão flutuante + painel
+   ========================================================================== */
+.wad-a11y-fab {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 1090;
+  width: 52px;
+  height: 52px;
+  border: none;
+  border-radius: 50%;
+  background: var(--cor-secundaria);
+  color: #fff;
+  font-size: 1.45rem;
+  box-shadow: 0 8px 22px rgba(42, 9, 68, 0.3);
+  display: grid;
+  place-items: center;
+}
+.wad-a11y-fab:hover { background: #6a24d6; }
+.wad-a11y-fab[aria-expanded="true"] { background: var(--cor-principal); }
+
+.wad-a11y-bar,
+.wad-a11y-bar.d-flex {
+  display: none !important;
+  position: fixed;
+  left: 1.25rem;
+  bottom: 5.4rem;
+  z-index: 1089;
+  width: min(260px, calc(100vw - 2.5rem));
+  margin: 0;
+  padding: 1rem;
+  background-color: var(--wad-escuro);
+  color: var(--cor-branca);
+  font-size: 0.85rem;
+  border-radius: var(--raio-medio);
+  box-shadow: 0 12px 32px rgba(42, 9, 68, 0.35);
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+.wad-a11y-bar.is-open {
+  display: flex !important;
+}
+.wad-a11y-bar .container {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+.wad-a11y-bar button {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,.4);
+  color: var(--cor-branca);
+  border-radius: var(--raio-pequeno);
+  padding: 0.45rem 0.7rem;
+  font-size: 0.82rem;
+  margin: 0;
+  width: 100%;
+  text-align: left;
+}
+.wad-a11y-bar button:hover,
+.wad-a11y-bar button:focus-visible {
+  background: var(--cor-secundaria);
+  color: var(--cor-branca);
+  border-color: var(--cor-secundaria);
+}
+.wad-a11y-bar button[aria-pressed="true"] {
+  background-color: var(--cor-destaque);
+  color: var(--wad-escuro);
+  border-color: var(--cor-destaque);
+  font-weight: 600;
+}
+
+
+
+/* ==========================================================================
+   Marca — logo (usado em todas as páginas, inclusive admin)
+   ========================================================================== */
+.wad-logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  flex-shrink: 0;
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+.wad-logo__wish,
+.wad-logo__drink { font-size: 1.3rem; }
+.wad-logo__wish { color: var(--cor-branca); }
+.wad-logo__a {
+  color: var(--cor-principal);
+  font-size: 0.95rem;
+}
+.wad-logo__drink { color: var(--cor-secundaria); }
+
+
+/* ==========================================================================
+   Modo escuro
+   ========================================================================== */
+html.wad-modo-escuro {
+  --cor-branca: #1B0B2E;
+  --cor-fundo: #150822;
+  --cor-texto: #F2EAFB;
+  --cor-texto-secundario: #D7C8E8;
+  --cor-texto-atenuado: #BBA9D0;
+  --cor-borda: #5A3D75;
+  --cor-superficie: #241238;
+  --cor-escura: #0F0620;
+}
+html.wad-modo-escuro body { background-color: var(--cor-fundo); }
+html.wad-modo-escuro .site-header,
+html.wad-modo-escuro .produto-card,
+html.wad-modo-escuro .wad-auth-card,
+html.wad-modo-escuro .wad-conta-sidebar,
+html.wad-modo-escuro .card { background-color: var(--cor-branca); }
+html.wad-modo-escuro h1, html.wad-modo-escuro h2, html.wad-modo-escuro h3,
+html.wad-modo-escuro h4, html.wad-modo-escuro h5 { color: var(--cor-texto); }
+html.wad-modo-escuro .produto-card img,
+html.wad-modo-escuro .wad-carrinho-item img { background-color: var(--cor-branca); }
+html.wad-modo-escuro .wad-header .wad-logo__wish,
+html.wad-modo-escuro .wad-header .wad-logo__a,
+html.wad-modo-escuro .wad-header .wad-logo__drink,
+html.wad-modo-escuro .wad-user-box,
+html.wad-modo-escuro .wad-carrinho-icone,
+html.wad-modo-escuro .wad-footer h6,
+html.wad-modo-escuro .footer-grid h3 { color: #F8F4FF; }
+html.wad-modo-escuro .wad-header .wad-logo__a,
+html.wad-modo-escuro .wad-logo__a { color: var(--cor-principal); }
+html.wad-modo-escuro .wad-header .wad-logo__drink,
+html.wad-modo-escuro .wad-logo__drink { color: #C84CFF; }
+html.wad-modo-escuro .btn,
+html.wad-modo-escuro .wad-a11y-bar button,
+html.wad-modo-escuro .wad-btn-logout { color: #F8F4FF; }
+html.wad-modo-escuro .site-header .wad-link-entrar,
+html.wad-modo-escuro .site-header .wad-btn-logout { color: #DDA8FF; }
+html.wad-modo-escuro .site-header .wad-link-entrar:hover,
+html.wad-modo-escuro .site-header .wad-btn-logout:hover { color: #1B0B2E; }
+html.wad-modo-escuro .wad-header,
+html.wad-modo-escuro .wad-header .navbar-brand,
+html.wad-modo-escuro .wad-header .wad-logo,
+html.wad-modo-escuro .wad-header .wad-logo__wish,
+html.wad-modo-escuro .wad-header .wad-logo__drink,
+html.wad-modo-escuro .wad-header .wad-carrinho-icone,
+html.wad-modo-escuro .wad-header .wad-user-box { color: #F8F4FF !important; }
+html.wad-modo-escuro .wad-header .wad-logo__a { color: #FF4FA3 !important; }
+html.wad-modo-escuro .wad-header .nav-link,
+html.wad-modo-escuro .wad-header .nav-link.active,
+html.wad-modo-escuro .wad-header .nav-link:hover { color: #F8F4FF !important; }
+html.wad-modo-escuro .site-header .icon-link i { color: #F8F4FF !important; }
+html.wad-modo-escuro .wad-footer,
+html.wad-modo-escuro .site-footer { color: #E8DDFB; }
+html.wad-modo-escuro .wad-footer .wad-logo__wish,
+html.wad-modo-escuro .site-footer .wad-logo__wish,
+html.wad-modo-escuro .wad-footer h6,
+html.wad-modo-escuro .site-footer h3,
+html.wad-modo-escuro .footer-bottom { color: #F8F4FF !important; }
+html.wad-modo-escuro .wad-footer .wad-logo__drink,
+html.wad-modo-escuro .site-footer .wad-logo__drink { color: #C84CFF !important; }
+html.wad-modo-escuro body,
+html.wad-modo-escuro main,
+html.wad-modo-escuro .wad-pagina-header,
+html.wad-modo-escuro .wad-auth-wrapper { color: #F2EAFB; }
+html.wad-modo-escuro .wad-pagina-header p,
+html.wad-modo-escuro .text-muted,
+html.wad-modo-escuro .wad-checkout-step,
+html.wad-modo-escuro .wad-admin-stat small,
+html.wad-modo-escuro .wad-admin-empty { color: #D7C8E8 !important; }
+html.wad-modo-escuro label,
+html.wad-modo-escuro .form-label,
+html.wad-modo-escuro .form-check-label,
+html.wad-modo-escuro .wad-resumo-box,
+html.wad-modo-escuro .wad-resumo-item,
+html.wad-modo-escuro .wad-pedido-card,
+html.wad-modo-escuro .wad-admin-panel,
+html.wad-modo-escuro .wad-admin-table { color: #F2EAFB; }
+html.wad-modo-escuro .form-control,
+html.wad-modo-escuro .form-select,
+html.wad-modo-escuro .wad-carrinho-item .wad-qtd-controle button {
+  background-color: #241238;
+  border-color: #9B7BB8 !important;
+  color: #F2EAFB;
+}
+html.wad-modo-escuro .form-control::placeholder { color: #BBA9D0; opacity: 1; }
+html.wad-modo-escuro .form-select option { background-color: #241238; color: #F2EAFB; }
+html.wad-modo-escuro .wad-resumo-box { background-color: #241238; }
+html.wad-modo-escuro .wad-pagina-header h1,
+html.wad-modo-escuro .wad-pagina-header h2 { color: #F8F4FF !important; }
+html.wad-modo-escuro .wad-footer a,
+html.wad-modo-escuro .site-footer a { color: #E8DDFB; }
+html.wad-modo-escuro .wad-footer a:hover,
+html.wad-modo-escuro .site-footer a:hover { color: #FFFFFF; }
+html.wad-modo-escuro a:not(.btn):not(.nav-link) { color: #D7B7FF; }
+html.wad-modo-escuro a:not(.btn):not(.nav-link):hover { color: #FFFFFF; }
+html.wad-modo-escuro .wad-status-entregue { background: #174A2B; color: #B8F2C8; }
+html.wad-modo-escuro .wad-status-transporte { background: #5A4210; color: #FFE7A0; }
+html.wad-modo-escuro .wad-status-preparo { background: #432566; color: #E7C9FF; }
+html.wad-modo-escuro .site-footer,
+html.wad-modo-escuro .wad-footer { background-color: #0F0620; }
+html.wad-modo-escuro .wad-auth-wrapper,
+html.wad-modo-escuro .wad-pagina-header { background-color: #1B0B2E; }
+html.wad-modo-escuro .wad-admin-stat,
+html.wad-modo-escuro .wad-admin-panel,
+html.wad-modo-escuro .wad-admin-body,
+html.wad-modo-escuro .wad-auth-card,
+html.wad-modo-escuro .modal-content,
+html.wad-modo-escuro .wad-tabela-wrap {
+  background-color: #1B0B2E;
+  color: #F2EAFB;
+}
+html.wad-modo-escuro .wad-admin-stat strong { color: #D7B7FF; }
+html.wad-modo-escuro .wad-admin-panel h2,
+html.wad-modo-escuro .wad-tabela th,
+html.wad-modo-escuro .wad-tabela td,
+html.wad-modo-escuro .modal-title { color: #F2EAFB; }
+html.wad-modo-escuro main h1,
+html.wad-modo-escuro main h2,
+html.wad-modo-escuro main h3,
+html.wad-modo-escuro main h4,
+html.wad-modo-escuro main h5,
+html.wad-modo-escuro .wad-icon-topo { color: #F2EAFB !important; }
+html.wad-modo-escuro .wad-tabela th { background-color: #2B1745; }
+html.wad-modo-escuro .wad-tabela th,
+html.wad-modo-escuro .wad-tabela td { border-color: #5A3D75; }
+html.wad-modo-escuro .wad-tabela tbody tr:hover { background-color: #2B1745; }
+html.wad-modo-escuro .wad-filtro-chip,
+html.wad-modo-escuro .form-check-input { background-color: #241238; color: #F2EAFB; }
+html.wad-modo-escuro .wad-filtro-chip.is-active { background-color: #7B2FF7; border-color: #B895FF; }
+html.wad-modo-escuro .alert,
+html.wad-modo-escuro .invalid-feedback { color: #F2EAFB; }
+html.wad-modo-escuro .alert-info { background-color: #173047; border-color: #41749B; }
+html.wad-modo-escuro .alert-warning { background-color: #45340D; border-color: #9B761D; }
+html.wad-modo-escuro .alert-danger { background-color: #4A1E2B; border-color: #A5485F; }
+html.wad-modo-escuro .alert-success { background-color: #174A2B; border-color: #3E8A5A; }
+html.wad-modo-escuro .btn-outline-secondary { color: #E8DDFB; border-color: #BBA9D0; }
+html.wad-modo-escuro .wad-toast-sucesso,
+html.wad-modo-escuro .wad-toast-erro { background-color: #1B0B2E; color: #F2EAFB; }
+html.wad-modo-escuro .wad-cookie-banner { background-color: #1B0B2E; border-color: #5A3D75; }
+html.wad-modo-escuro .wad-cookie-banner__message { color: #F2EAFB; }
+html.wad-modo-escuro .wad-cookie-banner__link { color: #9EDCFF; }
+
+
+
+/* ==========================================================================
+   Alto contraste
+   ========================================================================== */
+html.wad-alto-contraste {
+  --cor-principal: #B0004B;
+  --cor-secundaria: #4B0082;
+  --cor-destaque: #FFD400;
+  --cor-escura: #000000;
+  --cor-fundo: #FFFFFF;
+  --cor-branca: #FFFFFF;
+  --cor-texto: #000000;
+  --cor-texto-secundario: #222222;
+  --cor-texto-atenuado: #444444;
+  --cor-borda: #000000;
+  --cor-superficie: #F2F2F2;
+  --wad-roxo: #4B0082;
+}
+html.wad-alto-contraste body { background: #FFFFFF; color: #000000; }
+html.wad-alto-contraste h1,
+html.wad-alto-contraste h2,
+html.wad-alto-contraste h3,
+html.wad-alto-contraste h4,
+html.wad-alto-contraste h5,
+html.wad-alto-contraste h6,
+html.wad-alto-contraste p,
+html.wad-alto-contraste label,
+html.wad-alto-contraste .text-muted,
+html.wad-alto-contraste .form-text { color: #000000 !important; }
+html.wad-alto-contraste .site-header,
+html.wad-alto-contraste .wad-header,
+html.wad-alto-contraste .site-footer,
+html.wad-alto-contraste .wad-footer,
+html.wad-alto-contraste .wad-admin-sidebar,
+html.wad-alto-contraste .wad-admin-login {
+  background: #000000 !important;
+  color: #FFFFFF !important;
+}
+html.wad-alto-contraste .site-header .nav-link,
+html.wad-alto-contraste .site-header .icon-link,
+html.wad-alto-contraste .wad-header .nav-link,
+html.wad-alto-contraste .wad-footer,
+html.wad-alto-contraste .site-footer,
+html.wad-alto-contraste .wad-footer a,
+html.wad-alto-contraste .site-footer a,
+html.wad-alto-contraste .wad-admin-sidebar,
+html.wad-alto-contraste .wad-admin-sidebar .wad-logo__wish,
+html.wad-alto-contraste .wad-admin-sidebar .wad-logo__drink { color: #FFFFFF !important; }
+html.wad-alto-contraste .site-header .nav-link:hover,
+html.wad-alto-contraste .site-header .nav-link.is-active,
+html.wad-alto-contraste .wad-admin-nav button.is-active { color: #FFD400 !important; }
+html.wad-alto-contraste .produto-card,
+html.wad-alto-contraste .wad-auth-card,
+html.wad-alto-contraste .wad-conta-sidebar,
+html.wad-alto-contraste .wad-admin-stat,
+html.wad-alto-contraste .wad-admin-panel,
+html.wad-alto-contraste .wad-admin-body,
+html.wad-alto-contraste .card,
+html.wad-alto-contraste .modal-content,
+html.wad-alto-contraste .wad-tabela-wrap,
+html.wad-alto-contraste .wad-resumo-box {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+html.wad-alto-contraste .wad-auth-wrapper,
+html.wad-alto-contraste .wad-pagina-header { background: #F2F2F2 !important; color: #000000 !important; }
+html.wad-alto-contraste .wad-tabela th { background: #E5E5E5 !important; color: #000000 !important; }
+html.wad-alto-contraste .wad-tabela th,
+html.wad-alto-contraste .wad-tabela td,
+html.wad-alto-contraste .wad-admin-table th,
+html.wad-alto-contraste .wad-admin-table td { color: #000000 !important; border-color: #000000 !important; }
+html.wad-alto-contraste .wad-tabela tbody tr:hover { background: #FFF3B0 !important; }
+html.wad-alto-contraste .form-control,
+html.wad-alto-contraste .form-select,
+html.wad-alto-contraste .wad-signup-modal__input {
+  background: #FFFFFF !important;
+  color: #000000 !important;
+  border: 2px solid #000000 !important;
+}
+html.wad-alto-contraste .form-control::placeholder,
+html.wad-alto-contraste .wad-signup-modal__input::placeholder { color: #444444 !important; opacity: 1; }
+html.wad-alto-contraste .form-select option { background: #FFFFFF; color: #000000; }
+html.wad-alto-contraste .btn--primary,
+html.wad-alto-contraste .btn-wad-primario,
+html.wad-alto-contraste .wad-btn-primary,
+html.wad-alto-contraste .wad-admin-nav button.is-active {
+  background: #4B0082 !important;
+  border: 2px solid #000000 !important;
+  color: #FFFFFF !important;
+}
+html.wad-alto-contraste .btn--accent,
+html.wad-alto-contraste .wad-a11y-bar button[aria-pressed="true"],
+html.wad-alto-contraste .wad-signup-modal__continue {
+  background: #FFD400 !important;
+  border: 2px solid #000000 !important;
+  color: #000000 !important;
+}
+html.wad-alto-contraste .wad-a11y-bar,
+html.wad-alto-contraste .wad-a11y-bar.d-flex { background: #000000; color: #FFFFFF; border: 2px solid #FFFFFF; }
+html.wad-alto-contraste .wad-a11y-bar button { border-color: #FFFFFF; color: #FFFFFF; }
+html.wad-alto-contraste .wad-filtro-chip { background: #FFFFFF; border: 2px solid #000000; color: #000000; }
+html.wad-alto-contraste .wad-filtro-chip.is-active { background: #4B0082; color: #FFFFFF; }
+html.wad-alto-contraste .preco-atual,
+html.wad-alto-contraste .wad-admin-stat strong { color: #7A0033 !important; }
+html.wad-alto-contraste .wad-status-entregue { background: #D8F3E0; color: #004D1A; }
+html.wad-alto-contraste .wad-status-transporte,
+html.wad-alto-contraste .wad-status-preparando { background: #FFF0A6; color: #4A3500; }
+html.wad-alto-contraste .wad-status-preparo,
+html.wad-alto-contraste .wad-status-recebido { background: #E8D8FF; color: #32005E; }
+html.wad-alto-contraste .wad-status-enviado { background: #DCEBFF; color: #002D69; }
+html.wad-alto-contraste .wad-status-cancelado { background: #FFE0E0; color: #720000; }
+html.wad-alto-contraste .alert { border: 2px solid #000000; color: #000000 !important; }
+html.wad-alto-contraste .modal-content { color: #000000; }
+html.wad-alto-contraste .wad-cookie-banner { background: #FFFFFF; border: 2px solid #000000; }
+html.wad-alto-contraste .wad-cookie-banner__message { color: #000000; }
+html.wad-alto-contraste .wad-cookie-banner__link { color: #003B73; }
+html.wad-alto-contraste a,
+html.wad-alto-contraste .nav-link { text-decoration: underline; }
+html.wad-alto-contraste .produto-card,
+html.wad-alto-contraste .wad-auth-card,
+html.wad-alto-contraste .card { border: 2px solid #000 !important; }
+
+
+
+/* ==========================================================================
+   Toasts
+   ========================================================================== */
+.wad-toast-sucesso { border-left: 4px solid #1F8A4C; }
+.wad-toast-erro { border-left: 4px solid var(--cor-principal); }
+
+/* ==========================================================================
+   Modais de cookies e cadastro
+   ========================================================================== */
+.wad-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(20, 9, 30, 0.42);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.wad-modal-backdrop.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.wad-modal {
+  width: min(680px, 100%);
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 18px;
+  box-shadow: 0 18px 42px rgba(30, 15, 44, 0.14);
+  border: 1px solid rgba(42, 9, 68, 0.06);
+  overflow: hidden;
+}
+
+.wad-modal__content {
+  padding: clamp(1.1rem, 2vw, 1.8rem);
+}
+
+.wad-signup-backdrop {
+  background: rgba(17, 20, 24, 0.76);
+}
+
+.wad-signup-modal {
+  width: min(560px, calc(100vw - 28px));
+  background: rgba(45, 49, 55, 0.96);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 22px 42px rgba(0, 0, 0, 0.26);
+}
+
+.wad-signup-modal__content {
+  position: relative;
+  padding: 1.1rem 1.1rem 0.9rem;
+  color: #f4f4f7;
+}
+
+.wad-signup-modal__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: none;
+  display: grid;
+  place-items: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+}
+
+.wad-signup-modal h2 {
+  margin: 0 0 0.55rem;
+  padding-right: 2rem;
+  font-size: clamp(1.75rem, 2.2vw, 2.2rem);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #ffffff;
+}
+
+.wad-signup-modal__lead {
+  margin: 0 0 1rem;
+  font-size: 0.96rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.wad-signup-modal__link {
+  color: #ff7fe5;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.wad-signup-modal__providers {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.wad-signup-provider {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  font-size: clamp(1rem, 1.1vw, 1.3rem);
+  font-weight: 700;
+  padding: 0.8rem 0.9rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.wad-signup-provider:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.wad-signup-provider__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.wad-signup-provider__icon--google {
+  background: conic-gradient(#4285f4 0 25%, #34a853 0 50%, #fbbc05 0 75%, #ea4335 0 100%);
+  color: white;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+.wad-signup-provider__icon--apple {
+  background: #f5f5f5;
+  color: #111;
+  font-size: 1.2rem;
+}
+
+.wad-signup-provider__icon--microsoft {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  width: 28px;
+  height: 28px;
+  padding: 4px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.12);
+}
+
+.wad-ms-box {
+  display: block;
+  border-radius: 4px;
+}
+
+.wad-ms-box--red { background: #f25022; }
+.wad-ms-box--green { background: #7fba00; }
+.wad-ms-box--blue { background: #00a4ef; }
+.wad-ms-box--yellow { background: #ffb900; }
+
+.wad-signup-modal__divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1.1rem 0 0.7rem;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.85rem;
+}
+
+.wad-signup-modal__divider::before,
+.wad-signup-modal__divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.wad-signup-modal__label {
+  display: block;
+  margin-bottom: 0.45rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.wad-signup-modal__input {
+  width: 100%;
+  border-radius: 0.7rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  padding: 0.8rem 0.9rem;
+  font-size: 1rem;
+  outline: none;
+}
+
+.wad-signup-modal__input::placeholder {
+  color: rgba(255,255,255,0.48);
+}
+
+.wad-signup-modal__continue {
+  width: 100%;
+  border: none;
+  margin-top: 0.9rem;
+  border-radius: 0.8rem;
+  font-size: clamp(1.1rem, 1.5vw, 1.5rem);
+  font-weight: 800;
+  color: white;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(135deg, #ff62d7, #e96df9);
+  box-shadow: 0 10px 18px rgba(255, 98, 215, 0.22);
+  cursor: pointer;
+}
+
+@media (max-width: 576px) {
+  .wad-signup-modal__content {
+    padding: 1.2rem 1rem 1rem;
+  }
+
+  .wad-signup-modal h2 {
+    font-size: 2.2rem;
+  }
+
+  .wad-signup-provider {
+    font-size: 1.05rem;
+  }
+}
+
+.wad-cookie-banner {
+  position: fixed;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  width: min(880px, calc(100% - 24px));
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 12px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(17, 24, 39, 0.08);
+  z-index: 2100;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.wad-cookie-banner.is-visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.wad-cookie-banner__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem 0.9rem 1.2rem;
+}
+
+.wad-cookie-banner__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.wad-cookie-banner__message {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #1f2937;
+  text-align: center;
+}
+
+.wad-cookie-banner__link {
+  color: #0d6efd;
+  text-decoration: underline;
+  font-weight: 700;
+}
+
+.wad-cookie-banner__actions {
+  flex-shrink: 0;
+}
+
+.wad-cookie-banner__btn {
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  padding: 0.8rem 1.2rem;
+  font-size: 0.92rem;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.wad-cookie-banner__btn:hover {
+  opacity: 0.97;
+  transform: translateY(-1px);
+}
+
+.wad-cookie-banner__btn--primary {
+  background: #f59e0b;
+  color: #ffffff;
+  box-shadow: 0 6px 12px rgba(245, 158, 11, 0.2);
+}
+
+@media (max-width: 640px) {
+  .wad-cookie-banner {
+    bottom: 10px;
+    width: calc(100% - 16px);
+  }
+
+  .wad-cookie-banner__inner {
+    flex-direction: column;
+    padding: 0.8rem 0.8rem 0.7rem;
+    gap: 0.7rem;
+  }
+
+  .wad-cookie-banner__message {
+    font-size: 0.82rem;
+  }
+
+  .wad-cookie-banner__btn {
+    width: 100%;
+  }
+}
+
+.wad-cookie-modal .wad-modal__content,
+.wad-signup-modal .wad-modal__content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.wad-cookie-modal h2,
+.wad-signup-modal h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.2vw, 2.2rem);
+  line-height: 1.15;
+  color: var(--cor-escura);
+}
+
+.wad-cookie-modal p,
+.wad-signup-modal p {
+  margin: 0;
+  color: #57486a;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.wad-modal__eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cor-secundaria);
+}
+
+.wad-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.wad-modal__actions--stacked {
+  justify-content: stretch;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.wad-btn-primary,
+.wad-btn-secondary {
+  border: none;
+  border-radius: 12px;
+  padding: 0.85rem 1.4rem;
+  font-weight: 600;
+  font-size: 0.98rem;
+  transition: transform 0.15s ease, opacity 0.15s ease, box-shadow 0.15s ease;
+}
+
+.wad-btn-primary {
+  background: var(--cor-secundaria);
+  color: var(--cor-branca);
+  box-shadow: 0 8px 18px rgba(123, 47, 247, 0.12);
+}
+
+.wad-btn-secondary {
+  background: #f7f1fb;
+  color: var(--cor-escura);
+  border: 1px solid rgba(42, 9, 68, 0.08);
+}
+
+.wad-btn-primary:hover,
+.wad-btn-secondary:hover,
+.wad-modal__close:hover {
+  opacity: 0.97;
+  transform: translateY(-1px);
+}
+
+.wad-modal__close {
+  display: block;
+  margin-left: auto;
+  margin-top: 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--cor-secundaria);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .wad-cookie-banner__inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .wad-cookie-banner__actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 576px) {
+  .wad-cookie-banner {
+    bottom: 0.5rem;
+    width: calc(100% - 1rem);
+  }
+
+  .wad-cookie-banner__inner {
+    padding: 0.8rem;
+  }
+
+  .wad-cookie-banner__content {
+    font-size: 0.95rem;
+  }
+
+  .wad-cookie-banner__actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .wad-cookie-banner__btn {
+    flex: 1;
+  }
+
+  .wad-modal__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .wad-btn-primary,
+  .wad-btn-secondary {
+    width: 100%;
+  }
+}
+
+/* Popup de acesso compacto, inspirado no layout de login enviado. */
+.wad-signup-backdrop {
+  background: rgba(18, 18, 18, 0.38);
+  backdrop-filter: blur(2px);
+}
+
+.wad-signup-modal {
+  width: min(460px, calc(100vw - 28px));
+  background: #ffffff;
+  border: 1px solid #d5d9d9;
+  border-radius: 12px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.wad-signup-modal__content {
+  gap: 0.75rem;
+  padding: 1.35rem 1.4rem 1.25rem;
+  color: #111111;
+}
+
+.wad-signup-modal__close {
+  top: 0.65rem;
+  right: 0.65rem;
+  width: 30px;
+  height: 30px;
+  color: #687078;
+  font-size: 0.95rem;
+}
+
+.wad-signup-modal h2 {
+  margin: 0 2rem 0.35rem 0;
+  padding: 0;
+  color: #111111;
+  font-size: clamp(1.7rem, 3vw, 2.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.035em;
+}
+
+.wad-signup-modal__lead {
+  margin: 0 0 0.25rem;
+  color: #111111;
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+.wad-signup-modal__providers {
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.wad-signup-provider {
+  min-height: 42px;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #c7caca;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 0.92rem;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.wad-signup-provider:hover {
+  background: #f7f7f7;
+  transform: none;
+}
+
+.wad-signup-provider__icon {
+  width: 22px;
+  height: 22px;
+  font-size: 0.85rem;
+}
+
+.wad-signup-provider__icon--apple {
+  font-size: 1rem;
+}
+
+.wad-signup-provider__icon--microsoft {
+  width: 22px;
+  height: 22px;
+  padding: 3px;
+}
+
+.wad-signup-modal__divider {
+  gap: 0.65rem;
+  margin: 0.7rem 0 0.1rem;
+  color: #5f6368;
+  font-size: 0.78rem;
+}
+
+.wad-signup-modal__divider::before,
+.wad-signup-modal__divider::after {
+  background: #d5d9d9;
+}
+
+.wad-signup-modal__label {
+  margin: 0;
+  color: #111111;
+  font-size: 0.9rem;
+}
+
+.wad-signup-modal__input {
+  min-height: 42px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #888c8c;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #111111;
+  font-size: 0.95rem;
+}
+
+.wad-signup-modal__input:focus {
+  border-color: #007eb9;
+  box-shadow: 0 0 0 3px rgba(0, 126, 185, 0.2);
+}
+
+.wad-signup-modal__input::placeholder {
+  color: #687078;
+}
+
+.wad-signup-modal__continue {
+  min-height: 42px;
+  margin-top: 0.15rem;
+  padding: 0.65rem 1rem;
+  border: 1px solid #e2a400;
+  border-radius: 22px;
+  background: #ffd814;
+  color: #111111;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+.wad-signup-modal__continue:hover {
+  background: #f7ca00;
+}
+
+.wad-signup-modal__terms,
+.wad-signup-modal__terms a,
+.wad-signup-modal__help {
+  color: #2162a1;
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.wad-signup-modal__terms {
+  margin: 0;
+}
+
+.wad-signup-modal__terms a,
+.wad-signup-modal__help {
+  text-decoration: underline;
+}
+
+.wad-signup-modal__help {
+  display: inline-block;
+  margin-top: 0.15rem;
+  color: #2162a1;
+}
+
+@media (max-width: 576px) {
+  .wad-signup-modal__content {
+    padding: 1.1rem 1rem 1rem;
+  }
+
+  .wad-signup-modal h2 {
+    font-size: 1.75rem;
+  }
+
+  .wad-signup-provider {
+    min-height: 40px;
+  }
+}

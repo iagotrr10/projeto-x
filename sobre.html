@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wish a Drink | Sobre nós</title>
+  <meta name="description" content="Conheça o Wish a Drink, seu depósito de bebidas online.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/jpg" href="Assets/favicon.jpg">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/header-footer.css">
+  <link rel="stylesheet" href="css/sobre.css">
+</head>
+<body>
+  <!-- BARRA DE ACESSIBILIDADE -->
+  <div class="wad-a11y-bar d-flex justify-content-end align-items-center" role="region" aria-label="Barra de acessibilidade">
+    <div class="container d-flex justify-content-end align-items-center flex-wrap gap-1">
+      <span class="me-2 d-none d-sm-inline"><i class="bi bi-universal-access-circle"></i> Acessibilidade:</span>
+      <button id="wad-btn-fonte-menos" type="button" aria-label="Diminuir tamanho da fonte">A-</button>
+      <button id="wad-btn-fonte-mais" type="button" aria-label="Aumentar tamanho da fonte">A+</button>
+      <button id="wad-btn-contraste" type="button" aria-pressed="false" aria-label="Alternar alto contraste">
+        <i class="bi bi-circle-half"></i> Contraste
+      </button>
+      <button id="wad-btn-modo-escuro" type="button" aria-pressed="false" aria-label="Alternar modo escuro">
+        <i class="bi bi-moon-stars-fill"></i> Modo escuro
+      </button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <nav class="navbar" aria-label="Navegação principal">
+
+      <a href="index.html" class="wad-logo" aria-label="Wish a Drink, página inicial">
+        <img src="Assets/logo-wishadrink.png" alt="Wish a Drink" class="wad-logo-img">
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html" class="nav-link">Início</a></li>
+        <li><a href="bebidas.html" class="nav-link">Bebidas</a></li>
+        <li><a href="ofertas.html" class="nav-link">Ofertas</a></li>
+        <li><a href="sobre.html" class="nav-link is-active" aria-current="page">Sobre nós</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <form class="search-form" role="search" action="bebidas.html" method="get">
+          <label for="busca" class="sr-only">Buscar bebida</label>
+          <input type="search" id="busca" name="q" placeholder="O que você tá procurando?">
+          <button type="submit" aria-label="Buscar">
+            <i class="bi bi-search" aria-hidden="true"></i>
+          </button>
+        </form>
+
+        <div data-wad-area-usuario></div>
+
+        <a href="favoritos.html" class="icon-link icon-link--badge">
+          <i class="bi bi-heart" aria-hidden="true"></i>
+          <span>Favoritos</span>
+          <span id="wad-badge-favoritos" class="badge" style="display:none">0</span>
+        </a>
+
+        <a href="carrinho.html" class="icon-link icon-link--badge">
+          <i class="bi bi-bag" aria-hidden="true"></i>
+          <span>Carrinho</span>
+          <span id="wad-badge-carrinho" class="badge wad-badge-carrinho" style="display:none">0</span>
+        </a>
+      </div>
+
+    </nav>
+  </header>
+
+  <main class="container my-5" style="max-width: 900px;">
+    <h1 class="fw-bold mb-3" style="color:var(--wad-roxo)">Sobre o Wish a Drink</h1>
+    <div class="alert alert-info" role="note">
+      Este é um protótipo acadêmico. Não há venda, cobrança nem entrega real; pedidos registrados servem apenas para demonstração. Não utilize dados pessoais ou senhas reais.
+    </div>
+    <p class="mb-4">O Wish a Drink demonstra uma loja online de bebidas, com catálogo, carrinho, conta de cliente e área administrativa para avaliação acadêmica.</p>
+
+    <h2 class="h4 fw-bold mt-4 mb-2" style="color:var(--wad-roxo)">Venda responsável</h2>
+    <p class="mb-4">A venda de bebidas alcoólicas é proibida para menores de 18 anos, conforme o Estatuto da Criança e do Adolescente (Lei nº 8.069/1990) e a legislação brasileira aplicável. Ao criar uma conta e finalizar pedidos com bebidas alcoólicas, você declara ter idade legal para consumo. Beba com moderação.</p>
+
+    <h2 class="h4 fw-bold mt-4 mb-2" id="privacidade" style="color:var(--wad-roxo)">Política de privacidade</h2>
+    <p class="mb-4">Os dados informados são armazenados no banco local para demonstrar cadastro, pedidos e autenticação. Enquanto estiver conectado, registramos o nome das páginas acessadas e a data e hora para auditoria; não registramos a URL completa, parâmetros de busca ou conteúdo digitado. O usuário master pode consultar esses registros na área de usuários. Como este é um protótipo acadêmico, não informe dados pessoais reais.</p>
+
+    <h2 class="h4 fw-bold mt-4 mb-2" id="termos" style="color:var(--wad-roxo)">Termos de uso</h2>
+    <p class="mb-0">O site não realiza vendas, pagamentos, entregas, trocas ou devoluções reais. Qualquer pedido gravado é demonstrativo e não constitui uma compra.</p>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="wad-footer">
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <a href="index.html" class="wad-logo" aria-label="Wish a Drink">
+            <span class="wad-logo__wish">wish</span>
+            <span class="wad-logo__a">a</span>
+            <span class="wad-logo__drink">drink</span>
+          </a>
+          <p class="small mb-0">Sua loja completa de bebidas, do simples suco ao rótulo premium, com entrega rápida e segura.</p>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Institucional</h6>
+          <ul class="list-unstyled">
+            <li><a href="sobre.html">Sobre nós</a></li>
+            <li><a href="sobre.html#privacidade">Política de privacidade</a></li>
+            <li><a href="sobre.html#termos">Termos de uso</a></li>
+            <li><a href="modelagem.html">Modelagem do banco</a></li>
+          </ul>
+        </div>
+        <div class="col-6 col-md-4">
+          <h6>Minha conta</h6>
+          <ul class="list-unstyled">
+            <li><a href="login.html">Entrar</a></li>
+            <li><a href="cadastro.html">Criar conta</a></li>
+            <li><a href="favoritos.html">Favoritos</a></li>
+            <li><a href="alterar_senha.html">Ajuda com senha</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr>
+      <div class="text-center small">&copy; 2026 Wish a Drink. Venda proibida para menores de 18 anos. Beba com moderação.</div>
+    </div>
+  </footer>
+
+  <div id="wad-toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080;"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

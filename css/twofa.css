@@ -1,0 +1,14 @@
+/* ==========================================================================
+   Wish a Drink — twofa.css
+   Estilos exclusivos de 2fa.html (verificação em 2 etapas).
+   O cartão em si vem de auth.css.
+   ========================================================================== */
+
+.wad-codigo-2fa {
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  letter-spacing: 0.6rem;
+  padding: 0.6rem 0.5rem 0.6rem 1.1rem; /* compensa o espaçamento à direita do último dígito */
+}
+.wad-codigo-2fa::placeholder { letter-spacing: 0.6rem; }

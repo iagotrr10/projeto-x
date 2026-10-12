@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wish a Drink | Admin beta</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/jpg" href="Assets/favicon.jpg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&amp;family=Barlow+Semi+Condensed:wght@500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/auth.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="wad-admin-body">
+  <section id="admin-login" class="wad-admin-login" aria-labelledby="admin-login-title">
+    <div class="wad-auth-card">
+      <a href="index.html" class="wad-logo" aria-label="Voltar para Wish a Drink">
+        <span class="wad-logo__wish">wish</span><span class="wad-logo__a">a</span><span class="wad-logo__drink">drink</span>
+      </a>
+      <h1 id="admin-login-title" class="h4 text-center mb-1">Painel administrativo</h1>
+      <p class="text-center text-muted small mb-4">Ambiente beta para testes internos</p>
+      <form id="admin-login-form" novalidate>
+        <div class="mb-3">
+          <label class="form-label" for="admin-email">E-mail</label>
+          <input class="form-control" id="admin-email" type="email" autocomplete="username" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="admin-password">Senha</label>
+          <div class="input-group">
+            <input class="form-control" id="admin-password" type="password" autocomplete="current-password" required>
+            <button class="btn btn-outline-secondary" type="button" data-wad-toggle-senha="admin-password" aria-label="Mostrar senha" aria-pressed="false">
+              <i class="bi bi-eye" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <p id="admin-login-error" class="text-danger small d-none" role="alert">E-mail ou senha incorretos. Tente novamente.</p>
+        <button class="btn btn-wad-primario w-100 py-2 fw-bold" type="submit">Entrar no painel <i class="bi bi-arrow-right"></i></button>
+      </form>
+    </div>
+  </section>
+
+  <div id="admin-app" class="wad-admin-shell d-none">
+    <aside class="wad-admin-sidebar">
+      <a href="index.html" class="wad-logo" aria-label="Voltar para Wish a Drink">
+        <span class="wad-logo__wish">wish</span><span class="wad-logo__a">a</span><span class="wad-logo__drink">drink</span>
+      </a>
+      <nav class="wad-admin-nav" aria-label="Seções administrativas">
+        <button type="button" class="is-active" data-admin-section="dashboard"><i class="bi bi-grid-1x2 me-2"></i>Visão geral</button>
+        <button type="button" data-admin-section="produtos"><i class="bi bi-box-seam me-2"></i>Produtos</button>
+        <button type="button" data-admin-section="pedidos"><i class="bi bi-receipt me-2"></i>Pedidos</button>
+        <button type="button" data-admin-section="usuarios"><i class="bi bi-people me-2"></i>Usuários</button>
+        <button type="button" data-admin-section="configuracoes"><i class="bi bi-sliders me-2"></i>Configurações</button>
+      </nav>
+      <div class="wad-admin-sidebar-footer small">
+        <span class="d-block mb-2">Sessão: WishAdmin</span>
+        <button id="admin-logout" type="button" class="btn btn-sm btn-outline-light"><i class="bi bi-box-arrow-left me-1"></i>Sair</button>
+      </div>
+    </aside>
+
+    <main class="wad-admin-main">
+      <header class="wad-admin-topbar">
+        <div>
+          <span class="wad-admin-badge">BETA PRIVADO</span>
+          <h1 id="admin-section-title">Visão geral</h1>
+        </div>
+        <a href="index.html" class="btn btn-outline-secondary btn-sm"><i class="bi bi-shop me-1"></i>Ver loja</a>
+      </header>
+
+      <section class="wad-admin-section is-active" data-admin-panel="dashboard">
+        <div class="wad-admin-stats">
+          <div class="wad-admin-stat"><small>Produtos ativos</small><strong id="admin-stat-products">0</strong></div>
+          <div class="wad-admin-stat"><small>Pedidos em aberto</small><strong>2</strong></div>
+          <div class="wad-admin-stat"><small>Contas master</small><strong id="admin-stat-masters">—</strong></div>
+          <div class="wad-admin-stat"><small>Usuários comuns (inclui teste)</small><strong id="admin-stat-users">—</strong></div>
+          <div class="wad-admin-stat"><small>Vendas simuladas</small><strong>R$ 155,10</strong></div>
+        </div>
+        <div class="wad-admin-panel">
+          <h2>Atividade recente</h2>
+          <table class="wad-admin-table">
+            <thead><tr><th>Evento</th><th>Detalhe</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Novo pedido</td><td>#WAD-1063</td><td><span class="badge text-bg-warning">Em preparo</span></td></tr>
+              <tr><td>Produto em destaque</td><td>Vinho Tinto Seco 750ml</td><td><span class="badge text-bg-success">Ativo</span></td></tr>
+              <tr><td>Conta atualizada</td><td>Cliente de teste</td><td><span class="badge text-bg-info">Registrado</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="wad-admin-section" data-admin-panel="produtos">
+        <div class="wad-admin-panel">
+          <h2>Catálogo de produtos</h2>
+          <div id="admin-product-list"></div>
+        </div>
+        <div class="wad-admin-panel">
+          <h2>Adicionar produto de teste</h2>
+          <form id="admin-product-form" class="wad-admin-form-grid">
+            <div><label class="form-label" for="product-name">Nome</label><input class="form-control" id="product-name" required></div>
+            <div><label class="form-label" for="product-category">Categoria</label><select class="form-select" id="product-category"><option value="cervejas">Cervejas</option><option value="refrigerantes">Refrigerantes</option><option value="sucos">Sucos</option><option value="energeticos">Energéticos</option><option value="destilados">Destilados</option><option value="vinhos">Vinhos</option></select></div>
+            <div><label class="form-label" for="product-price">Preço</label><input class="form-control" id="product-price" type="number" min="0" step="0.01" required></div>
+            <div><label class="form-label" for="product-image">Imagem</label><input class="form-control" id="product-image" value="Assets/logo-wishadrink.png" required></div>
+            <div class="full"><button class="btn btn-wad-primario" type="submit"><i class="bi bi-plus-circle me-1"></i>Adicionar ao catálogo beta</button></div>
+          </form>
+        </div>
+      </section>
+
+      <section class="wad-admin-section" data-admin-panel="pedidos">
+        <div class="wad-admin-panel">
+          <h2>Pedidos para teste</h2>
+          <table class="wad-admin-table"><thead><tr><th>Pedido</th><th>Data</th><th>Total</th><th>Status</th></tr></thead><tbody>
+            <tr><td>#WAD-1042</td><td>18/08/2026</td><td>R$ 87,30</td><td><select class="form-select form-select-sm admin-order-status"><option selected>Entregue</option><option>Em transporte</option><option>Em preparo</option></select></td></tr>
+            <tr><td>#WAD-1058</td><td>20/08/2026</td><td>R$ 42,80</td><td><select class="form-select form-select-sm admin-order-status"><option>Entregue</option><option selected>Em transporte</option><option>Em preparo</option></select></td></tr>
+            <tr><td>#WAD-1063</td><td>22/08/2026</td><td>R$ 24,90</td><td><select class="form-select form-select-sm admin-order-status"><option>Entregue</option><option>Em transporte</option><option selected>Em preparo</option></select></td></tr>
+          </tbody></table>
+        </div>
+      </section>
+
+      <section class="wad-admin-section" data-admin-panel="usuarios">
+        <div class="wad-admin-panel">
+          <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+              <h2 class="mb-1">Usuários comuns</h2>
+              <p class="text-muted small mb-0">Contas de clientes e de teste cadastradas no banco. Contas master ficam separadas.</p>
+            </div>
+            <a href="usuarios.html" class="btn btn-outline-primary btn-sm">Gerenciar usuários</a>
+          </div>
+          <div id="admin-user-list" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="wad-admin-section" data-admin-panel="configuracoes">
+        <div class="wad-admin-panel">
+          <h2>Preferências de visualização</h2>
+          <p class="text-muted">Use estes controles para testar os estados de acessibilidade da loja.</p>
+          <div class="d-flex flex-wrap gap-2"><button type="button" class="btn btn-outline-secondary" id="admin-dark-mode"><i class="bi bi-moon-stars me-1"></i>Alternar modo escuro</button><button type="button" class="btn btn-outline-secondary" id="admin-contrast"><i class="bi bi-circle-half me-1"></i>Alternar contraste</button></div>
+        </div>
+        <div class="wad-admin-panel"><h2>Dados locais</h2><p class="text-muted small">Os dados deste painel são apenas de demonstração e ficam salvos neste navegador.</p><button type="button" class="btn btn-outline-danger btn-sm" id="admin-clear-data">Limpar produtos beta</button></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    (() => {
+      const CHAVE_SESSAO = "wad_usuario";
+      const CHAVE_PRODUTOS_ADMIN = "wad_admin_produtos_beta";
+      sessionStorage.removeItem("wad_admin_autenticado");
+      const secaoLoginAdmin = document.getElementById("admin-login");
+      const painelAdmin = document.getElementById("admin-app");
+      const formularioLoginAdmin = document.getElementById("admin-login-form");
+      const mensagemErroLogin = document.getElementById("admin-login-error");
+      const tituloSecaoAdmin = document.getElementById("admin-section-title");
+      const titulosDasSecoes = {
+        dashboard: "Visão geral",
+        produtos: "Produtos",
+        pedidos: "Pedidos",
+        usuarios: "Usuários",
+        configuracoes: "Configurações"
+      };
+
+      function obterProdutosAdministrativos() {
+        try {
+          const produtosSalvos = localStorage.getItem(CHAVE_PRODUTOS_ADMIN);
+          return produtosSalvos ? JSON.parse(produtosSalvos) : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function mostrarPainelAdmin() {
+        secaoLoginAdmin.classList.add("d-none");
+        painelAdmin.classList.remove("d-none");
+        renderizarProdutosAdmin();
+        renderizarUsuarioAdmin();
+        document.getElementById("admin-stat-products").textContent =
+          window.WAD.produtos.length + obterProdutosAdministrativos().length;
+      }
+
+      function renderizarProdutosAdmin() {
+        const produtosExibidos = [...window.WAD.produtos, ...obterProdutosAdministrativos()];
+        const escaparHTML = window.WAD.escaparHTML;
+        const linhasProdutos = produtosExibidos.map((produto) => `
+          <tr>
+            <td><div class="wad-admin-product"><img src="${escaparHTML(produto.imagem)}" alt=""><span>${escaparHTML(produto.nome)}</span></div></td>
+            <td>${escaparHTML(produto.categoria)}</td>
+            <td>${window.WAD.formatarPreco(Number(produto.preco))}</td>
+          </tr>`).join("");
+
+        // Produtos do localStorage são dados editáveis: escape antes de montar a tabela.
+        document.getElementById("admin-product-list").innerHTML = `
+          <table class="wad-admin-table">
+            <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th></tr></thead>
+            <tbody>${linhasProdutos}</tbody>
+          </table>`;
+      }
+
+      async function renderizarUsuarioAdmin() {
+        const listaUsuarios = document.getElementById("admin-user-list");
+        const indicadorUsuarios = document.getElementById("admin-stat-users");
+        const indicadorMasters = document.getElementById("admin-stat-masters");
+        listaUsuarios.textContent = "Carregando contas cadastradas...";
+        indicadorUsuarios.textContent = "…";
+        indicadorMasters.textContent = "…";
+        const { ok, dados } = await window.WAD.api("api/users.php?modo=todos");
+        if (!ok) {
+          listaUsuarios.textContent = dados.erro || "Não foi possível carregar os clientes cadastrados.";
+          indicadorUsuarios.textContent = "—";
+          indicadorMasters.textContent = "—";
+          return;
+        }
+
+        indicadorUsuarios.textContent = String(dados.total_comuns);
+        indicadorMasters.textContent = String(dados.total_masters);
+        listaUsuarios.replaceChildren();
+        if (!dados.usuarios.length) {
+          const vazio = document.createElement("p");
+          vazio.className = "wad-admin-empty";
+          vazio.textContent = "Nenhum cliente cadastrado.";
+          listaUsuarios.appendChild(vazio);
+          return;
+        }
+
+        const lista = document.createElement("div");
+        lista.className = "d-grid gap-3";
+        dados.usuarios.forEach((usuario) => {
+          const item = document.createElement("div");
+          item.className = "wad-admin-product";
+          const avatar = document.createElement("div");
+          avatar.className = "wad-avatar";
+          avatar.textContent = usuario.nome.trim().split(/\s+/).map((parte) => parte[0]).join("").slice(0, 2).toUpperCase();
+          const dadosUsuario = document.createElement("div");
+          const nome = document.createElement("strong");
+          nome.textContent = usuario.nome;
+          const email = document.createElement("div");
+          email.className = "text-muted small";
+          email.textContent = usuario.email;
+          dadosUsuario.append(nome, email);
+          item.append(avatar, dadosUsuario);
+          lista.appendChild(item);
+        });
+        listaUsuarios.appendChild(lista);
+        if (dados.total > dados.usuarios.length) {
+          const limite = document.createElement("p");
+          limite.className = "text-muted small mt-3 mb-0";
+          limite.textContent = `Exibindo ${dados.usuarios.length} de ${dados.total} contas.`;
+          listaUsuarios.appendChild(limite);
+        }
+      }
+
+      formularioLoginAdmin.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+        const emailInformado = document.getElementById("admin-email").value.trim();
+        const senhaInformada = document.getElementById("admin-password").value;
+
+        // Login real no servidor (1ª etapa). Só o usuário master vê o painel, depois da 2ª etapa.
+        const { ok, dados } = await window.WAD.api("api/login.php", {
+          metodo: "POST",
+          corpo: { email: emailInformado, senha: senhaInformada }
+        });
+
+        if (!ok) {
+          mensagemErroLogin.textContent = dados.erro || "E-mail ou senha incorretos. Tente novamente.";
+          mensagemErroLogin.classList.remove("d-none");
+          return;
+        }
+        sessionStorage.setItem("wad_2fa", JSON.stringify({ metodo: dados.metodo_2fa, emailMascarado: dados.email_mascarado }));
+        sessionStorage.setItem("wad_2fa_destino", "admin.html");
+        window.location.href = "2fa.html";
+      });
+
+      formularioLoginAdmin.querySelectorAll("input").forEach((campoFormulario) => {
+        campoFormulario.addEventListener("input", () => mensagemErroLogin.classList.add("d-none"));
+      });
+
+      document.querySelectorAll("[data-admin-section]").forEach((botaoSecao) => {
+        botaoSecao.addEventListener("click", () => {
+          document.querySelectorAll("[data-admin-section]").forEach((botao) => botao.classList.remove("is-active"));
+          document.querySelectorAll("[data-admin-panel]").forEach((painel) => painel.classList.remove("is-active"));
+          botaoSecao.classList.add("is-active");
+          document.querySelector(`[data-admin-panel="${botaoSecao.dataset.adminSection}"]`).classList.add("is-active");
+          tituloSecaoAdmin.textContent = titulosDasSecoes[botaoSecao.dataset.adminSection];
+          if (botaoSecao.dataset.adminSection === "dashboard" || botaoSecao.dataset.adminSection === "usuarios") {
+            renderizarUsuarioAdmin();
+          }
+        });
+      });
+
+      document.getElementById("admin-product-form").addEventListener("submit", (evento) => {
+        evento.preventDefault();
+        const produtosBeta = obterProdutosAdministrativos();
+        produtosBeta.push({
+          nome: document.getElementById("product-name").value.trim(),
+          categoria: document.getElementById("product-category").value,
+          preco: Number(document.getElementById("product-price").value),
+          imagem: document.getElementById("product-image").value.trim()
+        });
+        localStorage.setItem(CHAVE_PRODUTOS_ADMIN, JSON.stringify(produtosBeta));
+        evento.target.reset();
+        renderizarProdutosAdmin();
+        document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length + produtosBeta.length;
+      });
+
+      document.getElementById("admin-logout").addEventListener("click", async () => {
+        await window.WAD.api("api/logout.php", { metodo: "POST" });
+        localStorage.removeItem(CHAVE_SESSAO);
+        sessionStorage.removeItem("wad_admin_autenticado");
+        painelAdmin.classList.add("d-none");
+        secaoLoginAdmin.classList.remove("d-none");
+        formularioLoginAdmin.reset();
+      });
+
+      document.getElementById("admin-dark-mode").addEventListener("click", () => {
+        const modoEscuroAtivo = document.documentElement.classList.toggle("wad-modo-escuro");
+        localStorage.setItem("wad_modo_escuro", JSON.stringify(modoEscuroAtivo));
+      });
+
+      document.getElementById("admin-contrast").addEventListener("click", () => {
+        const altoContrasteAtivo = document.documentElement.classList.toggle("wad-alto-contraste");
+        localStorage.setItem("wad_alto_contraste", JSON.stringify(altoContrasteAtivo));
+      });
+
+      document.getElementById("admin-clear-data").addEventListener("click", () => {
+        localStorage.removeItem(CHAVE_PRODUTOS_ADMIN);
+        renderizarProdutosAdmin();
+        document.getElementById("admin-stat-products").textContent = window.WAD.produtos.length;
+      });
+
+      if (window.WAD.ehAdmin()) mostrarPainelAdmin();
+
+      // Depois que o servidor confirma a sessão, mostra ou esconde o painel conforme o perfil.
+      window.addEventListener("wad:sessao", () => {
+        if (window.WAD.ehAdmin()) {
+          mostrarPainelAdmin();
+        } else {
+          painelAdmin.classList.add("d-none");
+          secaoLoginAdmin.classList.remove("d-none");
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
